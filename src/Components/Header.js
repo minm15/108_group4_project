@@ -6,21 +6,21 @@ import {
 } from '@mui/material';
 import {
     Person, MarkEmailUnread, ForwardToInbox, Build,  Anchor,Balance,KeyboardArrowLeft,KeyboardArrowRight,KeyboardDoubleArrowRight
-,Settings} from "@mui/icons-material";
+,Settings,Campaign} from "@mui/icons-material";
 import LetterGrid from "../Letter/letter_grid";
 import LetterReceive from "../Letter/letter_receive";
 import LetterWriting from "../Letter/letter_writing";
 import Manufactor from "../manufactor/mf_list";
 
 import Container from '@mui/material/Container';
- import './HeaderFooter.css';
-//import SwipeableViews from 'react-swipeable-views';
-//import { autoPlay } from 'react-swipeable-views-utils';
+import './HeaderFooter.css';
+import SwipeableViews from 'react-swipeable-views';
+import { autoPlay } from 'react-swipeable-views-utils';
+const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 var co_name = "Wah汽車材料"; //公司名稱
 var co_asset = "$25萬元"; //公司資產
 var co_type = "供應"; //公司類型
-
-//const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+const homeLink="http://localhost:3000"
 function Header() {
   const [leftshow, setleftshow] = useState(false);
   const [rightshow, setrightshow] = useState(false);
@@ -66,14 +66,14 @@ function Header() {
                                     setrightshow2(true)
                                 }
                             } />
-                      
 
-                                <Button href="letter_list" onClick={()=>{} }style={{color:"white",fontSize: "22px",fontFamily: 'Noto Sans TC'}} 
+                               
+                                <Button href={homeLink+"/letter_list"} onClick={()=>{} }style={{color:"white",fontSize: "22px",fontFamily: 'Noto Sans TC'}} 
                                ><MarkEmailUnread/>獲取訂單&emsp;</Button>
                                 <KeyboardDoubleArrowRight/>
-                                <Button href="letter_list" onClick={()=>{} } style={{color:"white",fontSize: "22px",fontFamily: 'Noto Sans TC'}} ><ForwardToInbox/>下定材料&emsp;</Button>
+                                <Button href={homeLink+"/letter_list"} onClick={()=>{} } style={{color:"white",fontSize: "22px",fontFamily: 'Noto Sans TC'}} ><ForwardToInbox/>下定材料&emsp;</Button>
                                 <KeyboardDoubleArrowRight/>
-                                <Button href="manufactory" onClick={()=>{} }style={{color:"white",fontSize: "22px",fontFamily: 'Noto Sans TC'}}><Build/>&emsp;&emsp;製造&emsp;&emsp;</Button>
+                                <Button href={homeLink+"/manufactory"} onClick={()=>{} }style={{color:"white",fontSize: "22px",fontFamily: 'Noto Sans TC'}}><Build/>&emsp;&emsp;製造&emsp;&emsp;</Button>
                                 <KeyboardDoubleArrowRight/>
                                 <Button style={{color:"white",fontSize: "22px",fontFamily: 'Noto Sans TC'}}><Anchor/>交付貨品&emsp;</Button>
                                 <KeyboardDoubleArrowRight/>
@@ -91,16 +91,16 @@ function Header() {
 
             </div>
            
-            {/* <div className='scrollbox'>
+            <div className='scrollbox'>
                 <AutoPlaySwipeableViews
                     interval={5000}
                 // autoPlay={true}
                 >
-                    <div className='txt'>大排長榮!因貨櫃船卡住蘇伊士運河，導致貨品運送時間成本增加，若改其他航道，將花費更多運送成本</div>
-                    <div className='txt'>跑馬燈2</div>
-                    <div className='txt'>跑馬燈3</div>
+                    <div className='txt'><Campaign style={{ fontSize: 13 }} />大排長榮!因貨櫃船卡住蘇伊士運河，導致貨品運送時間成本增加，若改其他航道，將花費更多運送成本</div>
+                    <div className='txt'><Campaign style={{ fontSize: 13 }} />跑馬燈2 目前是設置5000毫秒(5秒)換一次</div>
+                    <div className='txt'><Campaign style={{ fontSize: 13 }} />跑馬燈3</div>
                 </AutoPlaySwipeableViews>
-            </div> */}
+            </div>
             </div>
     </>
   )

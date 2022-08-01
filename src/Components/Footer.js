@@ -11,6 +11,7 @@ import {
 import Container from '@mui/material/Container';
  import './HeaderFooter.css';
 //import { autoPlay } from 'react-swipeable-views-utils';
+const homeLink="http://localhost:3000"
 
 
 function Footer() {
@@ -54,8 +55,8 @@ function Footer() {
 
                             {/* <ButtonGroup variant="text" size="large" className='rightline' aria-label="outlined primary button group"> */}
                                 <Button style={{color:"black",fontSize: "14px",fontFamily: 'Noto Sans TC'}}><WorkOutline/>公司</Button>
-                                <Button href="letter_list" onClick={()=>{} } style={{color:"black",fontSize: "14px",fontFamily: 'Noto Sans TC'}}><Email/>信箱</Button>
-                                <Button href="manufactory" onClick={()=>{} } style={{color:"black",fontSize: "14px",fontFamily: 'Noto Sans TC'}}><Build/>工廠</Button>
+                                <Button href={homeLink+"/letter_list"} onClick={()=>{} } style={{color:"black",fontSize: "14px",fontFamily: 'Noto Sans TC'}}><Email/>信箱</Button>
+                                <Button href={homeLink+"/manufactory"} onClick={()=>{} } style={{color:"black",fontSize: "14px",fontFamily: 'Noto Sans TC'}}><Build/>工廠</Button>
                                 <Button style={{color:"black",fontSize: "14px",fontFamily: 'Noto Sans TC'}}><Anchor/>港口</Button>
                                 <Button style={{color:"black",fontSize: "14px",fontFamily: 'Noto Sans TC'}}><Campaign/>新聞</Button>
                                 <Button style={{color:"black",fontSize: "14px",fontFamily: 'Noto Sans TC'}}><Link/>區塊鏈</Button>
