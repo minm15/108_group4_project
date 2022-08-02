@@ -87,7 +87,8 @@ function Header() {
               
               </div>
             <div className='set'>
-            <Settings/>     
+            <Button href={homeLink} onClick={()=>{} }style={{color:"white",fontSize: "22px"}}><Settings/></Button>
+
 
             </div>
            

@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import LetterReceive from "./Letter/letter_receive";
 import LetterWriting from "./Letter/letter_writing";
 import Manufactor from "./manufactor/mf_list";
+import Product from "./manufactor/mf_product";
 
 class MainContainer extends React.Component {
     render() {
@@ -30,7 +31,10 @@ class MainContainer extends React.Component {
                                 />
                             </Route>
                             <Route path="/letter_writing" element={<LetterWriting />} />
-                            <Route path="/manufactory" element={<Manufactor />} />
+                            <Route path="/manufactory">
+                                <Route index element={<Manufactor />} />
+                                <Route path="product" element={<Product />} />
+                            </Route>
                         </Routes>
                     </BrowserRouter>
                 </div>
