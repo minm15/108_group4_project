@@ -35,8 +35,8 @@ code {
  .fn-clear .fr1 {
    /* 公司類型 */
    font-size: 14px;
-    background-color: red;
-    color: white;
+    /* background-color: red; */
+    /* color: white; */
   
 
 }
@@ -75,7 +75,8 @@ code {
   margin-left: 250px;
   z-index: 20;
   background-color:#FDF1EF;
-  border:0cm
+  border:0cm;
+  color:#333;
 }
  .scrollbox .txt {
   /* icon的尺寸寫在header.js裡 */
@@ -83,7 +84,6 @@ code {
   font-size: 14px;
   line-height: 20px;
   height: 20px;
-  color:#333;
 }
 
 .centerbox {

@@ -1,36 +1,34 @@
-// src\Components\Header.js  
 import React, { useState } from 'react'
-import { useNavigate,BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import {
-    Box, Paper, Grid, useTheme, Typography, MobileStepper, Button,ButtonGroup
+     Button,Chip
 } from '@mui/material';
+
 import {
     Person, MarkEmailUnread, ForwardToInbox, Build,  Anchor,Balance,KeyboardArrowLeft,KeyboardArrowRight,KeyboardDoubleArrowRight
 ,Settings,Campaign} from "@mui/icons-material";
-import LetterGrid from "../Letter/letter_grid";
-import LetterReceive from "../Letter/letter_receive";
-import LetterWriting from "../Letter/letter_writing";
-import Manufactor from "../manufactor/mf_list";
 
-import Container from '@mui/material/Container';
+// import LetterGrid from "../Letter/letter_grid";
+// import LetterReceive from "../Letter/letter_receive";
+// import LetterWriting from "../Letter/letter_writing";
+// import Manufactor from "../manufactor/mf_list";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import {  Autoplay } from 'swiper';
+import 'swiper/css';
 import './HeaderFooter.css';
-import SwipeableViews from 'react-swipeable-views';
-import { autoPlay } from 'react-swipeable-views-utils';
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
-var co_name = "Wah汽車材料"; //公司名稱
-var co_asset = "$25萬元"; //公司資產
-var co_type = "供應"; //公司類型
+
+
+// import SwipeableViews from 'react-swipeable-views';
+// import { autoPlay } from 'react-swipeable-views-utils';
+// const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+var name = "Wah汽車材料"; //公司名稱
+var company_asset = "$25萬元"; //公司資產
+var company_type = "供應"; //公司類型
 const homeLink="http://localhost:3000"
 function Header() {
-  const [leftshow, setleftshow] = useState(false);
-  const [rightshow, setrightshow] = useState(false);
-  const [rightshow2, setrightshow2] = useState(false);
-  const handleLinkClick = event => {
-    console.log('Link clicked');
 
-    // 👇️ refers to the link element
-    console.log(event.currentTarget);
-  };
+  const [rightshow2, setrightshow2] = useState(false);
+
+  
   return (
     <>
       <div className={'header'}>
@@ -39,10 +37,10 @@ function Header() {
                     
                     <p className='fn-clear'>
                 
-                       <span className='fl'> <Person /> {co_name}</span>
+                       <span className='fl'> <Person /> {name}</span>
                
-                        <span  className='fr1'>{co_type}</span>
-                        <span  className='fr2'>&emsp; {co_asset}</span>
+                        <span  className='fr1'><Chip label={company_type} sx={{ bgcolor: "#E4513D", color: "white" }} /></span>
+                        <span  className='fr2'>&emsp; {company_asset}</span> 
                     </p>
                    
                 </div>
@@ -93,14 +91,25 @@ function Header() {
             </div>
            
             <div className='scrollbox'>
-                <AutoPlaySwipeableViews
+                {/* <AutoPlaySwipeableViews
                     interval={5000}
                 // autoPlay={true}
                 >
                     <div className='txt'><Campaign style={{ fontSize: 13 }} />大排長榮!因貨櫃船卡住蘇伊士運河，導致貨品運送時間成本增加，若改其他航道，將花費更多運送成本</div>
                     <div className='txt'><Campaign style={{ fontSize: 13 }} />跑馬燈2 目前是設置5000毫秒(5秒)換一次</div>
                     <div className='txt'><Campaign style={{ fontSize: 13 }} />跑馬燈3</div>
-                </AutoPlaySwipeableViews>
+                </AutoPlaySwipeableViews> */}
+
+                <Swiper
+        modules={[ Autoplay]}
+        slidesPerView={1}
+        autoplay={{ delay: 5000 }}
+    >
+      <SwiperSlide><Campaign style={{ fontSize: 13 }} />大排長榮!因貨櫃船卡住蘇伊士運河，導致貨品運送時間成本增加，若改其他航道，將花費更多運送成本</SwiperSlide>
+      <SwiperSlide><Campaign style={{ fontSize: 13 }} />跑馬燈2 目前是設置5000毫秒(5秒)換一次</SwiperSlide>
+      <SwiperSlide><Campaign style={{ fontSize: 13 }} />跑馬燈3</SwiperSlide>
+      <SwiperSlide><Campaign style={{ fontSize: 13 }} />跑馬燈4</SwiperSlide>
+    </Swiper>
             </div>
             </div>
     </>
