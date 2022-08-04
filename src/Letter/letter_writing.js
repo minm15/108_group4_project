@@ -1,5 +1,6 @@
 import React from "react";
 import { FormControl, InputLabel, Select } from "@mui/material";
+import MenuList from "./menu";
 
 function LetterWriting() {
     const companies = [
@@ -19,37 +20,21 @@ function LetterWriting() {
             company_type: "材料商"
         }
     ];
-// 打到這裡，現在卡在我不會換選項內容
-    function changeSubject(dropdown) {
-        const company_type = dropdown.option[dropdown.selectIndex].parentNode;
-        const subject = document.getElementById("subject-select")[0];
-        switch (company_type) {
-            case "供應商":
-                subject.addChild(
-                    <option value="purchase">【報價請求】請貴公司提供報價單</option>
-                );
-                break;
-            case "材料商":
-                subject.addChild(
-                    <option value="purchase">【材料下訂】</option>
-                );
-                break;
-        }
-    }
 
     return (
         <div className="letter_writing">
+            <MenuList />
             收件人：
             <FormControl>
                 <InputLabel>Select a receiver</InputLabel>
-                <Select native defaultValue="" id="receiver-select" label="receiver" onChange={changeSubject(this)}>
+                <Select native defaultValue="" id="receiver-select" label="receiver">
                     <option aria-label="None" value="" />
                     <optgroup label="供應商" value="供應商">
                         {
                             companies.map(
                                 company => {
                                     return company.company_type === "供應商" ? (
-                                        <option value={company.id}>{company.name}</option>
+                                        <option value={company.company_id} key={company.company_id}>{company.name}</option>
                                     ) : null;
                                 }
                             )
@@ -60,7 +45,7 @@ function LetterWriting() {
                             companies.map(
                                 company => {
                                     return company.company_type === "材料商" ? (
-                                        <option value={company.id}>{company.name}</option>
+                                        <option value={company.company_id} key={company.company_id}>{company.name}</option>
                                     ) : null;
                                 }
                             )
