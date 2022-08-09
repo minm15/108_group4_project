@@ -98,7 +98,7 @@ function Manufactor() {
     // manufactor space
     const mf_space = 5 - mf_list.length > 0 ? (
         <Paper elevation={4} square={false}>
-            <IconButton component={Link} to="/manufactor_produce">
+            <IconButton component={Link} to="/manufactory/product">
                 <Add />
             </IconButton>
         </Paper>

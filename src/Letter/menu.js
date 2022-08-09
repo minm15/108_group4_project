@@ -6,6 +6,7 @@ import {
 import {
     List, ListItemButton, ListItemIcon, ListItemText, Collapse
 } from "@mui/material";
+import { Link } from "react-router-dom";
 
 function MenuList() {
     const [open, setOpen] = React.useState(false);
@@ -16,13 +17,13 @@ function MenuList() {
 
     return (
         <List component="nav" >
-            <ListItemButton>
+            <ListItemButton component={Link} to="/letter_writing">
                 <ListItemIcon>
                     <Create />
                 </ListItemIcon>
                 <ListItemText primary="撰寫信件" />
             </ListItemButton>
-            <ListItemButton onClick={handleClick}>
+            <ListItemButton onClick={handleClick} component={Link} to="/letter_list">
                 <ListItemIcon>
                     <MailOutline />
                 </ListItemIcon>
