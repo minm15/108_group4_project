@@ -7,10 +7,12 @@ function LetterReceive() {
     const [id, setId] = useState(useParams().letterId);
     const [detail, setDetail] = useState(
         {
+            letterType: 'operation',
+            receiver: 'Takodachi',
+            sender: "可愛小秘書",
+            title: "【費用調控】請您審核公司支出規劃",
             last_plan: 'less',
             payment: id*100,
-            sender: "可愛小秘書",
-            title: "【費用調控】請您審核公司支出規劃"
         }
     );
 
