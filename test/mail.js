@@ -1,5 +1,4 @@
 var mysql = require('mysql');
-const { RR } = require('mysql/lib/PoolSelector');
 
 var con = mysql.createConnection({
     host: "localhost",
@@ -10,68 +9,263 @@ var con = mysql.createConnection({
 
 con.connect(function(err) {
     if (err) throw err;
-    //get_letter_list(11)
-    //get_letter(6)
-    //get_attach_quotation(59)
-    get_attach_order(59)
+    /* get_letter_list(200, function(result) {
+        console.log(result);
+    }) */
+
+    /* get_attach(15, function(result) {
+        console.log(result);
+    }) */
+    //send_letter(send_letter_input)
+    pay(12, false, function(result) {
+        console.log(result)
+    })
+    
 });
 
 // get letter list by studentID
-function get_letter_list(studentID) {
-    var selectSql = "SELECT * FROM mail WHERE Send_to = " + studentID;
-    con.query(selectSql, function(err, result) {
+function get_letter_list(studentID, callback) {
+    var selectSql = "SELECT * FROM mail WHERE Send_to = ?";
+    con.query(selectSql, [studentID], function(err, result) {
         if(err) throw err;
         if(result[0]) {
-            console.log(generate_letter_list_json(result));
+            return callback(generate_letter_list_json(result));
         } else {
-            console.log("cannot find this letter list")
+            return callback("cannot find this letter list")
         }
     })
 }
 
 // get letter by letter ID
-function get_letter(letterID) {
-    var selectSql = "SELECT * FROM mail WHERE mail_ID = " + letterID;
-    con.query(selectSql, function(err, result) {
+function get_letter(letterID, callback) {
+    var selectSql = "SELECT * FROM mail WHERE mail_ID = ?";
+    con.query(selectSql, [letterID],function(err, result) {
         if(err) throw err;
         if(result[0]) {
             generate_letter_json(result, function(res) {
-                console.log(res)
+                return callback(res);
             })
         } else {
-            console.log("cannot find this letter")
+            return callback("cannot find this letter");
+        }
+    })
+}
+
+// get attach by mailID
+function get_attach(mailID, callback) {
+    get_attach_ID(mailID, function(result) {
+        if(result[0] == "Order") {
+            get_attach_order(result[1], function(res) {
+                return callback(res);
+            })
+        } else if(result[0] == "Quotation" ) {
+            get_attach_quotation(result[1], function(res) {
+                return callback(res);
+            })
+        } else {
+            return callback("this is unknown type");
         }
     })
 }
 
 // 報價單
-function get_attach_quotation(attachmentID) {
-    var selectSql =  "SELECT * FROM quotation WHERE quotation_ID = " + attachmentID;
-    con.query(selectSql, function(err, result) {
+function get_attach_quotation(attachmentID, callback) {
+    var selectSql = "SELECT * FROM quotation WHERE quotation_ID = ?";
+    con.query(selectSql, [attachmentID], function(err, result) {
         if(err) throw err;
         if(result[0]) {
-            console.log(generate_quotation_json(result))
+            return callback(generate_quotation_json(result));
         } else {
-            console.log("cannot find this attachment")
+            return "cannot find this attachment"
         }
     })
 }
 
 // order
-function get_attach_order(attachmentID) {
-    var selectSql =  "SELECT * FROM project.order WHERE order_id = " + attachmentID;
-    con.query(selectSql, function(err, result) {
+function get_attach_order(attachmentID, callback) {
+    var selectSql = "SELECT * FROM project.purchase WHERE order_id = ?";
+    con.query(selectSql, [attachmentID], function(err, result) {
         if(err) throw err;
         if(result[0]) {
-            console.log(generate_order_json(result))
+            return callback(generate_order_json(result));
         } else {
-            console.log("cannot find this attachment")
+            return "cannot find this attachment"
         }
     })
 }
 
-function send_letter() {
-    
+function get_attach_ID(mailID, callback) {
+    var selectMailSql = "SELECT Type FROM mail WHERE mail_id = ?";
+    con.query(selectMailSql, [mailID], function(err, result) {
+        if(err) throw err;
+        var type = result[0].Type
+        if(result[0].Type == "Quotation") {
+            var selectSql =  "SELECT quotation_id FROM quotation WHERE mail_id = ?";
+        } else if(result[0].Type == "Order") {
+            var selectSql =  "SELECT order_id FROM project.purchase WHERE mail_id = ?";
+        } else {
+            console.log("cannot find this mail")
+        }
+
+        if(result[0]) {
+            con.query(selectSql, [mailID], function(err, res) {
+                if(err) throw err;
+                if(type == "Quotation") {
+                    return callback([type, res[0].quotation_id]);
+                } else if(type == "Order") {
+                    return callback([type, res[0].order_id]);
+                } else {
+                    return "error"
+                }
+            })
+        }
+    })
+
+}
+
+// 用於測試 function send_letter()的東西
+let send_letter_input = {
+    title: "New mail of Quotation",
+    sender: 43,
+    receiver: 30,
+    letter_type: "Quotation",
+    content: "43 send mail to 30 : Quotation",
+    attach: [
+        {
+            name: "A",
+            price: "900",
+            rank: "S"
+        }
+    ],
+    time: "2022-07-20"
+}
+// input format
+/* {
+    title: 信件標題(string),
+    sender: 寄件者(string),
+    letter_type: 信件種類(string),
+    content: 信件內容(string),
+    attach: 報價單或訂單內容，格式如查看附件(string),
+    time: 寄件時間(string)
+} */
+function send_letter(input) {
+    let title = input.title;
+    let date = input.time;
+    let content = input.content;
+    let send_from = input.sender;
+    let send_to = input.receiver;
+    let type = input.letter_type;
+    let product_name = input.attach[0].name;
+    let product_price = input.attach[0].price;
+    let product_rank = input.attach[0].rank;
+
+    /* if(content == "Quotation") {
+        var insertQuotationSql = "INSERT INTO quotation (mail_id, mail_box_id, product_name, product_unit price, product_rank) VALUES ("
+    } */
+
+    get_mail_box_ID(send_to, function(res) {
+        let mail_box_ID = res;
+        var insertMailSql = "INSERT INTO mail (mail_box_ID, Title, Date, Content, Send_from, Send_to, Type) VALUES (?, ?, ?, ?, ?, ?, ?)"  
+        var insertQuotation = "INSERT INTO quotation (mail_id, mail_box_id, product_name, product_unit_price, product_rank) VALUES (?, ?, ?, ?, ?)"
+
+        con.query(insertMailSql, [mail_box_ID, title, date, content, send_from, send_to, type],function(err, result) {
+            if(err) throw err;
+
+            get_latest_mailID(send_from, send_to, function(result) {
+                
+                // 目前做到insert quotation
+                // 之後要再加上判定是order or quotation
+                con.query(insertQuotation, [result.mail_ID, mail_box_ID, product_name, product_price, product_rank], function(err, result) {
+                    if(err) throw err;
+                    // 這裡之後要改成return 告知有成功insert
+                    console.log(send_from + " send to " + send_to + " and insert into quotation")
+                })
+            })
+        })
+    }) 
+}
+
+function get_latest_mailID(send_from, send_to, callback) {
+    var selectMailIDSql = "SELECT mail_ID FROM mail WHERE Send_from = ? AND Send_to = ?";
+    con.query(selectMailIDSql, [send_from, send_to], function(err, res) {
+        //find the latest one
+        let latest = res.length - 1; 
+        return callback(res[latest]);
+    })
+}
+
+// 找到使用者的信箱編號
+function get_mail_box_ID(send_to_ID, callback) {
+    var selectSql = "SELECT * FROM mail_box WHERE belong_to_user_ID = ?";
+    con.query(selectSql, [send_to_ID], function(err, result) {
+        if(err) throw err;
+        if(result[0]) {
+            let mail_box_ID = result[0].ID;
+            return callback(mail_box_ID);
+        } else {
+            return "this user_id is not existed";
+        }
+    })
+}
+
+/* {
+    status: goods_unreceived/success,
+    discount:
+      [
+        {
+        reason: 折價原因(string),
+        amount: 折價金額(int)
+        }
+      ]
+    paid: 支付金額(int),
+    cash: 現有金額(int)
+} */
+function pay(mail_id, check, callback) {
+    let pay_output = {
+        "status":"",
+        "discount":[],
+        "paid":"",
+        "cash":""
+    }
+    var selectSql = "SELECT * FROM purchase WHERE mail_id = ?";
+    var select_send_from = "SELECT Send_from, Type FROM mail WHERE mail_id = ?";
+    var select_cash = "SELECT cash FROM finance WHERE belong_to_user_ID = ?"
+    con.query(selectSql, [mail_id], function(err, res) {
+        if(err) throw err;
+
+        con.query(select_send_from, [mail_id], function(err, mail_result) {
+            if(err) throw err;
+            if(mail_result[0].Type == "Order") {
+                let stu_id = mail_result[0].Send_from;
+                
+                con.query(select_cash, [stu_id], function(err, cash_result) {
+                    if(err) throw err;
+                    let cash = cash_result[0].cash;
+                    let paid = 0;
+
+                    if(check) {
+                        pay_output.discount.push({"reason":"reason", "amount":res[0].product_discount});
+                        paid = res[0].product_price * res[0].product_discount;
+                        pay_output.paid = paid;
+                    } else { 
+                        // 沒有驗貨
+                        pay_output.discount.push({"reason":"no check", "amount":0});
+                        paid = res[0].product_price
+                        pay_output.paid = paid;
+                    }
+            
+                    pay_output.status = res[0].status;
+                    pay_output.cash = cash - paid;
+            
+                    return callback(pay_output)
+                })
+            } else {
+                // 正常來說 前端call這個function會確定是order才可以
+                // 但我還是先做判定
+                return callback("this is not order")
+            }
+        })
+    })
 }
 
 // format 
@@ -117,6 +311,9 @@ function generate_letter_json(sql_result, callback) {
 }
 
 function get_attachmentID(type, mail_ID, callback) {
+    if(type == "Order"){
+        type = "purchase"
+    }
     var selectSql = "SELECT * FROM " + type + " WHERE mail_id = " + mail_ID;
     con.query(selectSql, function(err, result) {
         if(err) throw err;
@@ -189,4 +386,15 @@ function generate_order_json(sql_result) {
     result_json.detail = detail_json;
     result_json.edit = sql_result[0].edit_count
     return result_json;
+}
+
+
+
+
+// --- Export--- //
+module.exports = {
+    get_letter_list,
+    get_letter,
+    get_attach,
+    
 }
