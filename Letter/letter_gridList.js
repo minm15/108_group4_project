@@ -17,7 +17,7 @@ function LetterList() {
                                         <Chip label={letter.sender_type} size="small" />
                                     </Grid>
                                     <Grid item>
-                                        【{letter.letter_type}】{letter.title}
+                                        {letter.title}
                                         <div classname="expired">{letter.expired}</div>
                                     </Grid>
                                     <Grid item>{letter.time}</Grid>

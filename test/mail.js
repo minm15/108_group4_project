@@ -23,11 +23,15 @@ function get_letter_list(studentID) {
         if(err) throw err;
         if(result[0]) {
             console.log(generate_letter_list_json(result));
+            // edit by Patricia
+            // returning the result
+            return generate_letter_list_json(result);
         } else {
             console.log("cannot find this letter list")
         }
     })
 }
+
 
 // get letter by letter ID
 function get_letter(letterID) {
@@ -38,6 +42,9 @@ function get_letter(letterID) {
             generate_letter_json(result, function(res) {
                 console.log(res)
             })
+            // edit by Patricia
+            // returning the result
+            return generate_letter_json(result);
         } else {
             console.log("cannot find this letter")
         }
@@ -190,3 +197,8 @@ function generate_order_json(sql_result) {
     result_json.edit = sql_result[0].edit_count
     return result_json;
 }
+
+// edit by Patricia
+// exporting function which makes other react file can use it.
+// btw, I'm not sure whether this is the regular way to do this.
+export { get_letter_list, get_letter };

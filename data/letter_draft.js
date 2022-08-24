@@ -76,12 +76,11 @@ function IgdPurchase({ receiver, user }) {
         setPay(addDay(time, 60));
     }
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const handleSend = (event) => {
         console.log(
             {
                 amountList: amountList,
-                arrive: arrive, 
+                arrive: arrive,
                 address: address,
                 addressLoc: addressLoc,
                 pay: pay
@@ -95,49 +94,47 @@ function IgdPurchase({ receiver, user }) {
                 {receiver}負責人您好：<br />
             </Typography>
             {getContent('igd_purchase')}
-            <form onSubmit={handleSubmit}>
-                <Grid container className="contract-grid">
-                    <Grid item>商品品項</Grid>
-                    <Grid item>單位報價（元）</Grid>
-                    <Grid item>購買數量（份）</Grid>
-                    <Grid item>售價（千元）</Grid>
-                    {
-                        amountList.map(
-                            (igd) => {
-                                return (
-                                    <div className="purchase-form">
-                                        <Grid item>{igd.name}</Grid>
-                                        <Grid item>{igd.price}</Grid>
-                                        <Grid item>
-                                            <TextField id={igd.name} label="amount" onChange={handleAmount} />
-                                        </Grid>
-                                        <Grid item>{igd.price * igd.amount}</Grid>
-                                    </div>
-                                )
-                            }
-                        )
-                    }
-                    <Grid item>總價（千元）：</Grid>
-                    <Grid item>{Math.round(total)}</Grid>
-                </Grid>
-                <Grid item>
-                    <Grid item>送達時間</Grid>
-                    <Grid item>{arrive}</Grid>
-                    <Grid item>送達地址</Grid>
-                    <Grid item>{address}</Grid>
-                    <Grid item>{addressLoc}</Grid>
-                    <Grid item>支付期限</Grid>
-                    <Grid item>{addDay(arrive, 30)}</Grid>
-                </Grid>
-                <Typography className="letter-ending">{user}&emsp;敬上</Typography>
-                <Button startIcon={<ForwardToInbox />} type="submit">送出信件</Button>
-            </form>
+            <Grid container className="contract-grid">
+                <Grid item>商品品項</Grid>
+                <Grid item>單位報價（元）</Grid>
+                <Grid item>購買數量（份）</Grid>
+                <Grid item>售價（千元）</Grid>
+                {
+                    amountList.map(
+                        (igd) => {
+                            return (
+                                <div className="purchase-form">
+                                    <Grid item>{igd.name}</Grid>
+                                    <Grid item>{igd.price}</Grid>
+                                    <Grid item>
+                                        <TextField id={igd.name} label="amount" onChange={handleAmount} />
+                                    </Grid>
+                                    <Grid item>{igd.price * igd.amount}</Grid>
+                                </div>
+                            )
+                        }
+                    )
+                }
+                <Grid item>總價（千元）：</Grid>
+                <Grid item>{Math.round(total)}</Grid>
+            </Grid>
+            <Grid item>
+                <Grid item>送達時間</Grid>
+                <Grid item>{arrive}</Grid>
+                <Grid item>送達地址</Grid>
+                <Grid item>{address}</Grid>
+                <Grid item>{addressLoc}</Grid>
+                <Grid item>支付期限</Grid>
+                <Grid item>{addDay(arrive, 30)}</Grid>
+            </Grid>
+            <Typography className="letter-ending">{user}&emsp;敬上</Typography>
+            <Button startIcon={<ForwardToInbox />} onClick={handleSend} href='/letter_list'>送出信件</Button>
         </div>
     )
 }
 
 // 提供報價單
-function Quotation({ receiver, user }) {
+function Quotation({ detail, user }) {
     const [discount, setDiscount] = React.useState();
     const [choice, setChoice] = React.useState();
 
@@ -149,8 +146,7 @@ function Quotation({ receiver, user }) {
         setChoice(event.target.value);
     }
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const handleSend = (event) => {
         const quotate = [
             {
                 name: "螺絲",
@@ -182,55 +178,61 @@ function Quotation({ receiver, user }) {
     return (
         <div classname="quotation">
             <Typography>
-                {receiver}負責人您好：<br />
+                {detail.sender}負責人您好：<br />
             </Typography>
             {getContent('quotation')}
-            <form onSubmit={handleSubmit}>
-                <FormControl className="quotation-price">
-                    <FormLabel>請選擇報價單之價格調整</FormLabel>
-                    <RadioGroup onChange={handleChoice}>
-                        <FormControlLabel value="normal" control={<Radio />} label="提供預設價格之報價單" />
-                        <FormControlLabel value="adjust" control={<Radio />} label={
-                            <div className="discount-textfield">
-                                提供
-                                <TextField id="discount" onChange={handleDiscount} />
-                                的價格
-                            </div>
-                        } />
-                    </RadioGroup>
-                </FormControl>
-                <Typography className="letter-ending">{user}&emsp;敬上</Typography>
-                <Button type='submit' startIcon={<ForwardToInbox />}>送出信件</Button>
-            </form>
+            <FormControl className="quotation-price">
+                <FormLabel>請選擇報價單之價格調整</FormLabel>
+                <RadioGroup onChange={handleChoice}>
+                    <FormControlLabel value="normal" control={<Radio />} label="提供預設價格之報價單" />
+                    <FormControlLabel value="adjust" control={<Radio />} label={
+                        <div className="discount-textfield">
+                            提供
+                            <TextField id="discount" onChange={handleDiscount} />
+                            的價格
+                        </div>
+                    } />
+                </RadioGroup>
+            </FormControl>
+            <Typography className="letter-ending">{user}&emsp;敬上</Typography>
+            <Button startIcon={<ForwardToInbox />} href='/letter_list' onClick={handleSend}>送出信件</Button>
+        </div>
+    )
+}
+
+// 請求報價單
+function Quotation_request({ receiver, user }) {
+    const handleSend = (event) => {
+        console.log('letter sent from ' + user + ' to ' + receiver);
+    }
+
+    return (
+        <div classname="quotation">
+            <Typography>
+                {receiver}負責人您好：<br />
+            </Typography>
+            {getContent('quotation_request')}
+            <Typography className="letter-ending">{user}&emsp;敬上</Typography>
+            <Button startIcon={<ForwardToInbox />} href='/letter_list' onClick={handleSend}>送出信件</Button>
         </div>
     )
 }
 
 // 訂單草稿
-function ContractDraft({ receiver, user }) {
-
+function ContractDraft({ detail, user }) {
+    // 主要獲得收件人的地址
     const receiverInfo = {
-        name: receiver,
+        name: detail.sender,
         address: "美國"
     }
-
+    // 主要獲得寄件人地址
     const userInfo = {
         name: user,
         address: "英國"
     }
 
-    const quotate = [
-        {
-            name: "螺絲",
-            price: 100
-        },
-        {
-            name: "休旅車車門",
-            price: 1000
-        }
-    ]
-
-    const [amountList, setAmount] = React.useState(quotate.map(
+    // 一些最後表單完成後要交給後端的參數
+    const [amountList, setAmount] = React.useState(detail.quotate.map(
         (product) => {
             return (
                 {
@@ -241,7 +243,6 @@ function ContractDraft({ receiver, user }) {
             )
         }
     ));
-    const [total, setTotal] = React.useState(0);
     const [arrive, setArrive] = React.useState();
     const [address, setAddress] = React.useState();
     const [addressLoc, setLoc] = React.useState();
@@ -250,6 +251,10 @@ function ContractDraft({ receiver, user }) {
     const [flawRender, setFlawRender] = React.useState();
     const [pay, setPay] = React.useState();
 
+    // 用來加總東西的
+    const [total, setTotal] = React.useState(0);
+
+    // 當使用者輸入任何一格數量時，調整畫面上的參數
     const handleAmount = (event) => {
         var totalNow = 0;
         setAmount(
@@ -270,11 +275,13 @@ function ContractDraft({ receiver, user }) {
         setTotal(totalNow);
     }
 
+    // 依照使用者選擇的送貨目的地，調整畫面上的參數
     const handleAddress = (event) => {
         setAddress(event.target.value);
-        setLoc(event.target.value === receiver ? receiverInfo.address : userInfo.address);
+        setLoc(event.target.value === detail.receiver ? receiverInfo.address : userInfo.address);
     }
 
+    // 依照使用者選擇的瑕疵處理方式，調整畫面上的參數
     const handleFlaw = (event) => {
         setFlaw(event.target.value);
         setFlawRender(event.target.value === "change" ?
@@ -293,8 +300,8 @@ function ContractDraft({ receiver, user }) {
         console.log('供貨天數:', arrive);
     }
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    // 信件送出時，將需要交給後端的參數傳給後端
+    const handleSend = (event) => {
         console.log(
             {
                 amountList: amountList,
@@ -311,10 +318,9 @@ function ContractDraft({ receiver, user }) {
     return (
         <div className="contract-draft">
             <Typography>
-                {receiver}負責人您好：<br />
+                {detail.receiver}負責人您好：<br />
             </Typography>
             {getContent('contract_draft')}
-            <form onSubmit={handleSubmit}>
                 <Grid container className="contract-grid">
                     <Grid item>商品品項</Grid>
                     <Grid item>單位報價（元）</Grid>
@@ -355,7 +361,7 @@ function ContractDraft({ receiver, user }) {
                     <Grid item>
                         <FormControl>
                             <Select onChange={handleAddress}>
-                                <MenuItem value={receiver}>{receiver}</MenuItem>
+                                <MenuItem value={detail.receiver}>{detail.receiver}</MenuItem>
                                 <MenuItem value={user}>{user}</MenuItem>
                             </Select>
                         </FormControl>
@@ -383,8 +389,7 @@ function ContractDraft({ receiver, user }) {
                         </FormControl>
                     </Grid>
                 </Grid>
-                <Button startIcon={<ForwardToInbox />} type="submit">送出信件</Button>
-            </form>
+                <Button startIcon={<ForwardToInbox />} href='/letter_list' onClick={handleSend}>送出信件</Button>
         </div>
     )
 }
@@ -515,8 +520,7 @@ function ContractEdit({ receiver, user, contract }) {
         setTotal(totalNow);
     }
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const handleSend = (event) => {
         console.log(
             {
                 amountList: amountList,
@@ -536,7 +540,6 @@ function ContractEdit({ receiver, user, contract }) {
                 {receiver}負責人您好：<br />
             </Typography>
             {getContent('contract_edit')}
-            <form onSubmit={handleSubmit}>
                 <Grid container className="contract-grid">
                     <Grid item>無法提供</Grid>
                     <Grid item>商品品項</Grid>
@@ -621,10 +624,9 @@ function ContractEdit({ receiver, user, contract }) {
                         </FormControl>
                     </Grid>
                 </Grid>
-                <Button startIcon={<ForwardToInbox />} type="submit">送出信件</Button>
-            </form>
+                <Button startIcon={<ForwardToInbox />} onClick={handleSend} href='/letter_list'>送出信件</Button>
         </div>
     )
 }
 
-export { IgdPurchase, Quotation, ContractDraft, ContractEdit };
+export { IgdPurchase, Quotation, ContractDraft, ContractEdit, Quotation_request };
