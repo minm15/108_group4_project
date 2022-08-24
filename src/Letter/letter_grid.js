@@ -5,6 +5,7 @@ import { DataGrid } from '@mui/x-data-grid';
 // import { get_letter_list } from '../test/mail.js';
 import get_letter_list from '../data/letter_list';
 import MenuList from './menu';
+import LetterList from './letter_gridList';
 
 
 
@@ -59,7 +60,7 @@ const LetterGrid = () => {
             <div className="menu">
                 <MenuList />
             </div>
-            <Box sx={{ height: 400, width: '100%' }}>
+            {/* <Box sx={{ height: 400, width: '100%' }}>
                 <DataGrid
                     rows={rows}
                     columns={columns}
@@ -69,7 +70,8 @@ const LetterGrid = () => {
                         columnMenu: { background: 'red', counter: rows.length },
                     }}
                 />
-            </Box>
+            </Box> */}
+            <LetterList />
             <Outlet />
         </div>
     )
