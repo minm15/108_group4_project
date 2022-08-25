@@ -5,21 +5,30 @@ import {
     FormControl, RadioGroup, FormControlLabel, FormLabel, Radio,
     Select, MenuItem,
     Button,
-    Typography
+    Typography,
+    Box
 } from '@mui/material';
 import { ForwardToInbox } from "@mui/icons-material";
 import getContent from "./letter_content";
+import { DataGrid } from "@mui/x-data-grid";
+import CustomFooter from "../small_component/customFooter";
 
 function addDay(day) {
     // 目前時間會奇異的倒轉
     // Thu Apr 02 2020 + 15 = 2020-3-17
     var result = new Date(time);
     result.setDate(result.getDate() + day);
-    console.log((new Date(time)).toDateString(), '+', day, '=', result.getFullYear() + '-' + result.getMonth() + '-' + result.getDate());
+    // console.log((new Date(time)).toDateString(), '+', day, '=', result.getFullYear() + '-' + result.getMonth() + '-' + result.getDate());
     return result.getFullYear() + '-' + result.getMonth() + '-' + result.getDate();
 }
 
 const time = "2020-4-2";
+
+// Note: 這一邊的letter_draft，IgdPurchase、Quotation_request是要直接從撰寫信件點進去的
+// Quotation、ContractDraft、ContractEdit都是藉由回信，才能夠導到這些頁面
+// （註：回信，就是從收到的信件裡面最底下的按鈕，點寄送報價單、發起訂單、調整訂單）
+// 所以這個.js檔案裡面提到的detail，都是指要回的那一封信的資訊
+// 也就是說，在撰寫提供報價單的信件的時候，那個收件者，是detail的寄件者，就是報價單請求信的寄件人
 
 // 材料下訂
 function IgdPurchase({ receiver, user }) {
@@ -236,6 +245,7 @@ function ContractDraft({ detail, user }) {
         (product) => {
             return (
                 {
+                    id: product.id,
                     name: product.name,
                     price: product.price,
                     amount: 0
@@ -264,6 +274,7 @@ function ContractDraft({ detail, user }) {
                     totalNow += igdAmount * igd.price;
                     return (
                         {
+                            id: igd.id,
                             name: igd.name,
                             price: igd.price,
                             amount: igdAmount
@@ -278,7 +289,7 @@ function ContractDraft({ detail, user }) {
     // 依照使用者選擇的送貨目的地，調整畫面上的參數
     const handleAddress = (event) => {
         setAddress(event.target.value);
-        setLoc(event.target.value === detail.receiver ? receiverInfo.address : userInfo.address);
+        setLoc(event.target.value === detail.sender ? receiverInfo.address : userInfo.address);
     }
 
     // 依照使用者選擇的瑕疵處理方式，調整畫面上的參數
@@ -315,13 +326,43 @@ function ContractDraft({ detail, user }) {
         )
     }
 
+    // datagrid的標題（我後來把
+    const columns = [
+        {
+            field: 'name',
+            headerName: '商品品項',
+            width: 120,
+            height: 40
+        },
+        {
+            field: 'price',
+            headerName: '單位報價',
+            width: 120,
+            height: 40
+        },
+        {
+            field: 'amount',
+            headerName: '數量',
+            width: 120,
+            height: 40,
+            renderCell: (params) => {
+                return (
+                    <TextField id={params.row.name} label="amount" onChange={handleAmount} />
+                )
+            }
+        }
+    ];
+
+    const rows = amountList;
+
     return (
         <div className="contract-draft">
             <Typography>
                 {detail.receiver}負責人您好：<br />
             </Typography>
             {getContent('contract_draft')}
-                <Grid container className="contract-grid">
+            {/* 原本的Grid寫法 */}
+            {/* <Grid container className="contract-grid">
                     <Grid item>商品品項</Grid>
                     <Grid item>單位報價（元）</Grid>
                     <Grid item>購買數量（份）</Grid>
@@ -345,58 +386,74 @@ function ContractDraft({ detail, user }) {
                     }
                     <Grid item>總價（千元）：</Grid>
                     <Grid item>{total / 1000}</Grid>
+                </Grid> */}
+            {/* datagrid寫法 */}
+            <Box sx={{ height: 400, width: '100%' }}>
+                <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    pageSize={10}
+                    rowsPerPageOptions={[10]}
+                    components={{
+                        Footer: CustomFooter
+                    }}
+                    componentsProps={{
+                        footer: { total }
+                    }}
+                />
+            </Box>
+            <Grid container className="contract-detail">
+                <Grid item>送達時間</Grid>
+                <Grid item>
+                    <FormControl>
+                        <Select onChange={(event) => { setArrive(Number(event.target.value)); }}>
+                            <MenuItem value={15}>{addDay(15)}</MenuItem>
+                            <MenuItem value={30}>{addDay(30)}</MenuItem>
+                        </Select>
+                    </FormControl>
                 </Grid>
-                <Grid container className="contract-detail">
-                    <Grid item>送達時間</Grid>
-                    <Grid item>
-                        <FormControl>
-                            <Select onChange={(event) => { setArrive(Number(event.target.value)); }}>
-                                <MenuItem value={15}>{addDay(15)}</MenuItem>
-                                <MenuItem value={30}>{addDay(30)}</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
 
-                    <Grid item>送達地址</Grid>
-                    <Grid item>
-                        <FormControl>
-                            <Select onChange={handleAddress}>
-                                <MenuItem value={detail.receiver}>{detail.receiver}</MenuItem>
-                                <MenuItem value={user}>{user}</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item>位於{addressLoc}</Grid>
-
-                    <Grid item>瑕疵處理</Grid>
-                    <Grid item>
-                        <FormControl>
-                            <Select onChange={handleFlaw}>
-                                <MenuItem value="change">換貨</MenuItem>
-                                <MenuItem value="discount">讓價</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    {flawRender}
-
-                    <Grid item>支付期限</Grid>
-                    <Grid item>
-                        <FormControl>
-                            <Select onChange={(event) => { setPay(Number(event.target.value)); }}>
-                                <MenuItem value={10 + arrive}>{addDay(10 + arrive)}</MenuItem>
-                                <MenuItem value={15 + arrive}>{addDay(15 + arrive)}</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
+                <Grid item>送達地址</Grid>
+                <Grid item>
+                    <FormControl>
+                        <Select onChange={handleAddress}>
+                            <MenuItem value={detail.sender}>{detail.sender}</MenuItem>
+                            <MenuItem value={user.name}>{user.name}</MenuItem>
+                        </Select>
+                    </FormControl>
                 </Grid>
-                <Button startIcon={<ForwardToInbox />} href='/letter_list' onClick={handleSend}>送出信件</Button>
+                <Grid item>位於{addressLoc}</Grid>
+
+                <Grid item>瑕疵處理</Grid>
+                <Grid item>
+                    <FormControl>
+                        <Select onChange={handleFlaw}>
+                            <MenuItem value="change">換貨</MenuItem>
+                            <MenuItem value="discount">讓價</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+                {flawRender}
+
+                <Grid item>支付期限</Grid>
+                <Grid item>
+                    <FormControl>
+                        <Select onChange={(event) => { setPay(Number(event.target.value)); }}>
+                            <MenuItem value={10 + arrive}>{addDay(10 + arrive)}</MenuItem>
+                            <MenuItem value={15 + arrive}>{addDay(15 + arrive)}</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+            </Grid>
+            <Button startIcon={<ForwardToInbox />} href='/letter_list' onClick={handleSend}>送出信件</Button>
         </div>
     )
 }
 
-function ContractEdit({ receiver, user, contract }) {
+// 訂單調整
+function ContractEdit({ detail, user }) {
     const receiverInfo = {
-        name: receiver,
+        name: detail.sender,
         address: "美國"
     }
 
@@ -406,10 +463,11 @@ function ContractEdit({ receiver, user, contract }) {
     }
 
     const [amountList, setAmount] = React.useState(
-        contract.amountList.map(
+        detail.amountList.map(
             (product) => {
                 return (
                     {
+                        id: product.id,
                         name: product.name,
                         price: product.price,
                         amount: product.amount,
@@ -429,13 +487,13 @@ function ContractEdit({ receiver, user, contract }) {
             }
         ).reduce((acc, ele) => acc + ele, 0)
     );
-    const [arrive, setArrive] = React.useState(contract.arrive);
-    const [address, setAddress] = React.useState(contract.address);
+    const [arrive, setArrive] = React.useState(detail.arrive);
+    const [address, setAddress] = React.useState(detail.address);
     const [addressLoc, setLoc] = React.useState(
         (address === userInfo.name) ? userInfo.address : receiverInfo.address
     );
-    const [flaw, setFlaw] = React.useState(contract.flaw);
-    const [flawDate, setFlawDate] = React.useState(contract.flawDate);
+    const [flaw, setFlaw] = React.useState(detail.flaw);
+    const [flawDate, setFlawDate] = React.useState(detail.flawDate);
     const [flawRender, setFlawRender] = React.useState(
         (flaw === 'change') ? (
             <div className="flaw-date">
@@ -453,11 +511,11 @@ function ContractEdit({ receiver, user, contract }) {
             </div>
         ) : null
     );
-    const [pay, setPay] = React.useState(contract.pay);
+    const [pay, setPay] = React.useState(detail.pay);
 
     const handleAddress = (event) => {
         setAddress(event.target.value);
-        setLoc(event.target.value === receiver ? receiverInfo.address : userInfo.address);
+        setLoc(event.target.value === detail.sender ? receiverInfo.address : userInfo.address);
     }
 
     const handleFlaw = (event) => {
@@ -480,22 +538,47 @@ function ContractEdit({ receiver, user, contract }) {
         console.log('供貨天數:', arrive);
     }
 
-    const handleProvide = (event) => {
-        setAmount(
-            amountList.map(
-                (product) => {
-                    return (
-                        {
-                            name: product.name,
-                            price: product.price,
-                            amount: product.amount,
-                            discount: product.discount,
-                            cantProvide: product.name === event.target.id ? !product.cantProvide : product.cantProvide
-                        }
-                    )
-                }
-            )
-        );
+    // 給Grid用的
+    // const handleProvide = (event) => {
+    //     setAmount(
+    //         amountList.map(
+    //             (product) => {
+    //                 return (
+    //                     {
+    //                         id: product.id,
+    //                         name: product.name,
+    //                         price: product.price,
+    //                         amount: product.amount,
+    //                         discount: product.discount,
+    //                         cantProvide: product.name === event.target.id ? !product.cantProvide : product.cantProvide
+    //                     }
+    //                 )
+    //             }
+    //         )
+    //     );
+    // }
+
+    // 給Datagrid用的
+    // 因為是配合onCellClick，所以多一層判斷他是點哪一個欄位
+    const handleProvide = (params) => {
+        if (params.field === 'provide') {
+            setAmount(
+                amountList.map(
+                    (product) => {
+                        return (
+                            {
+                                id: product.id,
+                                name: product.name,
+                                price: product.price,
+                                amount: product.amount,
+                                discount: product.discount,
+                                cantProvide: product.id === params.row.id ? !product.cantProvide : product.cantProvide
+                            }
+                        )
+                    }
+                )
+            );
+        }
     }
 
     const handleDiscount = (event) => {
@@ -503,10 +586,11 @@ function ContractEdit({ receiver, user, contract }) {
         setAmount(
             amountList.map(
                 (product) => {
-                    var discount = product.name === event.target.id ? event.target.value : product.discount;
-                    totalNow = product.price * product.amount * (1 - discount);
+                    var discount = product.name === event.target.id ? Number(event.target.value) : product.discount;
+                    totalNow += product.price * product.amount * (1 - discount);
                     return (
                         {
+                            id: product.id,
                             name: product.name,
                             price: product.price,
                             amount: product.amount,
@@ -534,97 +618,160 @@ function ContractEdit({ receiver, user, contract }) {
         )
     }
 
+    // datagrid用的標題
+    const columns = [
+        {
+            field: 'provide',
+            headerName: '無法提供',
+            width: 120,
+            height: 40,
+            renderCell: (params) => {
+                return (params.row.cantProvide ? "X" : "　　　");
+            }
+        },
+        {
+            field: 'name',
+            headerName: '商品品項',
+            width: 120,
+            height: 40
+        },
+        {
+            field: 'price',
+            headerName: '單位報價',
+            width: 120,
+            height: 40
+        },
+        {
+            field: 'amount',
+            headerName: '購買數量',
+            width: 120,
+            height: 40
+        },
+        {
+            field: 'discount',
+            headerName: '折扣',
+            width: 120,
+            height: 40,
+            renderCell: (params) => {
+                return (
+                    <TextField id={params.row.name} label="discount" onChange={handleDiscount} />
+                )
+            }
+        }
+    ]
+
+    // datagrid用的內容
+    const rows = amountList;
+
     return (
         <div className="contract-edit">
             <Typography>
-                {receiver}負責人您好：<br />
+                {detail.sender}負責人您好：<br />
             </Typography>
             {getContent('contract_edit')}
-                <Grid container className="contract-grid">
-                    <Grid item>無法提供</Grid>
-                    <Grid item>商品品項</Grid>
-                    <Grid item>單位報價（元）</Grid>
-                    <Grid item>購買數量（份）</Grid>
-                    <Grid item>折扣（%off）</Grid>
-                    <Grid item>售價（千元）</Grid>
+            {/* 原本的Grid寫法 */}
+            {/* <Grid container className="contract-grid">
+                <Grid item>無法提供</Grid>
+                <Grid item>商品品項</Grid>
+                <Grid item>單位報價（元）</Grid>
+                <Grid item>購買數量（份）</Grid>
+                <Grid item>折扣（%off）</Grid>
+                <Grid item>售價（千元）</Grid>
 
-                    {
-                        amountList.map(
-                            (product) => {
-                                return (
-                                    <div className="quoate-list">
-                                        <Grid item id={product.name} onClick={handleProvide}>{product.cantProvide ? "X" : "　　　"}</Grid>
-                                        <Grid item>{product.name}</Grid>
-                                        <Grid item>{product.price}</Grid>
-                                        <Grid item>{product.amount}</Grid>
-                                        <Grid item>
-                                            <TextField id={product.name} label="discount" onChange={handleDiscount} />
-                                        </Grid>
-                                        <Grid item>{product.price * product.amount * (1 - product.discount)}</Grid>
-                                    </div>
-                                )
-                            }
-                        )
-                    }
-                    <Grid item>總價（千元）：</Grid>
-                    <Grid item>{total / 1000}</Grid>
+                {
+                    amountList.map(
+                        (product) => {
+                            return (
+                                <div className="quoate-list">
+                                    <Grid item id={product.name} onClick={handleProvide}>{product.cantProvide ? "X" : "　　　"}</Grid>
+                                    <Grid item>{product.name}</Grid>
+                                    <Grid item>{product.price}</Grid>
+                                    <Grid item>{product.amount}</Grid>
+                                    <Grid item>
+                                        <TextField id={product.name} label="discount" onChange={handleDiscount} />
+                                    </Grid>
+                                    <Grid item>{product.price * product.amount * (1 - product.discount)}</Grid>
+                                </div>
+                            )
+                        }
+                    )
+                }
+                <Grid item>總價（千元）：</Grid>
+                <Grid item>{total / 1000}</Grid>
+            </Grid> */}
+            {/* datagrid寫法 */}
+            {/* CustomFooter在small_component的資料夾底下，調整css要過去調 */}
+            <Box sx={{ height: 400, width: '100%' }}>
+                <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    pageSize={10}
+                    rowsPerPageOptions={[10]}
+                    components={{
+                        Footer: CustomFooter
+                    }}
+                    componentsProps={{
+                        footer: { total }
+                    }}
+                    onCellClick={handleProvide}
+                />
+            </Box>
+            <Grid container className="contract-detail">
+                <Grid item>送達時間</Grid>
+                <Grid item>
+                    <FormControl>
+                        <Select
+                            onChange={(event) => { setArrive(Number(event.target.value)); }}
+                            defaultValue={arrive}
+                        >
+                            <MenuItem value={15}>{addDay(15)}</MenuItem>
+                            <MenuItem value={30}>{addDay(30)}</MenuItem>
+                        </Select>
+                    </FormControl>
                 </Grid>
-                <Grid container className="contract-detail">
-                    <Grid item>送達時間</Grid>
-                    <Grid item>
-                        <FormControl>
-                            <Select
-                                onChange={(event) => { setArrive(Number(event.target.value)); }}
-                                defaultValue={arrive}
-                            >
-                                <MenuItem value={15}>{addDay(15)}</MenuItem>
-                                <MenuItem value={30}>{addDay(30)}</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
 
-                    <Grid item>送達地址</Grid>
-                    <Grid item>
-                        <FormControl>
-                            <Select
-                                onChange={handleAddress}
-                                defaultValue={address}
-                            >
-                                <MenuItem value={receiver}>{receiver}</MenuItem>
-                                <MenuItem value={user}>{user}</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item>位於{addressLoc}</Grid>
-
-                    <Grid item>瑕疵處理</Grid>
-                    <Grid item>
-                        <FormControl>
-                            <Select
-                                onChange={handleFlaw}
-                                defaultValue={flaw}
-                            >
-                                <MenuItem value="change">換貨</MenuItem>
-                                <MenuItem value="discount">讓價</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    {flawRender}
-
-                    <Grid item>支付期限</Grid>
-                    <Grid item>
-                        <FormControl>
-                            <Select
-                                onChange={(event) => { setPay(Number(event.target.value)); }}
-                                defaultValue={contract.pay}
-                            >
-                                <MenuItem value={10 + arrive}>{addDay(10 + arrive)}</MenuItem>
-                                <MenuItem value={15 + arrive}>{addDay(15 + arrive)}</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
+                <Grid item>送達地址</Grid>
+                <Grid item>
+                    <FormControl>
+                        <Select
+                            onChange={handleAddress}
+                            defaultValue={address}
+                        >
+                            <MenuItem value={detail.sender}>{detail.sender}</MenuItem>
+                            <MenuItem value={user.name}>{user.name}</MenuItem>
+                        </Select>
+                    </FormControl>
                 </Grid>
-                <Button startIcon={<ForwardToInbox />} onClick={handleSend} href='/letter_list'>送出信件</Button>
+                <Grid item>位於{addressLoc}</Grid>
+
+                <Grid item>瑕疵處理</Grid>
+                <Grid item>
+                    <FormControl>
+                        <Select
+                            onChange={handleFlaw}
+                            defaultValue={flaw}
+                        >
+                            <MenuItem value="change">換貨</MenuItem>
+                            <MenuItem value="discount">讓價</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+                {flawRender}
+
+                <Grid item>支付期限</Grid>
+                <Grid item>
+                    <FormControl>
+                        <Select
+                            onChange={(event) => { setPay(Number(event.target.value)); }}
+                            defaultValue={detail.pay}
+                        >
+                            <MenuItem value={10 + arrive}>{addDay(10 + arrive)}</MenuItem>
+                            <MenuItem value={15 + arrive}>{addDay(15 + arrive)}</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+            </Grid>
+            <Button startIcon={<ForwardToInbox />} onClick={handleSend} href='/letter_list'>送出信件</Button>
         </div>
     )
 }
