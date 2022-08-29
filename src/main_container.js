@@ -5,6 +5,7 @@ import LetterReceive from "./Letter/letter_receive";
 import LetterWriting from "./Letter/letter_writing";
 import Manufactor from "./manufactor/mf_list";
 import Product from "./manufactor/mf_product";
+import LetterReply from "./Letter/letter_reply";
 
 class MainContainer extends React.Component {
     render() {
@@ -27,10 +28,36 @@ class MainContainer extends React.Component {
                                 <Route index element={<LetterGrid />} />
                                 <Route
                                     path=":letterId"
-                                    element={<LetterReceive />}
+                                    element={
+                                        <LetterReceive
+                                            user={{
+                                                name: 'takodachi公司',
+                                                type: 'manufacturer'
+                                            }}
+                                        />
+                                    }
                                 />
                             </Route>
-                            <Route path="/letter_writing" element={<LetterWriting />} />
+                            <Route path="/letter_writing">
+                                <Route index element={
+                                    <LetterWriting
+                                        user={{
+                                            name: 'takodachi公司',
+                                            type: 'manufacturer'
+                                        }}
+                                    />
+                                } />
+                                <Route
+                                    path=":letterId"
+                                    element={
+                                        <LetterReply
+                                            user={{
+                                                name: 'takodachi公司',
+                                                type: 'manufacturer'
+                                            }}
+                                        />
+                                    } />
+                            </Route>
                             <Route path="/manufactory">
                                 <Route index element={<Manufactor />} />
                                 <Route path="product" element={<Product />} />
