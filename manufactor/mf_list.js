@@ -1,67 +1,37 @@
 import React from "react";
-import { Box, Paper, Grid, IconButton } from "@mui/material";
+import { Box, Paper, Grid, IconButton, Button } from "@mui/material";
 import { Add } from '@mui/icons-material';
 import { Link } from "react-router-dom";
+import get_producing_list from "../data/mf_producing_list";
+
+const date = "2022-3-10";
 
 function Manufactor() {
+    
+    const handleCollect = (event) => {
+        setList(
+            mf_list.filter(
+                (mf) => mf.id !== event.currentTarget.id
+            )
+        );
+        // console.log(mf_list);
+        // console.log(event.currentTarget.id);
+    }
+    
     // manufactor list
-    const mf_list = [
-        {
-            product: "品項名稱",
-            target: {
-                rank: "生產目標",
-                amount: "目標數量"
-            },
-            mistake: "預期誤差",
-            ingredient: [
-                {
-                    name: "材料名稱",
-                    amount: "消耗量",
-                    company: "從哪間公司購買的",
-                    rank: "材料等級",
-                    cost: "進貨成本"
-                }
-            ],
-            expense: "其他費用",
-            total_cost: "共計成本",
-            time: "預計耗時",
-            status: "生產是否完畢",
-            purpose: "生產目的"
-        },
-        {
-            product: "品項名稱",
-            target: {
-                rank: "生產目標",
-                amount: "目標數量"
-            },
-            mistake: "預期誤差",
-            ingredient: [
-                {
-                    name: "材料名稱",
-                    amount: "消耗量",
-                    company: "從哪間公司購買的",
-                    rank: "材料等級",
-                    cost: "進貨成本"
-                }
-            ],
-            expense: "其他費用",
-            total_cost: "共計成本",
-            time: "預計耗時",
-            status: "生產是否完畢",
-            purpose: "生產目的"
-        }
-    ]
+    const [mf_list, setList] = React.useState(get_producing_list());
 
     const product_paper = mf_list.map(
         mf => {
             return (
                 <Paper elevation={4}
-                    square={false}>
+                    square={false}
+                    key={mf.id}>
                     <div className="mf_status">{mf.status}</div>
                     <div className="mf_purpose">{mf.purpose}</div>
                     <Grid container>
                         <Grid item>生產目標：</Grid>
-                        <Grid item>{mf.target.rank}</Grid>
+                        <Grid item>{mf.target.type}</Grid>
                         <Grid item>{mf.target.amount}</Grid>
 
                         <Grid item>預期誤差：</Grid>
@@ -73,8 +43,8 @@ function Manufactor() {
                                 igd => {
                                     return (
                                         <Grid container>
-                                            <Grid item>{igd.name}-{igd.amount}</Grid>
-                                            <Grid item>{igd.company}</Grid>
+                                            <Grid item>{igd.name}-{igd.type}</Grid>
+                                            <Grid item>{igd.amount}</Grid>
                                         </Grid>
                                     )
                                 }
@@ -90,6 +60,10 @@ function Manufactor() {
                         <Grid item>預計耗時：</Grid>
                         <Grid item>{mf.time}</Grid>
                     </Grid>
+                    {
+                        mf.finish_date === date ?
+                            <Button onClick={handleCollect} id={mf.id}>收集成品</Button> : null
+                    }
                 </Paper>
             )
         }

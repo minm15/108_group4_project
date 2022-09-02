@@ -5,7 +5,9 @@ import CreateContent from '../data/letter_detail';
 import get_letter_list from "../data/letter_list";
 
 function LetterReceive({ user }) {
+    // 從網址獲得信件編號
     const [id, setId] = useState(useParams().letterId);
+    // 獲得信件內容
     const [detail, setDetail] = useState(
         get_letter_list().find(
             letter => letter.id === id
