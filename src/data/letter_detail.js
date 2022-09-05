@@ -16,14 +16,7 @@ import getContent from "./letter_content";
 import MenuList from "../Letter/menu";
 import { DataGrid } from "@mui/x-data-grid";
 
-// CustomFooter: DataGrid要用的總和
-const CustomFooter = (props) => {
-    return (
-        <Box sx={{ padding: "10px", display: "flex" }}>
-            總價：{props.total}
-        </Box>
-    )
-}
+import CustomFooter from "../small_component/customFooter";
 
 // Operation: 營運支出計畫
 const Operation = ({ detail, user }) => {
@@ -294,6 +287,15 @@ const ContractEdit = ({ detail }) => {
     // datagrid用的標題
     const columns = [
         {
+            field: 'provide',
+            headerName: '無法提供',
+            width: 120,
+            height: 40,
+            renderCell: (params) => {
+                return (params.row.cantProvide ? "X" : "　　　");
+            }
+        },
+        {
             field: 'name',
             headerName: '商品品項',
             width: 120,
@@ -365,7 +367,7 @@ const ContractEdit = ({ detail }) => {
             </Grid> */}
 
             {/* datagrid寫法 */}
-            {/* CustomFooter在本js檔案最上面，要調整CSS要上去調 */}
+            {/* CustomFooter在small_component的資料夾底下，調整css要過去調 */}
             <Box sx={{ height: 400, width: '100%' ,mb:3,mt:3}}>
                 <DataGrid
                     rows={rows}
@@ -381,7 +383,7 @@ const ContractEdit = ({ detail }) => {
                     onStateChange={(state) => {
                         const totalNow = detail.amountList.map(
                             (product) => {
-                                return product.price * product.amount * product.discount
+                                return product.price * product.amount * (1-product.discount)
                             }
                         ).reduce(
                             (a, b) => a + b, 0

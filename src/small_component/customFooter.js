@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 // CustomFooter: DataGrid要用的總和
 const CustomFooter = (props) => {
     return (
-        <Box sx={{ padding: "10px", display: "flex",color:"red" }}>
+        <Box sx={{ padding: "10px", display: "flex" }}>
             總價：{props.total}
         </Box>
     )

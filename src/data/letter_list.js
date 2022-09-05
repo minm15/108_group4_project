@@ -73,6 +73,7 @@ const letter_list = [
                 price: 300,
                 amount: 40,
                 discount: 0.8,
+                cantProvide: false
             }
         ],
         arrive: '2022-7-31',
