@@ -55,11 +55,11 @@ function MenuList() {
             </ListItemButton>
             
             <ListItemButton  sx={{"&:hover": { backgroundColor: "#E4513D" },"&$selected":{backgroundColor: "#E4513D"}}}onClick={handleClick} component={Link} to="/letter_list">
-                <ListItemIcon>
+                <ListItemIcon  sx={{"&:hover": { color: "#ffffff" }}}>
                     <MailOutline />
                 </ListItemIcon>
-                <ListItemText primary="所有信件" disableTypography sx={{  fontFamily: 'Noto Sans TC',
-        fontSize: '18px',fontWeight: '400',lineHeight: '35px',letterSpacing: '0em',textAlign: 'left' }}/>
+                <ListItemText primary="所有信件" disableTypography sx={{ color:'#350D08', fontFamily: 'Noto Sans TC',
+        fontSize: '18px',fontWeight: '400',lineHeight: '35px',letterSpacing: '0em',textAlign: 'left', "&:hover": { color:'#ffffff' }  }}/>
                 
                 {open ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
