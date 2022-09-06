@@ -1,3 +1,4 @@
+//其他公司頁面中的所有公司資料
 const companyList = [
     {
       // id: "1",

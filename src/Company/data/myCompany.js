@@ -1,3 +1,4 @@
+ //user這間公司的基本資料
  const myCompany=[
     {
       name: "Wah汽車材料股份有限公司",
