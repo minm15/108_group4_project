@@ -1,112 +1,172 @@
 import React from "react";
-import { Box, Paper, Grid, IconButton } from "@mui/material";
+import { Box, Paper, Grid, IconButton, Button,Typography } from "@mui/material";
+import { shadows } from '@mui/system';
 import { Add } from '@mui/icons-material';
 import { Link } from "react-router-dom";
+import get_producing_list from "../data/mf_producing_list";
+
+const date = "2022-3-10";
 
 function Manufactor() {
+    
+    const handleCollect = (event) => {
+        setList(
+            mf_list.filter(
+                (mf) => mf.id !== event.currentTarget.id
+            )
+        );
+        // console.log(mf_list);
+        // console.log(event.currentTarget.id);
+    }
+    
     // manufactor list
-    const mf_list = [
-        {
-            product: "品項名稱",
-            target: {
-                rank: "生產目標",
-                amount: "目標數量"
-            },
-            mistake: "預期誤差",
-            ingredient: [
-                {
-                    name: "材料名稱",
-                    amount: "消耗量",
-                    company: "從哪間公司購買的",
-                    rank: "材料等級",
-                    cost: "進貨成本"
-                }
-            ],
-            expense: "其他費用",
-            total_cost: "共計成本",
-            time: "預計耗時",
-            status: "生產是否完畢",
-            purpose: "生產目的"
-        },
-        {
-            product: "品項名稱",
-            target: {
-                rank: "生產目標",
-                amount: "目標數量"
-            },
-            mistake: "預期誤差",
-            ingredient: [
-                {
-                    name: "材料名稱",
-                    amount: "消耗量",
-                    company: "從哪間公司購買的",
-                    rank: "材料等級",
-                    cost: "進貨成本"
-                }
-            ],
-            expense: "其他費用",
-            total_cost: "共計成本",
-            time: "預計耗時",
-            status: "生產是否完畢",
-            purpose: "生產目的"
-        }
-    ]
+    const [mf_list, setList] = React.useState(get_producing_list());
 
     const product_paper = mf_list.map(
         mf => {
             return (
-                <Paper elevation={4}
-                    square={false}>
+               
+               
+                
+                   
+                <Paper elevation={4} 
+                    square={false}
+                    sx={{width: 250,
+                        height: 400,
+                        padding:2}}
+                    key={mf.id}>
+                    
                     <div className="mf_status">{mf.status}</div>
-                    <div className="mf_purpose">{mf.purpose}</div>
-                    <Grid container>
-                        <Grid item>生產目標：</Grid>
-                        <Grid item>{mf.target.rank}</Grid>
-                        <Grid item>{mf.target.amount}</Grid>
+                    <div className="mf_purpose">
+                    <Typography disableTypography sx={{fontFamily: "Noto Sans TC",fontSize: "24px",fontWeight: 700,lineHeight: "35px",letterSpacing: "0em",textAlign: "left"}}>
+                        {mf.purpose}
+                    </Typography>
+                        </div>
+                    <Grid container  direction="row">
+                        <Grid item xs={8} sx={{borderBottom:1}} >生產目標：</Grid>
+                        <Grid item xs={4} ></Grid>
+                        <Grid item xs={2} ></Grid>
+                        <Grid item xs={6} sx={{borderBottom:1}}>{mf.target.type}</Grid>
+                        <Grid item xs={4} sx={{borderBottom:1}}>{mf.target.amount}</Grid>
 
-                        <Grid item>預期誤差：</Grid>
-                        <Grid item>{mf.mistake}</Grid>
+                        <Grid item xs={8} sx={{borderBottom:1}}>預期誤差：</Grid>
+                        <Grid item xs={4} sx={{borderBottom:1}}>{mf.mistake}</Grid>
 
-                        <Grid item>材料：</Grid>
+                        <Grid item xs={5} sx={{borderBottom:1}}>材料：</Grid>
+                        <Grid item xs={7} ></Grid>
                         {
                             mf.ingredient.map(
                                 igd => {
                                     return (
                                         <Grid container>
-                                            <Grid item>{igd.name}-{igd.amount}</Grid>
-                                            <Grid item>{igd.company}</Grid>
+                                            <Grid item xs={2} ></Grid>
+                                            <Grid item xs={6} sx={{borderBottom:1}}>{igd.name}-{igd.type}</Grid>
+                                            <Grid item xs={4} sx={{borderBottom:1}}>{igd.amount}</Grid>
                                         </Grid>
                                     )
                                 }
                             )
                         }
 
-                        <Grid item>其他費用：</Grid>
-                        <Grid item>{mf.expense}</Grid>
+                        <Grid item xs={8} sx={{borderBottom:1}}>其他費用：</Grid>
+                        <Grid item xs={4} sx={{borderBottom:1}}>{mf.expense}</Grid>
 
-                        <Grid item>共計成本：</Grid>
-                        <Grid item>{mf.total_cost}</Grid>
+                        <Grid item xs={8} sx={{borderBottom:1}}>共計成本：</Grid>
+                        <Grid item xs={4} sx={{borderBottom:1}}>{mf.total_cost}</Grid>
 
-                        <Grid item>預計耗時：</Grid>
-                        <Grid item>{mf.time}</Grid>
+                        <Grid item xs={8} sx={{borderBottom:1}}>預計耗時：</Grid>
+                        <Grid item xs={4} sx={{borderBottom:1}}>{mf.time}</Grid>
                     </Grid>
+                    {
+                        mf.finish_date === date ?
+                        <Grid container justifyContent="flex-end"><Button sx={{margin:"10px","&:hover": { backgroundColor:"#E4513D",color:"#FFFFFF"},backgroundColor: "#FFFFFF" ,color:"#350D08",border:2}} onClick={handleCollect} id={mf.id}>收集成品</Button></Grid>  : null
+                    }
+                    
                 </Paper>
+              
+
+                    
+                
+               
+                
             )
         }
     )
 
     // manufactor space
     const mf_space = 5 - mf_list.length > 0 ? (
-        <Paper elevation={4} square={false}>
-            <IconButton component={Link} to="/manufactory/product">
-                <Add />
-            </IconButton>
+        <Paper elevation={4} square={false} sx={{width: 250,height: 400,padding:2}}>
+            <Grid container
+            justifyContent="center"
+            alignItems="center"
+            direction="column"
+            spacing={0}
+            style={{ minHeight: '65vh' }}
+            >
+             
+                <Grid Item >
+                    <IconButton component={Link} to="/manufactory/product">
+                    <Add />
+                    </IconButton>
+                </Grid>
+            
+            </Grid>
         </Paper>
     ) : (
-        <Paper elevation={4} square={false}>請擴建廠房</Paper>
+        <Paper elevation={4} square={false} sx={{bgcolor:"#F6C9C3"}}>
+        <Typography disableTypography sx={{fontFamily: "Noto Sans TC",fontSize: "36px",fontWeight: 400,lineHeight: "52px",letterSpacing: "0em",textAlign: "left"}}>
+            請擴建廠房
+        </Typography>
+        </Paper>
     );
 
+    //manufactor main menu
     return (
+        <div className="mf_mainframe">
+        <Box sx={{height: 700,bgcolor:"#FDF1EF"}}>
+            <Grid container
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="flex-start"
+                
+    
+                >
+                <Grid Item xs={6}>
+                <Box sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    '& > :not(style)': {
+                        m: 1,
+                        width: 250,
+                        height: 400,
+                        bgcolor:"#FFFFFF"
+                    },
+                    }}>
+                    {product_paper}
+                    
+                </Box>
+                </Grid>
+                <Grid Item xs={6}>
+                <Box sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    '& > :not(style)': {
+                        m: 1,
+                        width: 250,
+                        height: 400,
+                        bgcolor:"#FFFFFF"
+                    },
+                    }}>
+                    {mf_space}
+                    
+                </Box>
+                </Grid>
+            </Grid>
+             
+   
+        </Box>
+        {/*
+         
         <Box sx={{
             display: 'flex',
             flexWrap: 'wrap',
@@ -115,11 +175,14 @@ function Manufactor() {
                 width: 1367,
                 height: 797,
             },
-        }}>
+            }}>
             {product_paper}
             {mf_space}
-        </Box>
+            </Box>*/}
+        </div>
+            
     )
+    
 }
 
 export default Manufactor;
