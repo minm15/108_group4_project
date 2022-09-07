@@ -68,7 +68,11 @@ const HarborSendable = ({ user }) => {
                                             )
                                         }
                                     </Grid>
-                                    <Button id={contract.id} startIcon={<Anchor />} href={`/harbor/${contract.id}`}>前往配送</Button>
+                                    {
+                                        contract.sufficient ?
+                                            <Button id={contract.id} startIcon={<Anchor />} href={`/harbor/${contract.id}`}>前往配送</Button>
+                                            : null
+                                    }
                                 </AccordionDetails>
                             </Accordion>
                         )

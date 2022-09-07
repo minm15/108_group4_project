@@ -12,14 +12,20 @@ const constractList = [
             },
             {
                 id: '002',
-                name: '車殼',
+                name: '車身',
                 type: 'C',
                 amount: 10,
                 price: 600
             }
         ],
+        arrive: '2022-7-31',
+        address: 'Takodachi汽車',
+        addressLoc: '美國',
+        flaw: '換貨',
+        flawDate: '',
+        pay: '2022-8-1',
         status: '下訂',
-        origin: '',
+        origin: '2022-8-15',
         sufficient: true
     },
     {
@@ -35,7 +41,7 @@ const constractList = [
             },
             {
                 id: '002',
-                name: '車殼',
+                name: '車身',
                 type: 'C',
                 amount: 10,
                 price: 600
@@ -43,7 +49,7 @@ const constractList = [
         ],
         status: '換貨',
         origin: '0101',
-        sufficient: false
+        sufficient: true
     },
     {
         id: '0103',
@@ -57,9 +63,9 @@ const constractList = [
                 price: 3170
             }
         ],
-        status: '換貨',
+        status: '下訂',
         origin: '',
-        sufficient: true
+        sufficient: false
     }
 ]
 
