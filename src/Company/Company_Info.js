@@ -16,14 +16,13 @@ import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import CompanyDrawer from './Drawer';
 import cooperateList from  './data/cooperateList'
 import {levelList,list1,list2,list3,list4,list5} from './data/serviceList.js'; 
 import {warehouseSpace,good,ingredient} from './data/warehouseData.js';
 import myCompany from './data/myCompany.js'
+import {income,expense,revenue} from './data/finanData'
 
 import './css/Company_Info.css';
 
@@ -32,12 +31,7 @@ import {
  ,KeyboardDoubleArrowRight} from "@mui/icons-material";
 function Company_Info() {
   
-    const renderCustomizedLabel = (props) => {
-        const { content, value,...rest } = props;
-      
-        return <Label {...rest} fontSize="16" fill="#black" fontWeight="bold" textAnchor="middle">{value}</Label>;
-      };
-  
+   
     const Item = styled(Paper)(({ theme }) => ({
         backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
         ...theme.typography.body2,
@@ -53,25 +47,105 @@ function Company_Info() {
      <CompanyDrawer/>
      <Box sx={{ flexGrow: 1 ,ml:'25px'}}>
         <div className="companyName">  &ensp;{myCompany[0].name}</div>
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         <Grid item xs={4}>
-        <Stack spacing={2} >
-  <Item sx={{        maxHeight:'200px',  overflowY: "scroll",
-}}>
-  <Cooperate/>   {/* 上次合作 */}
+        <Stack spacing={1.5} >
+          <Item >
+            {/* 財務報表 */}
+            <FinanState/>  
+          </Item>
+          <Item sx={{        maxHeight:'300px',  overflowY: "scroll",}}>
+            {/* 上次合作 */}
+            <Cooperate/>  
+          </Item>
+        </Stack>
+        </Grid>
+        <Grid item xs={4}>
+          <Stack spacing={8}>
+            <Item sx={{        maxHeight:'500px', }}>
+              {/* 設施等級 */}
+              <Service/>
+            </Item>
+          </Stack>
+        </Grid>
+        <Grid item xs={4}>
+          {/* 倉庫的空間 */}
+          <Warehouse/>
+        </Grid>
+        </Grid>
+    </Box>
+    </Box>
+
+  );
+}
+export default Company_Info;
 
 
-  </Item>
-  <Item>
+const Cooperate = ({  }) => {
+  return (
+   <>
+ <h2>&emsp;上次合作</h2>
 
-  <Grid container spacing={0}>
+      <Table size="small">
+  
+          <TableBody>
+            {cooperateList.map((row, index) => (
+              <TableRow >
+                <TableCell >{row.name}</TableCell>
+                <TableCell >
+
+                <Chip label={row.company_type} sx={{ bgcolor: "#1976D2", color: "white",fontSize:10,height:'18px' }} />
+                </TableCell>
+             
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+   </>
+
+  );
+};
+
+const FinanState= ({  }) => {
+  return (
+    <>
+ <h2>&emsp;本月財務狀況</h2>
+
+      <Table size="small">
+  
+          <TableBody>
+              <TableRow >
+                <TableCell >收入</TableCell>
+                <TableCell >{income[income.length-1].amount}</TableCell>
+              </TableRow>
+              <TableRow >
+                <TableCell >支出</TableCell>
+                <TableCell >{expense[expense.length-1].amount}</TableCell>
+              </TableRow>
+              <TableRow >
+                <TableCell >收益</TableCell>
+                <TableCell >{revenue[revenue.length-1].amount}</TableCell>
+              </TableRow>
+          </TableBody>
+        </Table>
+   </>
+
+
+  );
+};
+
+const Service= ({  }) => {
+  return (
+    <>
+<Grid container spacing={0}>
         <Grid item xs={2}>
         <DashboardCustomize style={{fontSize:"40px"}}/><br/>
         </Grid>
         <Grid item xs={8}>
             <big><b>倉儲容量</b></big>  <br/>
            {list1[levelList[0]-1].effect}<KeyboardDoubleArrowRight />     {list1[levelList[0]].effect}<br/>
-            <b>   <KeyboardCapslock/>升級 </b>            ({list1[levelList[0]].cost})
+            <b>   <KeyboardCapslock/>升級 </b>            
+            ({list1[levelList[0]].cost})
         </Grid>
         <Grid item xs={2}>
             lv{levelList[0]}
@@ -91,18 +165,9 @@ function Company_Info() {
         lv{levelList[1]}
         </Grid>
  </Grid>
-  </Item>
-</Stack>
-        </Grid>
-        <Grid item xs={4}>
-        <Stack spacing={8}>
-  <Item>
-  <FinanState/>  {/* 財務報表 */}
+ <hr style={{width:"100%"}}></hr>
 
-  </Item>
-  <Item>
-
-  <Grid container spacing={0}>
+ <Grid container spacing={0}>
         <Grid item xs={2}>
         <WorkspacePremium style={{fontSize:"40px"}}/><br/>
 
@@ -149,12 +214,22 @@ function Company_Info() {
             </Grid>
             </Grid>
 
-  </Item>
-</Stack>
-        </Grid>
-        <Grid item xs={4}>
-          {/* 倉庫的空間 */}
-        <BarChart width={250} height={500} data={warehouseSpace}   stackOffset="expand">
+   </>
+
+
+  );
+};
+
+const Warehouse= ({  }) => {
+  const renderCustomizedLabel = (props) => {
+    const { content, value,...rest } = props;
+  
+    return <Label {...rest} fontSize="16" fill="#black" fontWeight="bold" textAnchor="middle">{value}</Label>;
+  };
+
+  return (
+    <>
+<BarChart width={250} height={480} data={warehouseSpace}   stackOffset="expand">
     
     <Bar dataKey="ingredient" fill="#E4513D" stackId="a"  >
     <LabelList position="insideLeft" fontWeight="bold" offset={70} >材料：&emsp;&emsp;%</LabelList>
@@ -192,83 +267,9 @@ function Company_Info() {
           ></LabelList> 
 
         </Bar>
-    </BarChart>        </Grid>
-        </Grid>
-    </Box>
-    </Box>
-
-  );
-}
-export default Company_Info;
-
-
-const Cooperate = ({  }) => {
-  return (
-   <>
- <h2>&emsp;上次合作</h2>
-
-      <Table size="small">
-  
-          <TableBody>
-            {cooperateList.map((row, index) => (
-              <TableRow >
-                <TableCell >{row.name}</TableCell>
-                <TableCell >
-
-                <Chip label={row.company_type} sx={{ bgcolor: "#1976D2", color: "white",fontSize:10,height:'18px' }} />
-                </TableCell>
-             
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+    </BarChart>
    </>
+
 
   );
 };
-
-const FinanState= ({  }) => {
-  return (
-   <>
-  <table cellspacing="0" cellpadding="0" >
-        <caption> 財務報表 </caption>
-
-<tbody>
-<tr>
-<td valign="top" ><b>數值名稱</b></td>
-<td valign="top" > <b>本公司</b></td>
-<td valign="top" > <b>同產業平均</b></td>
-</tr>
-
-<tr>
-<td valign="top" >本益比</td>
-<td valign="top" > 0</td>
-<td valign="top" >0 </td>
-</tr>
-
-<tr>
-<td valign="top" >毛利率</td>
-<td valign="top" > 0</td>
-<td valign="top" >0 </td>
-</tr>
-
-<tr>
-<td valign="top" >ROE</td>
-<td valign="top" > 0</td>
-<td valign="top" >0 </td>
-</tr>
-
-<tr>
-<td valign="top" >存貨周轉率</td>
-<td valign="top" > 0</td>
-<td valign="top" >0 </td>
-</tr>
-
-</tbody>
-</table>
-
-   </>
-
-  );
-};
-

@@ -36,7 +36,7 @@ const level=parseInt(nowLevel);
   return (
     <div>
       <Button onClick={handleOpen} sx={{ 
-}}><KeyboardCapslock/><small>升級</small></Button>
+}}><KeyboardCapslock/>升級</Button>
        <Dialog
         open={open}
         onClose={handleClose}

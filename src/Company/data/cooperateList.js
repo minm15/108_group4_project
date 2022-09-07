@@ -24,5 +24,13 @@ const cooperateList=    [
     name: '小黑的公司',
     company_type: '製造'
         },
+        {
+    name: '大黃的公司',
+    company_type: '製造'
+    },
+    {
+    name: '大黑的公司',
+    company_type: '製造'
+        },
 ]
 export default cooperateList;
