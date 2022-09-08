@@ -9,15 +9,19 @@ var con = mysql.createConnection({
 
 con.connect(function(err) {
     if (err) throw err;
-    /* get_letter_list(200, function(result) {
+    /* get_letter_list(120560124, function(result) {
         console.log(result);
     }) */
 
-    /* get_attach(15, function(result) {
+    /* get_letter(106, function(result) {
+        console.log(result)
+    }) */
+
+    /* get_attach(105, function(result) {
         console.log(result);
     }) */
     //send_letter(send_letter_input)
-    pay(12, false, function(result) {
+    pay(106, false, function(result) {
         console.log(result)
     })
     
@@ -125,11 +129,11 @@ function get_attach_ID(mailID, callback) {
 
 // 用於測試 function send_letter()的東西
 let send_letter_input = {
-    title: "New mail of Quotation",
-    sender: 43,
-    receiver: 30,
+    title: "Quotation: buy something",
+    sender: 123456789,
+    receiver: 123098765,
     letter_type: "Quotation",
-    content: "43 send mail to 30 : Quotation",
+    content: "I want to buy something",
     attach: [
         {
             name: "A",
@@ -160,29 +164,26 @@ function send_letter(input) {
     let product_rank = input.attach[0].rank;
 
     /* if(content == "Quotation") {
-        var insertQuotationSql = "INSERT INTO quotation (mail_id, mail_box_id, product_name, product_unit price, product_rank) VALUES ("
+        var insertQuotationSql = "INSERT INTO quotation (mail_id, product_name, product_unit price, product_rank) VALUES ("
     } */
 
-    get_mail_box_ID(send_to, function(res) {
-        let mail_box_ID = res;
-        var insertMailSql = "INSERT INTO mail (mail_box_ID, Title, Date, Content, Send_from, Send_to, Type) VALUES (?, ?, ?, ?, ?, ?, ?)"  
-        var insertQuotation = "INSERT INTO quotation (mail_id, mail_box_id, product_name, product_unit_price, product_rank) VALUES (?, ?, ?, ?, ?)"
+    var insertMailSql = "INSERT INTO mail (Title, Date, Content, Send_from, Send_to, Type) VALUES (?, ?, ?, ?, ?, ?)"  
+    var insertQuotation = "INSERT INTO quotation (mail_id, product_name, product_unit_price, product_rank) VALUES (?, ?, ?, ?)"
 
-        con.query(insertMailSql, [mail_box_ID, title, date, content, send_from, send_to, type],function(err, result) {
-            if(err) throw err;
+    con.query(insertMailSql, [title, date, content, send_from, send_to, type],function(err, result) {
+        if(err) throw err;
 
-            get_latest_mailID(send_from, send_to, function(result) {
+        get_latest_mailID(send_from, send_to, function(result) {
                 
-                // 目前做到insert quotation
-                // 之後要再加上判定是order or quotation
-                con.query(insertQuotation, [result.mail_ID, mail_box_ID, product_name, product_price, product_rank], function(err, result) {
-                    if(err) throw err;
-                    // 這裡之後要改成return 告知有成功insert
-                    console.log(send_from + " send to " + send_to + " and insert into quotation")
-                })
+            // 目前做到insert quotation
+            // 之後要再加上判定是order or quotation
+            con.query(insertQuotation, [result.mail_ID, product_name, product_price, product_rank], function(err, result) {
+                if(err) throw err;
+                // 這裡之後要改成return 告知有成功insert
+                console.log(send_from + " send to " + send_to + " and insert into quotation")
             })
         })
-    }) 
+    })
 }
 
 function get_latest_mailID(send_from, send_to, callback) {
@@ -191,20 +192,6 @@ function get_latest_mailID(send_from, send_to, callback) {
         //find the latest one
         let latest = res.length - 1; 
         return callback(res[latest]);
-    })
-}
-
-// 找到使用者的信箱編號
-function get_mail_box_ID(send_to_ID, callback) {
-    var selectSql = "SELECT * FROM mail_box WHERE belong_to_user_ID = ?";
-    con.query(selectSql, [send_to_ID], function(err, result) {
-        if(err) throw err;
-        if(result[0]) {
-            let mail_box_ID = result[0].ID;
-            return callback(mail_box_ID);
-        } else {
-            return "this user_id is not existed";
-        }
     })
 }
 
@@ -386,6 +373,29 @@ function generate_order_json(sql_result) {
     result_json.detail = detail_json;
     result_json.edit = sql_result[0].edit_count
     return result_json;
+}
+
+/* {
+    shopping_list: [
+        {
+          rank: 等級(string),
+          name: 商品名稱(string),
+          price: 商品定價(string),
+          amount: 購買數量(int)
+        }
+    ],
+    detail: {
+        arrive_deadline: 抵達時間(string),
+        pay_deadline: 支付期限(string)
+    }
+} */
+function buy_ingredient(stu_id) {
+    let output_json = {
+        "shopping_list":[],
+        "detail":""
+    }
+
+    
 }
 
 

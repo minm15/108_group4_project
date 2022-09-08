@@ -11,14 +11,12 @@ var con = mysql.createConnection({
 
 con.connect(function(err) {
     if (err) throw err;
-    produce_status(1)
-    //get_contracts(46)
-    /* get_amount_info(45, "A", function(amount_res) {
-        console.log(amount_res);
-    }) */
+    //produce_status(120560124)
+    //get_contracts(119056432)
+    
     //produce_plan(plan_input)
-    //check_storage(34, "A")
-    //produce_order(50, produce_order_input)
+    //check_storage(120560124, "A")
+    produce_order(120560124, produce_order_input)
 });
 
 /* [
@@ -44,9 +42,10 @@ con.connect(function(err) {
     }
 ] */
 
+// 這個function之後還會改
 function produce_status(stu_id) {
     let select_factory = "SELECT ID FROM factory WHERE belong_to_user_ID = ?";
-    let select_produce = "SELECT * FROM product WHERE factory_ID = ?";
+    let select_produce = "SELECT * FROM produce_product WHERE factory_ID = ?";
     let select_from_product_detail = "SELECT * FROM product_detail WHERE product_Name = ?";
     let select_from_material = "SELECT * FROM material WHERE belong_to_user_ID = ?";
     let status_output = [];
@@ -67,7 +66,7 @@ function produce_status(stu_id) {
         let purpose_output = [];
         if(factory_res[0]) {
             // 目前測試先挑一筆
-            factory_id = factory_res[1].ID; // 31
+            factory_id = factory_res[0].ID; // 31
 
             con.query(select_produce, [factory_id], function(err, product_res) {
                 if(err) throw err;
@@ -225,7 +224,7 @@ function get_contracts(stu_id) {
 
 function get_amount_info(stu_id, product_name, callback) {
     let select_factory = "SELECT ID FROM factory WHERE belong_to_user_ID = ?";
-    let select_product = "SELECT * FROM product WHERE (";
+    let select_product = "SELECT * FROM produce_product WHERE (";
     let sql_input_list = []
     let total_amount = 0;
 
@@ -343,7 +342,7 @@ function handle_rank(rank) {
     }
 ] */
 function check_storage(stu_id, ingredient) {
-    let select_product = "SELECT * FROM product WHERE factory_ID = ( SELECT ID FROM factory WHERE belong_to_user_ID = ? )";
+    let select_product = "SELECT * FROM produce_product WHERE factory_ID = ( SELECT ID FROM factory WHERE belong_to_user_ID = ? )";
     let select_material = "SELECT * FROM material WHERE belong_to_user_ID = ?"
     let storage_list = [];
 
@@ -397,12 +396,12 @@ function check_storage(stu_id, ingredient) {
 }
 
 let produce_order_input = {
-    name: "B",
+    name: "part_B",
     rank: "C",
     amount: 20,
     ingredient: [
         {
-            name: "part_A;part_B",
+            name: "A;B",
             amount: 22,
             producer: 28 
         }
@@ -412,7 +411,7 @@ let produce_order_input = {
 function produce_order(stu_id, input) {
     let select_product_detail = "SELECT product_ID, cost_money, time_from_start_to_finish FROM product_detail WHERE product_Name = ?";
     let select_factory = "SELECT ID FROM factory WHERE belong_to_user_ID = ?";
-    let insert_product = "INSERT INTO product (product_ID, factory_ID, Name, Cost_material, Cost_money, Quality, Quantity, Start_Date, Finish_Date) VALUES (?,?,?,?,?,?,?,?,?)"
+    let insert_product = "INSERT INTO produce_product (product_ID, factory_ID, Name, Cost_material, Cost_money, Quality, Quantity, Start_Date, Finish_Date) VALUES (?,?,?,?,?,?,?,?,?)"
     let product_name = input.name;
     let date = new Date().toLocaleString();
     //date = date.toUTCString();
