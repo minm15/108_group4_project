@@ -1,0 +1,118 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+.topline{
+  position: fixed;
+  left: 30px;
+  top: 0px;
+
+}
+ .topline .info {
+  
+  width: 180px;
+  height: 60px;
+}
+
+.topline .info span {
+  /* width: 100%; */
+  float: left;
+}
+ .fn-clear {
+  overflow: hidden;
+
+}
+ .fn-clear .fl { 
+  /* 公司名稱 */
+  font-size: 22px;
+  font-family: Noto Sans TC;
+}
+ .fn-clear .fr1 {
+   /* 公司類型 */
+   font-size: 14px;
+    /* background-color: red; */
+    /* color: white; */
+  
+
+}
+ .fn-clear .fr2 {
+  /* 公司資產 */
+  font-size: 14px;
+}
+ .right{
+  position: fixed;
+  right: 170px;
+  top: 14px;
+  color:white;
+  font-size: 40px;
+  
+}
+/* .right .rightline2  {
+
+  }
+   */
+  /* .right .mui-icon{
+    font-size:60px;
+  } */
+.set {
+  position: fixed;
+  right: 30px;
+  top: 30px;
+}
+
+ .scrollbox {
+ 
+
+  width: 800px;
+  
+  margin: 80px ;
+  height: 20px;
+  margin-left: 250px;
+  z-index: 20;
+  background-color:#FDF1EF;
+  border:0cm;
+  color:#333;
+}
+ .scrollbox .txt {
+  /* icon的尺寸寫在header.js裡 */
+  text-align: center;
+  font-size: 14px;
+  line-height: 20px;
+  height: 20px;
+}
+
+.centerbox {
+  position:fixed;
+  right: 60px;
+  top: 100px;
+  min-height: 500px;
+  min-width: 1300px;
+  background-color: #f4f4f4;
+  z-index: 10;
+
+}
+.leftbox {
+  position: fixed;
+  left: 30px;
+  bottom: 20px;
+  z-index: 20;
+  color:#333
+
+}
+ .rightbox {
+  position: fixed;
+  right: 30px;
+  bottom: 20px;
+  z-index: 20;
+  color:#333
+
+}
+ .rightbox .rightline {
+  vertical-align: super;
+  margin-right: 30px;
+}
