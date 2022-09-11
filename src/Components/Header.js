@@ -1,32 +1,27 @@
 import React, { useState } from 'react'
 import {
-     Button,Chip
+     Button,Chip,IconButton
 } from '@mui/material';
 
 import {
     Person, MarkEmailUnread, ForwardToInbox, Build,  Anchor,Balance,KeyboardArrowLeft,KeyboardArrowRight,KeyboardDoubleArrowRight
-,Settings,Campaign} from "@mui/icons-material";
+,SettingsOutlined,Campaign,CottageOutlined, FlashOffTwoTone} from "@mui/icons-material";
 
-// import LetterGrid from "../Letter/letter_grid";
-// import LetterReceive from "../Letter/letter_receive";
-// import LetterWriting from "../Letter/letter_writing";
-// import Manufactor from "../manufactor/mf_list";
+
 import { Swiper, SwiperSlide } from 'swiper/react';
 import {  Autoplay } from 'swiper';
 import 'swiper/css';
 import './HeaderFooter.css';
+import myCompany from './myCompany';
 
 
-// import SwipeableViews from 'react-swipeable-views';
-// import { autoPlay } from 'react-swipeable-views-utils';
-// const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
-var name = "Wah汽車材料"; //公司名稱
-var company_asset = "$25萬元"; //公司資產
-var company_type = "供應"; //公司類型
+
 const homeLink="http://localhost:3000"
 function Header() {
+
   const [rightshow2, setrightshow2] = useState(false);
 
+  
   return (
     <>
       <div className={'header'}>
@@ -35,10 +30,10 @@ function Header() {
                     
                     <p className='fn-clear'>
                 
-                       <span className='fl'> <Person /> {name}</span>
+                       <span className='fl'> <Person /> {myCompany[0].name}</span>
                
-                        <span  className='fr1'><Chip label={company_type} sx={{ bgcolor: "#E4513D", color: "white" }} /></span>
-                        <span  className='fr2'>&emsp; {company_asset}</span> 
+                        <span  className='fr1'><Chip label={myCompany[0].company_type} sx={{ bgcolor: "#E4513D", color: "white" }} /></span>
+                        <span  className='fr2'>&emsp; {myCompany[0].company_asset}</span> 
                     </p>
                    
                 </div>
@@ -47,35 +42,30 @@ function Header() {
    
       <div className='right'>
                 {
-                    rightshow2 === true ?
-                    
-                        <KeyboardArrowLeft onClick={
-                            () => {
-                                setrightshow2(false)
-                            }
-                        } />
+                    rightshow2 === false ?
+                    <div className="rightBtn1">
+
+                     <Button onClick={()=>{setrightshow2(true)} }style={{color:"white"}} ><KeyboardArrowRight style={{fontSize:"36px"}} /></Button> 
+                    </div>
                         
                         :
                         <div>
-                             <KeyboardArrowRight onClick={
-                                () => { 
-                                    setrightshow2(true)
-                                }
-                            } />
+                             {/* <Button onClick={()=>{setrightshow2(false)} }style={{color:"gray"}} ><SettingsOutlined style={{fontSize:"36px"}} /></Button>  */}
 
+                          
                                
                                 <Button href={homeLink+"/letter_list"} onClick={()=>{} }style={{color:"white",fontSize: "22px",fontFamily: 'Noto Sans TC'}} 
-                               ><MarkEmailUnread/>獲取訂單&emsp;</Button>
+                               ><MarkEmailUnread/>獲取訂單</Button>
                                 <KeyboardDoubleArrowRight/>
-                                <Button href={homeLink+"/letter_list"} onClick={()=>{} } style={{color:"white",fontSize: "22px",fontFamily: 'Noto Sans TC'}} ><ForwardToInbox/>下定材料&emsp;</Button>
+                                <Button href={homeLink+"/letter_list"} onClick={()=>{} } style={{color:"white",fontSize: "22px",fontFamily: 'Noto Sans TC'}} ><ForwardToInbox/>下定材料</Button>
                                 <KeyboardDoubleArrowRight/>
-                                <Button href={homeLink+"/manufactory"} onClick={()=>{} }style={{color:"white",fontSize: "22px",fontFamily: 'Noto Sans TC'}}><Build/>&emsp;&emsp;製造&emsp;&emsp;</Button>
+                                <Button href={homeLink+"/manufactory"} onClick={()=>{} }style={{color:"white",fontSize: "22px",fontFamily: 'Noto Sans TC'}}><Build/>&emsp;製造&emsp;</Button>
                                 <KeyboardDoubleArrowRight/>
-                                <Button href={homeLink+"/harbor"} style={{color:"white",fontSize: "22px",fontFamily: 'Noto Sans TC'}}><Anchor/>交付貨品&emsp;</Button>
+                                <Button style={{color:"white",fontSize: "22px",fontFamily: 'Noto Sans TC'}}><Anchor/>交付貨品</Button>
                                 <KeyboardDoubleArrowRight/>
-                                <Button href={homeLink+"/harbor"} style={{color:"white",fontSize: "22px",fontFamily: 'Noto Sans TC'}}><Balance/>履行契約</Button>
-                               
-    
+                                <Button style={{color:"white",fontSize: "22px",fontFamily: 'Noto Sans TC'}}><Balance/>履行契約</Button>
+                                <Button onClick={()=>{setrightshow2(false)} }style={{color:"white"}} ><KeyboardArrowLeft style={{fontSize:"36px",}} /></Button> 
+
                         </div>
                        
 
@@ -83,11 +73,15 @@ function Header() {
               
               </div>
             <div className='set'>
-            <Button href={homeLink} onClick={()=>{} }style={{color:"white",fontSize: "22px"}}><Settings/></Button>
+      <Button  onClick={()=>{} }style={{color:"white"}} ><SettingsOutlined style={{fontSize:"36px"}} /></Button> 
 
 
             </div>
-           
+            <div className='home'>
+            <Button href={homeLink} onClick={()=>{} }style={{color:"black",zIndex:'30'}} ><CottageOutlined style={{fontSize:"36px"}}/></Button>
+
+
+            </div>
             <div className='scrollbox'>
                 {/* <AutoPlaySwipeableViews
                     interval={5000}

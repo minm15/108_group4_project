@@ -85,7 +85,7 @@ const letter_list = [
     }
 ]
 
-function get_letter_list(user, letter_type) {
+function get_letter_list() {
     return letter_list;
 }
 

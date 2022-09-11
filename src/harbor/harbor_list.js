@@ -45,77 +45,75 @@ const HarborList = ({ user }) => {
                                         <Grid item xs={3} >
                                             {
                                                 deliver.receiver === user.name ?
-                                                    <Typography disableTypography sx={{ color: '#350D08', fontFamily: 'Noto Sans TC', fontSize: '24px', fontWeight: '400', lineHeight: '35px' }}>From:{deliver.sender}</Typography> :
-                                                    <Typography disableTypography sx={{ color: '#350D08', fontFamily: 'Noto Sans TC', fontSize: '24px', fontWeight: '400', lineHeight: '35px' }}>To:{deliver.receiver}</Typography>
+                                                    <Typography disableTypography sx={{color:'#350D08', fontFamily: 'Noto Sans TC',fontSize: '24px',fontWeight: '400',lineHeight: '35px'}}>From:{deliver.sender}</Typography> :
+                                                    <Typography disableTypography sx={{color:'#350D08', fontFamily: 'Noto Sans TC',fontSize: '24px',fontWeight: '400',lineHeight: '35px'}}>To:{deliver.receiver}</Typography>
                                             }
                                         </Grid>
                                         <Grid item xs={1}>
                                             {deliver.package[0].name}{deliver.package[0].type}{deliver.package[0].amount}
-                                            {deliver.package.length > 1 ? <Typography disableTypography sx={{
-                                                color: '#350D08', fontFamily: 'Noto Sans TC',
-                                                fontSize: '16px', fontWeight: '400', lineHeight: '23px'
-                                            }}>...</Typography> : null}
+                                            {deliver.package.length > 1 ? <Typography  disableTypography sx={{ color:'#350D08', fontFamily: 'Noto Sans TC',
+        fontSize: '16px',fontWeight: '400',lineHeight: '23px'}}>...</Typography> : null}
                                         </Grid>
                                         <Grid item xs={7}>
-
-                                            {
-                                                progress === 0 ?
-                                                    <div key={deliver.id}>
-                                                        <Button sx={{ "&:hover": { backgroundColor: "#E4513D", color: "#FFFFFF", mr: 3 }, backgroundColor: "#FFFFFF", color: "#350D08", border: 2, mr: 3 }} id={deliver.id} onClick={inspectCollect}>驗貨取貨</Button>
-                                                        <Button sx={{ borderBottom: 1, borderRadius: '0em', color: '#350D08' }} size="small" id={deliver.id} onClick={handleCollect}>取貨不驗貨</Button>
-                                                    </div> :
-                                                    <Box sx={{ width: '50%' }}>
-                                                        <LinearProgress variant="determinate" value={progress} />
-                                                    </Box>
-                                            }
-                                        </Grid>
+                                    
+                                    {
+                                        progress === 0 ?
+                                            <div key={deliver.id}>
+                                                <Button sx={{"&:hover": { backgroundColor:"#E4513D",color:"#FFFFFF",mr:3},backgroundColor: "#FFFFFF" ,color:"#350D08",border:2,mr:3}} id={deliver.id} onClick={inspectCollect}>驗貨取貨</Button>
+                                                <Button sx={{borderBottom:1,borderRadius:'0em',color:'#350D08'}} size="small" id={deliver.id} onClick={handleCollect}>取貨不驗貨</Button>
+                                            </div> :
+                                            <Box sx={{ width: '50%' }}>
+                                                <LinearProgress variant="determinate" value={progress} />
+                                            </Box>
+                                    }
+                                    </Grid>
                                         <Grid item xs={1}>
-                                            <Typography disableTypography sx={{ color: '#350D08', fontFamily: 'Noto Sans TC', fontSize: '16px', fontWeight: '400', lineHeight: '23px' }}>
-                                                {deliver.arrive_date}
-                                            </Typography>
+                                        <Typography  disableTypography sx={{ color:'#350D08', fontFamily: 'Noto Sans TC',fontSize: '16px',fontWeight: '400',lineHeight: '23px'}}>
+                                            {deliver.arrive_date}
+                                        </Typography>
                                         </Grid>
                                     </Grid>
                                 </AccordionSummary>
                                 {/* 展開之後的詳細內容（下半部內容） */}
                                 <AccordionDetails>
                                     <Grid container>
-
+                                        
                                         <Grid item xs={12}>
-                                            <Typography disableTypography sx={{ color: '#350D08', fontFamily: 'Noto Sans TC', fontSize: '16px', fontWeight: '400', lineHeight: '23px' }}>
-                                                運送內容：
-                                            </Typography>
+                                        <Typography  disableTypography sx={{ color:'#350D08', fontFamily: 'Noto Sans TC',fontSize: '16px',fontWeight: '400',lineHeight: '23px'}}>
+                                            運送內容：
+                                        </Typography>
                                         </Grid>
                                         {
                                             deliver.package.map(
                                                 (product) => {
                                                     return (
-
+                                                      
                                                         <Grid container key={product.id}>
-
+                                                            
                                                             <Grid item xs={2}>
-                                                                <Typography disableTypography sx={{ color: '#350D08', fontFamily: 'Noto Sans TC', fontSize: '16px', fontWeight: '400', lineHeight: '23px' }}>
-                                                                    {product.name}
+                                                            <Typography  disableTypography sx={{ color:'#350D08', fontFamily: 'Noto Sans TC',fontSize: '16px',fontWeight: '400',lineHeight: '23px'}}>
+                                                                {product.name}
+                                                            </Typography>
+                                                            </Grid>
+                                                            <Grid item xs={1}>
+                                                            <Typography  disableTypography sx={{ color:'#350D08', fontFamily: 'Noto Sans TC',fontSize: '16px',fontWeight: '400',lineHeight: '23px'}}>
+                                                                {product.amount}
                                                                 </Typography>
                                                             </Grid>
                                                             <Grid item xs={1}>
-                                                                <Typography disableTypography sx={{ color: '#350D08', fontFamily: 'Noto Sans TC', fontSize: '16px', fontWeight: '400', lineHeight: '23px' }}>
-                                                                    {product.amount}
-                                                                </Typography>
+                                                            <Typography  disableTypography sx={{ color:'#350D08', fontFamily: 'Noto Sans TC',fontSize: '16px',fontWeight: '400',lineHeight: '23px'}}>
+                                                                {product.price}
+                                                            </Typography>
                                                             </Grid>
-                                                            <Grid item xs={1}>
-                                                                <Typography disableTypography sx={{ color: '#350D08', fontFamily: 'Noto Sans TC', fontSize: '16px', fontWeight: '400', lineHeight: '23px' }}>
-                                                                    {product.price}
-                                                                </Typography>
-                                                            </Grid>
-
+                                                            
                                                         </Grid>
-
+                                                        
                                                     )
                                                 }
                                             )
                                         }
                                         {/* 應該還要有受影響的事件的詳細情形，但我們先跳過 */}
-
+                                        
                                     </Grid>
                                 </AccordionDetails>
                             </Accordion>
