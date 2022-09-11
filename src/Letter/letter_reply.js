@@ -31,7 +31,7 @@ function LetterReply({ user }) {
 
     return (
         <div className="letter_reply">
-         <Box sx={{height: 700,bgcolor:"#FDF1EF"}}>
+         <Box sx={{height: 1000,bgcolor:"#FDF1EF"}}>
         <Grid
             container
             direction="row"
@@ -46,8 +46,9 @@ function LetterReply({ user }) {
                 <MenuList />
                 
             </Grid>
-            <MenuList />
+            
             <Grid item xs={10}>
+            <Box sx={{ height: 950, width: '90%' ,padding:3,bgcolor: '#FFFFFF' }}>
             <Box component="form" >
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
@@ -65,7 +66,7 @@ function LetterReply({ user }) {
                         標題：
                     </Grid>
                     <Grid item xs={32}>
-                        <TextField
+                        <TextField sx={{ bgcolor: '#FDF1EF',width:400 }}
                             id="title"
                             defaultValue={detail.title}
                             InputProps={{
@@ -74,9 +75,12 @@ function LetterReply({ user }) {
                     </Grid>
                 </Grid>
             </Box>
+            
+            <Content detail={detail} user={user} />
+            </Box>
             </Grid>
             {/* 依照要回復的信件，生成回復的信件內容，在這個檔案的前半段 */}
-            <Content detail={detail} user={user} />
+            
         </Grid>
         </Box>
         </div>
