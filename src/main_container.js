@@ -9,6 +9,7 @@ import LetterReply from "./Letter/letter_reply";
 import HarborMain from "./harbor/harbor_main";
 import HarborSend from "./harbor/harbor_send";
 
+
 const user = {
     name: 'takodachi公司',
     type: 'manufacturer'
@@ -35,7 +36,7 @@ class MainContainer extends React.Component {
                                 </div>
                             } />
                             <Route path='/letter_list'>
-                                <Route index element={<LetterGrid />} />
+                                <Route index element={<LetterGrid user={user}/>} />
                                 <Route
                                     path=":letterId"
                                     element={
@@ -60,17 +61,18 @@ class MainContainer extends React.Component {
                                     } />
                             </Route>
                             <Route path="/manufactory">
-                                <Route index element={<Manufactor />} />
-                                <Route path="product" element={<Product />} />
+                                <Route index element={<Manufactor user={user}/>} />
+                                <Route path="product" element={<Product user={user}/>} />
                             </Route>
                             <Route path="/harbor">
                                 <Route index element={<HarborMain user={user} />} />
                                 <Route path=":contractId" element={<HarborSend user={user} />} />
                             </Route>
+                           
                         </Routes>
                     </BrowserRouter>
                 </div>
-            </div>
+             </div>
         )
     }
 }

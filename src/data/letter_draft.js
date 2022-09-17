@@ -780,7 +780,7 @@ function ContractEdit({ detail, user }) {
                             </Select>
                         </FormControl>
                     </Grid>
-                    
+                    {flawRender}
 
                     <Grid item xs={1}>支付期限</Grid>
                     <Grid item xs={2}>
@@ -794,7 +794,7 @@ function ContractEdit({ detail, user }) {
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid item xs={9}>{flawRender}</Grid>
+                    
                 </Grid>
                 <Grid container justifyContent="flex-end">
                     <Button  sx={{"&:hover": { backgroundColor:"#E4513D",color:"#FFFFFF"},backgroundColor: "#FFFFFF" ,color:"#350D08",border:2}} startIcon={<ForwardToInbox />} onClick={handleSend} href='/letter_list'>送出信件</Button>
