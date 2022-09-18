@@ -9,34 +9,76 @@ var con = mysql.createConnection({
 
 con.connect(function(err) {
     if (err) throw err;
-    /* get_letter_list(120560124, function(result) {
-        console.log(result);
-    }) */
 
     /* get_letter(106, function(result) {
         console.log(result)
     }) */
-
-    /* get_attach(105, function(result) {
-        console.log(result);
+    /* get_attach_contract_draft(93, function(res) {
+        console.log(res)
     }) */
-    //send_letter(send_letter_input)
-    pay(106, false, function(result) {
-        console.log(result)
+
+    get_attach(115, function(result) {
+        console.log(result);
     })
+    //send_letter(send_letter_input)
+   /*  pay(106, false, function(result) {
+        console.log(result)
+    }) */
+    //console.log(get_letter_list(120560124, 'Quotation'));
     
 });
 
-// get letter list by studentID
-function get_letter_list(studentID, callback) {
-    var selectSql = "SELECT * FROM mail WHERE Send_to = ?";
-    con.query(selectSql, [studentID], function(err, result) {
+function get_letter_list(studentID, type) {
+    var selectSql = "SELECT * FROM mail WHERE Send_to = ? and Type = ?";
+    var output_list = [];
+    var output_json = {
+        'id': '',
+        'sender': '',
+        'sender_type': '',
+        'letter_type': '',
+        'title': '',
+        'expired': '',
+        'time': '',
+    }
+    con.query(selectSql, [studentID, type], function(err, result) {
         if(err) throw err;
         if(result[0]) {
-            return callback(generate_letter_list_json(result));
+            for(let i=0; i<result.length; i++) {
+                let send_from_id = result[i].Send_from;
+                get_player_type(send_from_id, function(send_from_type) {
+                    output_json.id = result[i].mail_ID;
+                    output_json.sender = result[i].Send_from;
+                    output_json.sender_type = send_from_type;
+                    output_json.letter_type = result[i].Type;
+                    output_json.title = result[i].Title;
+                    output_json.expired = result[i].id;
+                    output_json.time = result[i].Date;
+                    output_list.push(output_json);
+                    console.log(output_list);
+
+                    // return when arriveing the last index
+                    if(i == result.length - 1) {
+                        return output_list;
+                    }
+                })  
+            }
         } else {
-            return callback("cannot find this letter list")
+            return "cannot find this letter list";
         }
+    })
+}
+
+function get_player_type(studentID, callback) {
+    var select_student = "SELECT Type FROM student WHERE ID = ?";
+    con.query(select_student, [studentID], function(err, result) {
+        if(err) throw err;
+        var type = '';
+        if(result[0].Type == 'S') {
+            type = '供應';
+        } else if(result[0].Type == 'M') {
+            type = '製造';
+        }
+        return callback(type);
     })
 }
 
@@ -58,43 +100,182 @@ function get_letter(letterID, callback) {
 // get attach by mailID
 function get_attach(mailID, callback) {
     get_attach_ID(mailID, function(result) {
-        if(result[0] == "Order") {
-            get_attach_order(result[1], function(res) {
+        // type: operation => no additional attachment
+        // 目前return null
+        if(result[0] == "Operation") 
+        {
+            return callback("");
+        } 
+        // type: quotation
+        else if(result[0] == "Quotation" ) 
+        {
+            get_attach_quotation(mailID, result[1], function(res) {
                 return callback(res);
             })
-        } else if(result[0] == "Quotation" ) {
-            get_attach_quotation(result[1], function(res) {
+        }
+        else if(result[0] == "Contract_draft")  
+        {
+            get_attach_contract_draft(mailID, result[1], function(res) {
                 return callback(res);
             })
-        } else {
+        }
+        else if(result[0] == "Contract_edit")  
+        {
+            get_attach_contract_edit(mailID, result[1], function(res) {
+                return callback(res);
+            })
+        }
+        else 
+        {
             return callback("this is unknown type");
         }
     })
 }
 
 // 報價單
-function get_attach_quotation(attachmentID, callback) {
-    var selectSql = "SELECT * FROM quotation WHERE quotation_ID = ?";
+function get_attach_quotation(mail_id, attachmentID, callback) {
+    var selectSql = "SELECT * FROM quotation WHERE quotation_id = ?";
+    var output_list = []
+    var output_json = {
+        "id": '',
+        "name": '',
+        "type": '',
+        "price": 0
+    }
     con.query(selectSql, [attachmentID], function(err, result) {
         if(err) throw err;
         if(result[0]) {
-            return callback(generate_quotation_json(result));
+            for(let i=0; i<result.length; i++) {
+                output_json.id = result[i].quotation_id;
+                output_json.name = result[i].product_name;
+                output_json.type = result[i].product_rank;
+                output_json.price = result[i].product_unit_price;
+                output_list.push(output_json)
+
+                if(i == result.length - 1) {
+                    return callback(output_list);
+                }
+            }
         } else {
-            return "cannot find this attachment"
+            return callback("cannot find this attachment");
         }
     })
 }
 
-// order
-function get_attach_order(attachmentID, callback) {
+// Contract_draft
+function get_attach_contract_draft(mail_id, attachmentID, callback) {
     var selectSql = "SELECT * FROM project.purchase WHERE order_id = ?";
+    var select_company = "SELECT co_name FROM company WHERE belong_to_user_ID = (SELECT send_from FROM mail WHERE mail_ID = ?)"
+    var amount_list = [];
+    var output_json = {
+        "amountList":[],
+        "arrive": '',
+        "address": '',
+        "addressLoc": '',
+        "flaw": '',
+        "flawDate": '',
+        "pay": ''
+    }
+    var amount_json = {
+        "id": '',
+        "name": '',
+        "type": '',
+        "price": 0,
+        "amount": 0
+    }
     con.query(selectSql, [attachmentID], function(err, result) {
         if(err) throw err;
-        if(result[0]) {
-            return callback(generate_order_json(result));
-        } else {
-            return "cannot find this attachment"
-        }
+        con.query(select_company, [mail_id], function(err, company_res) {
+            if(err) throw err;
+            if(result[0]) {
+                for(let i=0; i<result.length; i++) {
+                    amount_json.id = result[i].order_id;
+                    amount_json.name = result[i].product_name;
+                    amount_json.type = result[i].product_rank;
+                    amount_json.price = result[i].product_price;
+                    amount_json.amount = result[i].product_amount;
+                    amount_list.push(amount_json);
+    
+                    if(i == result.length-1) {
+                        output_json.amountList = amount_list;
+                        output_json.arrive = result[0].arrive_deadline;
+                        output_json.address = company_res[0].co_name;
+                        output_json.addressLoc = result[0].country;
+                        output_json.flaw = result[0].flaw;
+                        if(result[0].flaw == 'exchange') {
+                            output_json.flawDate= result[0].exchange_deadline;
+                        }
+                        output_json.pay = result[0].pay_deadline;
+    
+                        return callback(output_json);
+                    }
+                }
+                //return callback(result);
+            } else {
+                return callback("cannot find this attachment");
+            }
+        })
+    })
+}
+
+// contract_edit
+function get_attach_contract_edit(mail_id, attachmentID, callback) {
+    var selectSql = "SELECT * FROM project.purchase WHERE order_id = ?";
+    var select_company = "SELECT co_name FROM company WHERE belong_to_user_ID = (SELECT send_from FROM mail WHERE mail_ID = ?)"
+    var amount_list = [];
+    var output_json = {
+        "amountList":[],
+        "arrive": '',
+        "address": '',
+        "addressLoc": '',
+        "flaw": '',
+        "flawDate": '',
+        "pay": ''
+    }
+    var amount_json = {
+        "id": '',
+        "name": '',
+        "type": '',
+        "price": 0,
+        "amount": 0,
+        "discount": '',
+        "cantProvide": '',
+    }
+    con.query(selectSql, [attachmentID], function(err, result) {
+        if(err) throw err;
+        con.query(select_company, [mail_id], function(err, company_res) {
+            if(err) throw err;
+            if(result[0]) {
+                for(let i=0; i<result.length; i++) {
+                    amount_json.id = result[i].order_id;
+                    amount_json.name = result[i].product_name;
+                    amount_json.type = result[i].product_rank;
+                    amount_json.price = result[i].product_price;
+                    amount_json.amount = result[i].product_amount;
+                    amount_json.discount = result[i].product_discount;
+                    amount_json.cantProvide = result[i].cantProvide;
+    
+                    amount_list.push(amount_json);
+    
+                    if(i == result.length-1) {
+                        output_json.amountList = amount_list;
+                        output_json.arrive = result[0].arrive_deadline;
+                        output_json.address = result[0].address;
+                        output_json.addressLoc = company_res[0].co_name;
+                        output_json.flaw = result[0].flaw;
+                        if(result[0].flaw == 'exchange') {
+                            output_json.flawDate= result[0].exchange_deadline;
+                        }
+                        output_json.pay = result[0].pay_deadline;
+    
+                        return callback(output_json);
+                    }
+                }
+                //return callback(result);
+            } else {
+                return callback("cannot find this attachment");
+            }
+        })    
     })
 }
 
@@ -105,20 +286,26 @@ function get_attach_ID(mailID, callback) {
         var type = result[0].Type
         if(result[0].Type == "Quotation") {
             var selectSql =  "SELECT quotation_id FROM quotation WHERE mail_id = ?";
-        } else if(result[0].Type == "Order") {
+        } else if(result[0].Type == "Contract_draft" || result[0].Type == "Contract_edit") {
             var selectSql =  "SELECT order_id FROM project.purchase WHERE mail_id = ?";
-        } else {
-            console.log("cannot find this mail")
+        } else  if(result[0].Type == "Operation"){
+            return callback([type, 0]);
         }
 
         if(result[0]) {
             con.query(selectSql, [mailID], function(err, res) {
                 if(err) throw err;
-                if(type == "Quotation") {
+                if(type == "Quotation") 
+                {
                     return callback([type, res[0].quotation_id]);
-                } else if(type == "Order") {
+                } 
+                else if(type == "Contract_draft" || type == "Contract_edit")
+                {
                     return callback([type, res[0].order_id]);
-                } else {
+
+                }
+                else 
+                {
                     return "error"
                 }
             })
@@ -255,27 +442,6 @@ function pay(mail_id, check, callback) {
     })
 }
 
-// format 
-/* {
-    letter_id: 信件編號(string),
-    title: 信件標題(string),
-    sender: 寄件者(string),
-    letter_type: 信件種類(string),
-    time: 寄件時間（遊戲時間）（string）
-} */
-function generate_letter_list_json(sql_result) {
-    let result_json = ""
-    let time, date;
-    let length = sql_result.length;
-    for(var i=0; i<length; i++) {
-        date = sql_result[i].Date;
-        time = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate()
-        result_json += JSON.stringify({"letter_id":sql_result[i].mail_ID, "title":sql_result[i].Title, "sender":sql_result[i].Send_from, "letter_type":sql_result[i].Type, "time":time}, null, 2)
-        result_json += '\n'
-    }
-    return result_json;
-}
-
 // format
 /* {
     title: 信件標題(string),
@@ -402,9 +568,8 @@ function buy_ingredient(stu_id) {
 
 
 // --- Export--- //
-module.exports = {
-    get_letter_list,
+/* module.exports = {
     get_letter,
     get_attach,
     
-}
+} */
