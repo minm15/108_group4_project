@@ -210,7 +210,7 @@ function Quotation({ detail, user }) {
                     </RadioGroup>
                 </FormControl>
                 <Typography className="letter-ending">{user}&emsp;敬上</Typography>
-                <Button startIcon={<ForwardToInbox />} href='/letter_list' onClick={handleSend}>送出信件</Button>
+                <Button  sx={{"&:hover": { backgroundColor:"#E4513D",color:"#FFFFFF"},backgroundColor: "#FFFFFF" ,color:"#350D08",border:2}} startIcon={<ForwardToInbox />} href='/letter_list' onClick={handleSend}>送出信件</Button>
             
         </div>
     )

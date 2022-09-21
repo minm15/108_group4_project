@@ -41,21 +41,23 @@ function LetterReply({ user }) {
             padding='5'
             >
 
-           
-            <Grid item xs={2}>
+           {/*  <Grid item xs={2}>
                 <MenuList />
                 
-            </Grid>
+            </Grid> */}
+           
             
             <Grid item xs={10}>
             <Box sx={{ height: 950, width: '90%' ,padding:3,bgcolor: '#FFFFFF' }}>
             <Box component="form" >
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
+                        <Typography sx={{textAlign:'left'}}>
                         收件人：
+                        </Typography>
                     </Grid>
                     <Grid item xs={32}>
-                        <TextField sx={{ bgcolor: '#FDF1EF',width:400 }}
+                        <TextField sx={{ bgcolor: '#FDF1EF',width:400,textAlign:'left' }}
                             id="sender"
                             defaultValue={detail.sender}
                             InputProps={{
@@ -63,10 +65,12 @@ function LetterReply({ user }) {
                             }} />
                     </Grid>
                     <Grid item xs={4}>
+                    <Typography sx={{textAlign:'left'}}>
                         標題：
+                    </Typography>
                     </Grid>
                     <Grid item xs={32}>
-                        <TextField sx={{ bgcolor: '#FDF1EF',width:400 }}
+                        <TextField sx={{ bgcolor: '#FDF1EF',width:400,textAlign:'left' }}
                             id="title"
                             defaultValue={detail.title}
                             InputProps={{

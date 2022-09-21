@@ -290,13 +290,25 @@ const HarborSend = ({ user }) => {
                             const ratio = ratioList.find(ele => ele.name === product.name);
                             return (
                                 ratio === undefined ? null :
-                                    <Dialog key={product.name} open={openWind} onClose={() => handleClose(product.name)}>
-                                        {ratio.name}
+                                    <Dialog  fullWidth maxWidth="xs"key={product.name} open={openWind} onClose={() => handleClose(product.name)}>
+                                        <Grid container
+                                         direction="row"
+                                         justifyContent="center"
+                                         alignItems="flex-start"
+                                         spacing='5'
+                                         padding='5'
+                                        >
+                                        <Grid item xs={12}>
+                                            <Typography sx={{fontSize:18,textAlign:'center'}}>
+                                                {ratio.name}
+                                            </Typography></Grid>
+                                        <Grid item xs={10}>
                                         {
                                             ratio.type.map(
                                                 (everyType) => {
                                                     return (
-                                                        <Slider
+                                                        <Slider 
+                                                        size="small"
                                                             name={everyType.name}
                                                             onChange={handleSlide}
                                                             step={1}
@@ -308,6 +320,8 @@ const HarborSend = ({ user }) => {
                                                 }
                                             )
                                         }
+                                        </Grid>
+                                        </Grid>
                                     </Dialog>
                             )
                         }

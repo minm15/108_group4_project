@@ -52,7 +52,7 @@ const HarborSendable = ({ user }) => {
                                 <AccordionDetails>
                                     <Grid container>
                                         <Grid item xs={12}>
-                                        <Typography disableTypography sx={{color:'#350D08', fontFamily: 'Noto Sans TC',fontSize: '16px',fontWeight: '400',lineHeight: '35px'}}>
+                                        <Typography disableTypography sx={{color:'#350D08', fontFamily: 'Noto Sans TC',fontSize: '16px',fontWeight: '400',lineHeight: '35px',textAlign:'left'}}>
                                             訂單內容：
                                         </Typography>
                                         </Grid>

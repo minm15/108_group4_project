@@ -49,7 +49,7 @@ function LetterWriting({ user }) {
        
            {/* 信件主體 */}
             <Grid item xs={10}>
-                <Box sx={{ height: 400, width: '90%' ,padding:3,bgcolor: '#FFFFFF' }}>
+                <Box sx={{ height: 400, width: '90%' ,padding:3,bgcolor: '#FFFFFF' , textAlign:'left'}}>
                 <Box>
                 收件人：
                 <FormControl>
