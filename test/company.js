@@ -10,30 +10,89 @@ var con = mysql.createConnection({
 
 con.connect(function(err) {
     if (err) throw err;
-    /* coop_history(300, function(res) {
+    coop_history_new(119056432, function(res) {
+        console.log(res);
+    })
+    /* get_supply(120560124, function(res) {
+        console.log(res)
+    }); */
+    /* get_address(119056432, function(res) {
         console.log(res)
     }) */
-    /* get_companies(function(company_list) {
-        console.log(company_list);
-    }) */
-    storage(250, function(storage_list) {
-        console.log(storage_list)
-    })
-    /* get_factory_ID(300, function(factory_ID) {
-        console.log(factory_ID);
-    }) */
-    // finance(300, function(finance_report) {
-    //     console.log(finance_report);
-    // })
+    
 });
 
 
 /* [
     {
-    name: 公司名稱(string),
-    company_type: 公司種類(string)
+        name:,
+        company_id:,
+        company_type:
     }
 ] */
+
+function coop_history_new(stu_id, callback) {
+    let output_list = []; 
+
+    get_coop_stuid(stu_id, function(coop_id_list) {
+        var select_company = "SELECT co_name from company WHERE belong_to_user_id = ?";
+        var select_student = "SELECT Type from student WHERE ID = ?";
+        for(let i=0; i<coop_id_list.length; i++) {
+            con.query(select_company, [coop_id_list[i]], function(err, company_res) {
+                if(err) throw err;
+                con.query(select_student, [coop_id_list[i]], function(err, student_res) {
+                    if(err) throw err;
+                    let output_json = {
+                        'name':'',
+                        'company_id':'',
+                        'company_type':''
+                    }
+                    output_json.name = company_res[0].co_name;
+                    output_json.company_id = coop_id_list[i];
+                    output_json.company_type = student_res[0].Type;
+                    output_list.push(output_json);
+
+                    if(i == coop_id_list.length - 1) {
+                        return callback(output_list);
+                    }
+                })
+            })
+        }
+    })
+}
+
+function create_coop_info(stu_id) {
+    
+}
+
+// return list[]
+function get_coop_stuid(stu_id, callback) {
+    var select_send_from = "SELECT Send_from from mail WHERE Send_to = ?";
+    var select_send_to = "SELECT Send_to from mail WHERE Send_from = ?";
+    let coop_list = [];
+
+    con.query(select_send_from, [stu_id], function(err, send_from_res) {
+        if(err) throw err;
+        con.query(select_send_to, [stu_id], function(err, send_to_res) {
+            if(err) throw err;
+            for(let i=0; i<send_from_res.length; i++) {
+                if(!coop_list.includes(send_from_res[i].Send_from)) {
+                    coop_list.push(send_from_res[i].Send_from);
+                }
+            }
+
+            for(let i=0; i<send_to_res.length; i++) {
+                if(!coop_list.includes(send_to_res[i].Send_to)) {
+                    coop_list.push(send_to_res[i].Send_to);
+                }
+            }
+
+            return callback(coop_list);
+        })
+    })
+}
+
+
 
 function coop_history(stu_id, callback) {
     get_send_from(stu_id, function(send_from_list) {
@@ -42,6 +101,12 @@ function coop_history(stu_id, callback) {
         let coop_list = {
             "coop_history_list":[],
         };
+        let output_list = []
+        let output_json = {
+            'name':'',
+            'company_id':'',
+            'company_type':''
+        }
         // 回傳值為空list，表示沒有合作，直接回傳空值
         if(list_length == 0) {
             return callback(coop_list)
@@ -108,40 +173,69 @@ function get_mail_box_ID(stu_id, callback) {
     })
 }
 
-/* 
-{
-    balance_sheet:{
-            asset: {
-              cash: 現金(int),
-              ar: 應收帳款(int),
-              equip: 廠房設備(int),
-              other: 其他(int)
-            },
-            debt:{
-              ap: 應付帳款(int),
-              other: 其他(int)
-            },
-            equity:{
-              stock: 普通股股本(int),
-              retained_earning: 保留盈餘(int)
-            }
+/* [
+    {
+        name: "品項1",
+        price: 1000
     },
-    earning:{
-          cost: 營業成本(int),
-          expense: 營業費用(int),
-          loss: 業外損益(int),
-          gain_before_tax: 稅前淨利(int),
-          tax: 稅(int),
-          eps: 每股盈餘(int)
-    },
-    ratio:{
-          pe: 本益比(float),
-          gross_margin: 毛利率(flaot),
-          roe: ROE(flaot),
-          inventory_turnover: 存貨周轉率(float)
+    {
+        name: "品項2",
+        price: 500
     }
+] */
+function get_material(stu_id, callback) {
+    var select_student = "SELECT Type FROM student WHERE ID = ?";
+    
+    con.query(select_student, [stu_id], function(err, type_res) {
+        if(err) throw err;
+        if(type_res[0].Type == 'material') {
+            select_development(stu_id, function(res) {
+                return callback(res);
+            })
+        }
+    })
 }
- */
+
+function select_development(stu_id, callback) {
+    var select_development = "SELECT * FROM development WHERE belong_to_user_ID = ?";
+    var output_list = [];         
+    con.query(select_development, [stu_id], function(err, dev_res) {
+        if(err) throw err;
+        for(let i = 0; i < dev_res.length; i++) {
+            output_list.push({'name':dev_res[i].Name, 'price':dev_res[i].Cost});
+        }
+        return callback(output_list);
+    })
+}
+
+/* {
+    name:,
+    price:(int)
+} */
+function get_supply(stu_id, callback) {
+    var select_student = "SELECT Type FROM student WHERE ID = ?";
+    
+    con.query(select_student, [stu_id], function(err, type_res) {
+        if(err) throw err;
+        if(type_res[0].Type == 'supply') {
+            select_supply(stu_id, function(res) {
+                return callback(res);
+            })
+        }
+    })
+}
+
+function select_supply(stu_id, callback) {
+    var select_development = "SELECT * FROM development WHERE belong_to_user_ID = ?";
+    var output_list = [];         
+    con.query(select_development, [stu_id], function(err, dev_res) {
+        if(err) throw err;
+        for(let i = 0; i < dev_res.length; i++) {
+            output_list.push({'name':dev_res[i].Name, 'price':dev_res[i].Cost});
+        }
+        return callback(output_list);
+    })
+}
 
 function finance(stu_id, callback) {
     var selectSql = "SELECT * FROM finance WHERE belong_to_user_ID = ? ";
@@ -177,6 +271,24 @@ function finance(stu_id, callback) {
         }
 
         return callback(finance_list)
+    })
+}
+
+/* {
+    name:,
+    address:
+} */
+function get_address(stu_id, callback) {
+    var select_company = "SELECT * FROM company WHERE belong_to_user_ID = ?";
+    con.query(select_company, [stu_id], function(err, com_res) {
+        if(err) throw err;
+        var output_json = {
+            'name':'',
+            'address':'', // 先用縮寫，有國家表再換
+        }
+        output_json.name = com_res[0].co_name;
+        output_json.address = com_res[0].country;
+        return callback(output_json);
     })
 }
 

@@ -8,14 +8,140 @@ var con = mysql.createConnection({
 });
 
 con.connect(function(err) {
-    /* deliver_list(119056432, function(result) {
+    deliver_list_new(119056432, function(result) {
+        console.log(result)
+    })
+    /* create_company_table(function(result) {
         console.log(result)
     }) */
     //deliver_detail(89)
     //receive_deliver(119056432, 89)
     //deliver_expense(119056432, 120560124)
-    deliver_order(deliver_order_input)
+    //deliver_order(deliver_order_input)
 })
+
+/* {
+    id:,
+    receiver:,
+    package : [
+        {
+            id:,
+            name:,
+            type:,
+            amount:(int),
+            price:(int)
+        },
+        {
+            id:,
+            name:,
+            type:,
+            amount:(int),
+            price:(int)
+        }
+    ],
+    sender:,
+    send_date:,
+    arrange_time: #約定時間,
+    actual_time: #實際時間,
+    arrive_date:
+} */
+// 待開會確認arrange_time, actual_time(前端要的、跟資料庫紀錄)
+function deliver_list_new(stu_id, callback) {
+    var select_mail = "SELECT mail_ID, Send_to, Send_from FROM mail WHERE Send_to = ? OR Send_from = ?";
+    var select_deliver = "SELECT * FROM purchase WHERE"
+    var select_mail_after = "SELECT Send_to, Send_from FROM mail WHERE"
+    var select_student = "SELECT Name FROM student WHERE ID = ?"
+    let output_list = [];
+    let package_list = [];
+
+    create_company_table(function(company_list) {
+        // find the mail related with input student_ID
+        con.query(select_mail, [stu_id, stu_id], function(err, mail_result) {
+            if(err) throw err;
+
+            // dynamically create select_deliver sql according to the number of mail
+            let mail_id_list = []
+            for(let i=0; i<mail_result.length; i++) {
+                if (i == 0) {
+                    select_deliver += " mail_ID = ?"
+                } else {
+                    select_deliver += " OR mail_ID = ?"
+                }
+                mail_id_list.push(mail_result[i].mail_ID)
+            }
+
+            con.query(select_deliver, mail_id_list, function(err, deliver_res) {
+                if(err) throw err;
+
+                let mid_list = [] // for second mail sql search data
+                for(let i=0; i<deliver_res.length; i++) {
+                    if (i == 0) {
+                        select_mail_after += " mail_ID = ?"
+                    } else {
+                        select_mail_after += " OR mail_ID = ?"
+                    }
+                    mid_list.push(deliver_res[i].mail_id)
+                }
+
+                // find the mail data again 
+                // to ensure these mail is order type
+                con.query(select_mail_after, mid_list, function(err, mail_res) {
+                    if(err) throw err;
+
+                    // find student's name
+                    con.query(select_student, [stu_id], function(err, stu_result) {
+                        if(err) throw err;
+
+                        for(let i=0; i<deliver_res.length; i++) {
+
+                            // handle type
+                            let type = "";
+                            if(mail_res[i].Send_to == stu_id) {
+                                type = "receiver";
+                            } else if(mail_res[i].Send_from == stu_id) {
+                                type = "sender";
+                            }
+
+                            var send_to_company = company_list[company_list.indexOf(mail_res[i].Send_to) + 1];
+                            var send_from_company = company_list[company_list.indexOf(mail_res[i].Send_from) + 1];
+
+                            // handle package
+                            package_list = []
+                            package_list.push({"id":deliver_res[i].order_id, "name": deliver_res[i].product_name, "type": deliver_res[i].product_rank, "amount": deliver_res[i].product_amount, "price": deliver_res[i].product_price});
+
+                            // handle progress
+                            let send_date = deliver_res[i].send_date;
+                            let arrive_date = deliver_res[i].arrive_deadline;
+
+                            // handle time
+                            let arrive = new Date(arrive_date).toLocaleString();
+                            arrive_d = arrive.split(' ');
+                            arrive_deadline = arrive_d[0]; 
+                            
+                            // handle output
+                            output_list.push({"id": deliver_res[i].order_id, "receiver": send_to_company,
+                            "package": package_list, "sender": send_from_company, "time": arrive_deadline, "send_date": deliver_res[i].send_date, "arrive_date": deliver_res[i].arrive_deadline});
+                        }
+
+                        return callback(output_list);
+                    })
+                })           
+            })
+        })     
+    })
+}
+
+function create_company_table(callback) {
+    var select_company = "SELECT * FROM company";
+    var company_list = [];
+    con.query(select_company, function(err, com_res) {
+        if(err) throw err;
+        for(let i=0; i<com_res.length; i++) {
+            company_list.push(com_res[i].belong_to_user_ID, com_res[i].co_name);
+        }
+        return callback(company_list);
+    })
+}
 
 /* [
     {
