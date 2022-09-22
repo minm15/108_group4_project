@@ -154,14 +154,21 @@ function Product() {
     function calIgd(target, amountNow, rankNow) {
         var costNow = 0;
         var timeNow = 0;
+        var amountAfter = amountNow;
+        if (rankNow === "C") {
+            amountAfter = amountNow * 0.9;
+        }
+        if (thrift) {
+            amountAfter = amountNow * 0.9;
+        }
         setIgd(
             target.ingredient.map(
                 (igd) => {
-                    costNow += igd.amount * amountNow * igd.marketPrice;
+                    costNow += igd.amount * amountAfter * igd.marketPrice;
                     return (
                         {
                             name: igd.name,
-                            amount: Math.round((rankNow === 'C') ? igd.amount * amountNow * 0.9 : igd.amount * amountNow)
+                            amount: Math.round(igd.amount * amountAfter)
                         }
                     )
                 }

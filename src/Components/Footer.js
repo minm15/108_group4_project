@@ -16,7 +16,7 @@ function Footer() {
   return (
     <>
       <div className={'footer'}>
-      <div className='leftbox'>{
+      {/* <div className='leftbox'>{
                 leftshow === false ?
                     <ChatBubbleOutline onClick={
                         () => {
@@ -35,7 +35,7 @@ function Footer() {
                     </div>
             }
 
-            </div>
+            </div> */}
             <div className='rightbox'>
                 {
                     rightshow === false ?

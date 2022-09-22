@@ -22,7 +22,7 @@ import {
 } from "@mui/icons-material";
 import { Divider } from '@mui/material';
 
-export default function Modal_Info({ company_ID,name }) { //姑且先傳了ID跟名字過來
+export default function Modal_Info({ company_ID,name,company_type,productList,finanData,cooperateList,}) { 
 
 
 
@@ -31,41 +31,83 @@ export default function Modal_Info({ company_ID,name }) { //姑且先傳了ID跟
      
      <Box sx={{ flexGrow: 1 }}>
      <Typography sx={{ fontSize: 24 ,fontWeight:"bold"}}  >
-     公司名稱:{name}
+     {company_ID}-{name} 
+     <Chip label={company_type} sx={{ bgcolor: "#1976D2", color: "white",fontSize:10,height:'18px' }} />
+
         </Typography>
+
      <Grid container spacing={2}>
-       <Grid item xs={6} sx={{height:250}}> 
-       <Typography sx={{ fontSize: 24 }}  >公司資訊        </Typography>    
+       <Grid item xs={6} > 
+       <h3>&emsp;公司資訊</h3>
+      <b>產品列表：{productList}　</b> <br></br>
+       <br></br>
+       不知道公司資訊欄位要放什麼<br></br>    
+        <br></br>
 
-         ID:{company_ID}
-          <br/>
-        {/* 測試:{name1} */}
-        三頁Modal中的內容均未完成
+  
+       <FinanState finanData={finanData}/>
        </Grid>
-       <Grid item xs={6} sx={{height:250}}> 
+       <Grid item xs={6} > 
       
-       <Typography sx={{ fontSize: 24 }}  >財務報表        </Typography>    
+      <Cooperate cooperateList={cooperateList}/>  
        </Grid>
-      <Grid item xs={12}>
-      <Typography sx={{ fontSize: 24 }}  >上次合作對象        </Typography>   
-      <table cellspacing="0" cellpadding="0" >
-
-<tbody>
-<tr>
-<td valign="top" >Takodachi汽車</td>
-<td valign="top" > <Chip label="製造" sx={{ bgcolor: "#1976D2", color: "white",fontSize:10,height:'18px' }} /></td>
-</tr>
-
-<tr>
-<td valign="top" >Takodachi汽車</td>
-<td valign="top" > <Chip label="製造" sx={{ bgcolor: "#1976D2", color: "white",fontSize:10,height:'18px' }} /></td>
-</tr>
-</tbody>
-</table> 
-      </Grid>
+ 
          
      </Grid>
    </Box>
    </Box>
   );
 }
+
+const Cooperate = ({ cooperateList }) => {
+  return (
+   <Box sx={{overflowY: "scroll"}}>
+ <h3>&emsp;上次合作對象</h3>
+
+      <Table size="small">
+  
+          <TableBody>
+            {cooperateList.map((row, index) => (
+              <TableRow >
+                <TableCell >{row.name}</TableCell>
+                <TableCell >
+
+                <Chip label={row.company_type} sx={{ bgcolor: "#1976D2", color: "white",fontSize:10,height:'18px' }} />
+                </TableCell>
+             
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+   </Box>
+
+  );
+};
+
+
+const FinanState= ({finanData }) => {
+  const rowNameList=["收入","支出","利潤"];
+  return (
+    <>
+<h3>&emsp;本月財務狀況</h3>  
+
+
+      <Table size="small">
+  
+          <TableBody>
+          {finanData.map((row, index) => (
+              <TableRow >
+                <TableCell >{rowNameList[index]}</TableCell>
+                <TableCell >
+                {row.amount}
+                </TableCell>
+             
+              </TableRow>
+            ))}
+          </TableBody>
+        <small> &emsp; 單位:100萬</small>
+        </Table>
+   </>
+     );
+    };
+    

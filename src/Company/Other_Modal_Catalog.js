@@ -10,8 +10,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import CardHeader from '@mui/material/CardHeader';
-import catalogList from "./data/catalogList.js"
 import CompanyDrawer from './Drawer';
+import Other_Modal_Catalog_Detail from './Other_Modal_Catalog_Detail'
 
 import {
  
@@ -20,7 +20,7 @@ import {
 } from "@mui/icons-material";
 import { Divider } from '@mui/material';
 
-export default function Modal_Product({ company_ID,name }) { //姑且先傳了ID跟名字過來
+export default function Modal_Product({ company_ID,name,catalogList}) { //姑且先傳了ID跟名字過來
   
 
     return (
@@ -31,56 +31,27 @@ export default function Modal_Product({ company_ID,name }) { //姑且先傳了ID
      <Typography sx={{ fontSize: 24 ,fontWeight:"bold"}}  >
      公司名稱:{name} 
         </Typography>
-   {/* <Catalog/> */}
-   等目錄頁完成再補上
+        <Grid container spacing={1}>
+
+        {catalogList.map((row, index) => (
+      <Grid item xs={4}>
+
+     <Card variant="outlined" sx={{height:60}}>
+     {row.title}
+     <Other_Modal_Catalog_Detail title={row.title} content={row.content} catalog_id={row.catalog_id}/>
+     </Card>
+     </Grid>
+
+            ))}   
+            </Grid>      
+      這一頁的資料寫死在other_catalogList <br></br>
+      目前預設一個公司一次可以放多個目錄(要改再說)
+
    </Box>
   
    </Box>
+
   
   
   );
 }
-function Catalog() {
-  const [list, setList] = useState(catalogList);
-
-
-   
-    return (
-
-    <Box sx={{overflowY: "scroll", maxHeight: "90%"}}>
-
-   <Grid container spacing={1}>
-
-   {list.map((row, index) => (
-              <Grid item xs={4}>
-
-      <ListItem key={row.id} item={row} />
-      </Grid>
-    ))}
- </Grid>
- </Box>
-  );
-}
-
-const ListItem = ({
-  item: {id,product_name, product_price,product_type,product_level,product_desc },
-}) => (
-     <Card variant="outlined" sx={{width:200,height:200}}>
-        <CardHeader
-        action={
-          <>
-     
-         </>
-            } 
-            title={product_name} />
-                <div align="center">id: {product_price}</div>
-                <div align="center" >{product_type}</div>
-                <div align="center" >{product_level}</div>
-                <div align="center" >{product_desc}</div>
-
-
-
-              </Card>
-  
-);
-

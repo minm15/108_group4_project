@@ -2,21 +2,21 @@ import React, { useState } from "react";
 // import {Grid, Item} from '@mui/material'
 import { useParams } from "react-router-dom";
 import CreateContent from '../data/letter_detail';
+import get_letter_list from "../data/letter_list";
 
-function LetterReceive() {
+function LetterReceive({ user }) {
+    // 從網址獲得信件編號
     const [id, setId] = useState(useParams().letterId);
+    // 獲得信件內容
     const [detail, setDetail] = useState(
-        {
-            last_plan: 'less',
-            payment: id*100,
-            sender: "可愛小秘書",
-            title: "【費用調控】請您審核公司支出規劃"
-        }
+        get_letter_list().find(
+            letter => letter.id === id
+        )
     );
 
     return (
         <div className="letterDetail">
-            <CreateContent detail={detail} />
+            <CreateContent detail={detail} user={user}/>
         </div>
     );
 }
