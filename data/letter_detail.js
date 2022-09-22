@@ -15,6 +15,7 @@ import getContent from "./letter_content";
 // MenuList是撰寫信件、所有信件等的選單
 import MenuList from "../Letter/menu";
 import { DataGrid } from "@mui/x-data-grid";
+
 import CustomFooter from "../small_component/customFooter";
 
 // Operation: 營運支出計畫
@@ -33,7 +34,6 @@ const Operation = ({ detail, user }) => {
 
     return (
         <div className="operation">
-            您好：<br />
             &emsp;上個月營運支出共計{detail.payment}元。並請您確認本月支出計畫，謝謝！<br />
             {/* 選擇這個月支出計畫的Radio Button */}
             <FormControl>
@@ -49,7 +49,11 @@ const Operation = ({ detail, user }) => {
                 </RadioGroup>
             </FormControl>
             {/* 按鈕會導回所有信件的頁面，並且向後端傳遞本月支出計畫 */}
-            <Button startIcon={<ForwardToInbox />} onClick={handleOperation} href="/letter_list">確認支出</Button>
+            <Grid container justifyContent="flex-end">
+              
+            <Button sx={{"&:hover": { backgroundColor:"#E4513D",color:"#FFFFFF"},backgroundColor: "#FFFFFF" ,color:"#350D08",border:2}} startIcon={<ForwardToInbox />} onClick={handleOperation} href="/letter_list">確認支出</Button>
+            </Grid>
+        
         </div>
     );
 }
@@ -60,9 +64,10 @@ const QuotationRequest = ({ detail, user }) => {
         <div className="quotation_request">
             <Typography>{user.name} 負責人您好：</Typography>
             {getContent('quotation_request')}
-            <Typography>{detail.sender}敬上</Typography>
+            <Grid container justifyContent="flex-end"><Typography>{detail.sender}敬上</Typography></Grid>
             {/* 直接帶著信件id過去撰寫信件，雖然要再從後端叫一次信件資訊，至少我不用再研究怎麼從傳值的問題 */}
-            <Button
+            <Button sx={{"&:hover": { backgroundColor:"#E4513D",color:"#FFFFFF"},backgroundColor: "#FFFFFF" ,color:"#350D08",border:2}} 
+
                 startIcon={<ForwardToInbox />}
                 href={`/letter_list/${detail.id}`}>
                 提供報價單
@@ -122,8 +127,10 @@ const Quotation = ({ detail }) => {
                     rowsPerPageOptions={[10]}
                 />
             </Box>
-            <Typography>{detail.sender}敬上</Typography>
-            <Button startIcon={<LocalGroceryStore />} href={`/letter_writing/${detail.id}`}>前往下訂</Button>
+            <Grid container justifyContent="flex-end"><Typography>{detail.sender}敬上</Typography></Grid>
+            <Grid container justifyContent="flex-end">            
+                <Button sx={{"&:hover": { backgroundColor:"#E4513D",color:"#FFFFFF"},backgroundColor: "#FFFFFF" ,color:"#350D08",border:2}} startIcon={<LocalGroceryStore />} href={`/letter_writing/${detail.id}`}>前往下訂</Button>
+            </Grid>
         </div>
     )
 }
@@ -198,7 +205,7 @@ const ContractDraft = ({ detail }) => {
             </Grid> */}
             {/* 這邊是DataGrid版本 */}
             {/* CustomFooter在本js檔案最上面，要調整CSS要上去調 */}
-            <Box sx={{ height: 400, width: '100%' }}>
+            <Box sx={{ height: 400, width: '100%',mb:3,mt:3 }}>
                 <DataGrid
                     rows={rows}
                     columns={columns}
@@ -224,28 +231,41 @@ const ContractDraft = ({ detail }) => {
                 />
             </Box>
             {/* 訂單細節 */}
-            <Grid container>
-                <Grid item>送達時間</Grid>
-                <Grid item>{detail.arrive}</Grid>
+            <Grid container direction="row"
+                justifyContent="flex-start"
+                alignItems="flex-start"
+                >
+              
+               <Grid item xs={2} sx={{borderBottom:1}}>送達時間</Grid>
+                <Grid item xs={10} sx={{borderBottom:1}}>{detail.arrive}</Grid>
+             
 
-                <Grid item>送達地址</Grid>
-                <Grid item>{detail.address}</Grid>
-                <Grid item>{detail.addressLoc}</Grid>
+                <Grid item xs={2} sx={{borderBottom:1}}>送達地址</Grid>
+                <Grid item xs={2} sx={{borderBottom:1}}>{detail.address}</Grid>
+                <Grid item xs={8} sx={{borderBottom:1}}>{detail.addressLoc}</Grid>
+              
 
-                <Grid item>瑕疵處理</Grid>
-                <Grid item>{detail.flaw}</Grid>
-                <Grid item>處理期限</Grid>
-                <Grid item>{detail.flawDate}</Grid>
+                <Grid item xs={2} sx={{borderBottom:1}}>瑕疵處理</Grid>
+                <Grid item xs={2} sx={{borderBottom:1}}>{detail.flaw}</Grid>
+                <Grid item xs={2} sx={{borderBottom:1}}>處理期限</Grid>
+                <Grid item xs={6} sx={{borderBottom:1}}>{detail.flawDate}</Grid>
 
-                <Grid item>支付期限</Grid>
-                <Grid item>{detail.pay}</Grid>
+                <Grid item xs={2} sx={{borderBottom:1}}>支付期限</Grid>
+                <Grid item xs={2} sx={{borderBottom:1}}>{detail.pay}</Grid>
+
+
+        
+                
             </Grid>
             {/* 信件結尾 */}
-            <Typography>{detail.sender}敬上</Typography>
+            <Grid container justifyContent="flex-end"><Typography>{detail.sender}敬上</Typography></Grid>
+            
             {/* 導向修改訂單的介面的按鈕 */}
-            <Button startIcon={<ForwardToInbox />} href={`/letter_writing/${detail.id}`}>
-                修改訂單
-            </Button>
+            <Grid container justifyContent="flex-end">
+                <Button sx={{"&:hover": { backgroundColor:"#E4513D",color:"#FFFFFF"},backgroundColor: "#FFFFFF" ,color:"#350D08",border:2}} startIcon={<ForwardToInbox />} href={`/letter_writing/${detail.id}`}>
+                    修改訂單
+                </Button>
+            </Grid>
         </div>
     )
 }
@@ -348,7 +368,7 @@ const ContractEdit = ({ detail }) => {
 
             {/* datagrid寫法 */}
             {/* CustomFooter在small_component的資料夾底下，調整css要過去調 */}
-            <Box sx={{ height: 400, width: '100%' }}>
+            <Box sx={{ height: 400, width: '100%' ,mb:3,mt:3}}>
                 <DataGrid
                     rows={rows}
                     columns={columns}
@@ -374,32 +394,48 @@ const ContractEdit = ({ detail }) => {
                 />
             </Box>
             {/* 訂單詳細內容 */}
-            <Grid container>
-                <Grid item>送達時間</Grid>
-                <Grid item>{detail.arrive}</Grid>
+            <Grid container direction="row"
+                justifyContent="flex-start"
+                alignItems="flex-start"
+                >
+              
+               <Grid item xs={2} sx={{borderBottom:1}}>送達時間</Grid>
+                <Grid item xs={10} sx={{borderBottom:1}}>{detail.arrive}</Grid>
+             
 
-                <Grid item>送達地址</Grid>
-                <Grid item>{detail.address}</Grid>
-                <Grid item>{detail.addressLoc}</Grid>
+                <Grid item xs={2} sx={{borderBottom:1}}>送達地址</Grid>
+                <Grid item xs={2} sx={{borderBottom:1}}>{detail.address}</Grid>
+                <Grid item xs={8} sx={{borderBottom:1}}>{detail.addressLoc}</Grid>
+              
 
-                <Grid item>瑕疵處理</Grid>
-                <Grid item>{detail.flaw}</Grid>
-                <Grid item>處理期限</Grid>
-                <Grid item>{detail.flawDate}</Grid>
+                <Grid item xs={2} sx={{borderBottom:1}}>瑕疵處理</Grid>
+                <Grid item xs={2} sx={{borderBottom:1}}>{detail.flaw}</Grid>
+                <Grid item xs={2} sx={{borderBottom:1}}>處理期限</Grid>
+                <Grid item xs={6} sx={{borderBottom:1}}>{detail.flawDate}</Grid>
 
-                <Grid item>支付期限</Grid>
-                <Grid item>{detail.pay}</Grid>
+                <Grid item xs={2} sx={{borderBottom:1}}>支付期限</Grid>
+                <Grid item xs={2} sx={{borderBottom:1}}>{detail.pay}</Grid>
+
+
+        
+                
             </Grid>
             {/* 信件結尾詞 */}
-            <Typography>{detail.sender}敬上</Typography>
+            <Grid container justifyContent="flex-end"><Typography>{detail.sender}敬上</Typography></Grid>
             {/* 同意並回到所有訂單頁面 */}
-            <Button startIcon={<Check />} href="/letter_list" onClick={handleAgreeContract}>
-                同意訂單
-            </Button>
+            <Grid container justifyContent="flex-end" columnSpacing={5}>
+                <Grid Item xs={2}>
+                <Button sx={{"&:hover": { backgroundColor:"green",color:"#FFFFFF"},backgroundColor: "#FFFFFF" ,color:"green",border:2}} startIcon={<Check />} href="/letter_list" onClick={handleAgreeContract}>
+                    同意訂單
+                </Button>
+                </Grid>
             {/* 拒絕並回到所有訂單頁面 */}
-            <Button startIcon={<Close />} href="/letter_list" onClick={handleRefuseContract}>
-                拒絕訂單
-            </Button>
+                <Grid Item xs={2}>
+                <Button sx={{"&:hover": { backgroundColor:"red",color:"#FFFFFF"},backgroundColor: "#FFFFFF" ,color:"red",border:2}} startIcon={<Close />} href="/letter_list" onClick={handleRefuseContract}>
+                    拒絕訂單
+                </Button>
+                </Grid>
+            </Grid>
         </div>
     )
 }
@@ -439,14 +475,31 @@ const CreateContent = ({ detail, user }) => {
 
     return (
         <div className="letter_detail">
-            <MenuList />
-            <Box component="form" >
+           
+       <Box sx={{height: 950,bgcolor:"#FDF1EF"}}>
+            <Grid
+                container
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="flex-start"
+                spacing='5'
+                padding='5'
+                >
+               <div className="menu">
+               <Grid item xs={12}>
+                <MenuList />
+                </Grid>
+                </div>
+            
+            <Grid item xs={8}>
+            <Box component="form"  sx={{ height: 850, width: '90%' ,padding:3,bgcolor: '#FFFFFF' }}>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
                         寄件人：
                     </Grid>
                     <Grid item xs={32}>
                         <TextField
+                            fullWidth
                             id="sender"
                             defaultValue={detail.sender}
                             InputProps={{
@@ -458,6 +511,7 @@ const CreateContent = ({ detail, user }) => {
                     </Grid>
                     <Grid item xs={32}>
                         <TextField
+                            fullWidth
                             id="title"
                             defaultValue={detail.title}
                             InputProps={{
@@ -465,10 +519,15 @@ const CreateContent = ({ detail, user }) => {
                             }} />
                     </Grid>
                 </Grid>
-            </Box>
+           
             <Typography>{detail.receiver} 負責人您好：</Typography>
             {createContent(detail.letter_type)}
+            </Box>
+            </Grid>
+            </Grid>
+            </Box>
         </div>
+   
     )
 }
 

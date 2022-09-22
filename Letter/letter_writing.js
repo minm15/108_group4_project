@@ -1,5 +1,5 @@
 import React from "react";
-import { FormControl, InputLabel, Select } from "@mui/material";
+import { FormControl, InputLabel, Select, Box, Grid } from "@mui/material";
 import MenuList from "./menu";
 import { IgdPurchase, Quotation_request } from "../data/letter_draft";
 
@@ -30,78 +30,101 @@ function LetterWriting({ user }) {
     return (
         <div className="letter_writing">
             {/* 導向各個信箱介面的選單 */}
-            <MenuList />
-            {/* 信件主體 */}
-            收件人：
-            <FormControl>
-                <InputLabel>Select a receiver</InputLabel>
-                <Select native
-                    defaultValue=""
-                    id="receiver-select"
-                    label="receiver"
-                    onChange={(event) => { setReceiver(event.target.value) }}
+            <Box sx={{ height: 700, bgcolor: "#FDF1EF" }}>
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="flex-start"
+                    spacing='5'
+                    padding='5'
                 >
-                    <option aria-label="None" value="" />
-                    {
-                        (user.type === "manufacturer") ? (
-                            <optgroup label="供應商" value="供應商">
-                                {
-                                    companies.map(
-                                        company => {
-                                            return company.company_type === "供應商" ? (
-                                                <option value={company.name} key={company.company_id}>{company.name}</option>
-                                            ) : null;
+
+
+                    <Grid item xs={2}>
+                        <MenuList />
+
+                    </Grid>
+
+
+                    {/* 信件主體 */}
+                    <Grid item xs={10}>
+                        <Box sx={{ height: 400, width: '90%', padding: 3, bgcolor: '#FFFFFF' }}>
+                            <Box>
+                                收件人：
+                                <FormControl>
+                                    <InputLabel >Select a receiver</InputLabel>
+                                    <Select sx={{ bgcolor: '#FDF1EF', width: 400 }} native defaultValue=""
+                                        id="receiver-select"
+                                        label="receiver"
+                                        onChange={(event) => { setReceiver(event.target.value) }}>
+                                        <option aria-label="None" value="" />
+                                        {
+                                            (user.type === "manufacturer") ? (
+                                                <optgroup label="供應商" value="供應商">
+                                                    {
+                                                        companies.map(
+                                                            company => {
+                                                                return company.company_type === "供應商" ? (
+                                                                    <option value={company.name} key={company.company_id}>{company.name}</option>
+                                                                ) : null;
+                                                            }
+                                                        )
+                                                    }
+                                                </optgroup>
+                                            ) : null
                                         }
-                                    )
-                                }
-                            </optgroup>
-                        ) : null
-                    }
-                    {
-                        (user.type === "supplier") ? (
-                            <optgroup label="材料商" value="材料商">
-                                {
-                                    companies.map(
-                                        company => {
-                                            return company.company_type === "材料商" ? (
-                                                <option value={company.name} key={company.company_id}>{company.name}</option>
-                                            ) : null;
+                                        {
+                                            (user.type === "supplier") ? (
+                                                <optgroup label="材料商" value="材料商">
+
+                                                    {
+                                                        companies.map(
+                                                            company => {
+                                                                return company.company_type === "材料商" ? (
+                                                                    <option value={company.name} key={company.company_id}>{company.name}</option>
+                                                                ) : null;
+                                                            }
+                                                        )
+                                                    }
+                                                </optgroup>
+                                            ) : null
                                         }
-                                    )
+                                    </Select>
+                                </FormControl><br />
+                            </Box>
+                            <Box>
+                                主旨：
+                                <FormControl>
+                                    <InputLabel>Select your purpose</InputLabel>
+                                    <Select sx={{ bgcolor: '#FDF1EF', width: 400 }} native defaultValue=""
+                                        id="subject-select"
+                                        label="subject"
+                                        onChange={(event) => { setTitle(event.target.value) }}>
+                                        <option aria-label="None" value="" />
+                                        {
+                                            (user.type === "supplier") ?
+                                                <option value='材料採購'>【材料採購】</option> : null
+                                        }
+                                        {
+                                            (user.type === "manufacturer") ?
+                                                <option value='報價請求'>【報價請求】</option> : null
+                                        }
+                                    </Select>
+                                </FormControl>
+                                {/* 依照上面選擇的收件人跟信件標題，直接生成對應的信件內容 */}
+                                {/* quotation_request跟igdpurchase在letter_draft.js裡面 */}
+                                {
+                                    title === '報價請求' ? <Quotation_request receiver={receiver} user={user.name} /> : null
                                 }
-                            </optgroup>
-                        ) : null
-                    }
-                </Select>
-            </FormControl><br />
-            主旨：
-            <FormControl>
-                <InputLabel>Select your purpose</InputLabel>
-                <Select native
-                    defaultValue=""
-                    id="subject-select"
-                    label="subject"
-                    onChange={(event) => { setTitle(event.target.value) }}
-                >
-                    <option aria-label="None" value="" />
-                    {
-                        (user.type === "supplier") ?
-                            <option value='材料採購'>【材料採購】</option> : null
-                    }
-                    {
-                        (user.type === "manufacturer") ?
-                            <option value='報價請求'>【報價請求】</option> : null
-                    }
-                </Select>
-            </FormControl>
-            {/* 依照上面選擇的收件人跟信件標題，直接生成對應的信件內容 */}
-            {/* quotation_request跟igdpurchase在letter_draft.js裡面 */}
-            {
-                title==='報價請求' ? <Quotation_request receiver={receiver} user={user.name} /> : null
-            }
-            {
-                title==='材料採購' ? <IgdPurchase receiver={receiver} user={user.name} /> : null
-            }
+                                {
+                                    title === '材料採購' ? <IgdPurchase receiver={receiver} user={user.name} /> : null
+                                }
+                            </Box>
+                        </Box>
+                    </Grid>
+                </Grid>
+            </Box>
         </div>
     )
 }

@@ -5,7 +5,7 @@ import {
     Box, Typography,
     Stepper, Step, StepContent, StepButton, Button,
     Dialog, Slider,
-    Alert, Snackbar
+    Alert, Snackbar,Grid
 } from '@mui/material';
 import { DataGrid } from "@mui/x-data-grid";
 
@@ -188,7 +188,9 @@ const HarborSend = ({ user }) => {
             height: 40,
             renderCell: (params) => {
                 return (
-                    <Button id={params.row.id} onClick={() => setWinOpen(true)}>品質比例</Button>
+                    <Button sx={{"&:hover": { backgroundColor:"#350D08",color:"#FDF1EF"},backgroundColor: "#FFFFFF" ,color:"#E4513D",borderRadius:3,fontFamily: 'Noto Sans TC',fontSize: '16px',fontWeight: '400',lineHeight: '23px'}}id={params.row.id} onClick={() => setWinOpen(true)}>
+                        品質比例
+                    </Button>
                 )
             }
         }
@@ -196,15 +198,39 @@ const HarborSend = ({ user }) => {
 
     return (
         <div className="harbor-send">
-            <Box className="contract-detail">
-                <Typography>{send.buyer}</Typography>
+            <Box sx={{height: 700,bgcolor:"#FDF1EF"}}>
+           
+            <Grid container>
+
+            <Grid Item xs={6}>
+            <Box className="contract-detail" sx={{height:600,padding:2,bgcolor:"#FFFFFF",mb:'16px',ml:'16px',mt:'16px',borderRadius:5}}>
+                <Typography disableTypography sx={{color:'#350D08', fontFamily: 'Noto Sans TC',fontSize: '36px',fontWeight: '700',lineHeight: '52px'}}>
+                    {send.buyer}
+                </Typography>
                 <Stepper orientation="vertical" nonLinear activeStep={activeStep}>
                     <Step key={'order'} completed={target.status === '換貨'}>
+                        <Grid container>
                         {/* 點點不要有數字的部分先跳過 */}
+                        <Grid Item xs={12}>
                         <StepButton onClick={handleClick} id={0}>
-                            <Typography className="status-line-topic">下訂內容</Typography>
-                            <Typography className="status-due">{send.arrive}</Typography>
+                            <Grid container
+                            direction="row"
+                            justifyContent="flex-start"
+                            alignItems="flex-start">
+                            <Grid Item xs={12}>
+                                <Typography disableTypography sx={{color:'#350D08', fontFamily: 'Noto Sans TC',fontSize: '24px',fontWeight: '400',lineHeight: '35px'}}className="status-line-topic">
+                                    下訂內容
+                                </Typography>
+                            </Grid>
+                            <Grid Item xs={12}>
+                                <Typography disableTypography sx={{color:'#350D08', fontFamily: 'Noto Sans TC',fontSize: '16px',fontWeight: '400',lineHeight: '23px'}}className="status-due">
+                                    {send.arrive}
+                                </Typography>
+                            </Grid>
+                            </Grid>
                         </StepButton>
+                        </Grid>
+                        <Grid Item xs={12}>
                         <StepContent>
                             <Box className="product-list" sx={{ height: 400, width: '100%' }}>
                                 {/* 要改用Grid再跟我說 */}
@@ -216,6 +242,8 @@ const HarborSend = ({ user }) => {
                                 />
                             </Box>
                         </StepContent>
+                        </Grid>
+                        </Grid>
                     </Step>
                     {
                         target.status === '換貨' ?
@@ -240,17 +268,23 @@ const HarborSend = ({ user }) => {
                     }
                 </Stepper>
             </Box>
-            <Box className="send-detail">
-                <Typography>{saler_address.address}－{buyer_address.address}</Typography>
+            </Grid>
+            
+            <Grid Item xs={6}>
+            <Box className="send-detail"  sx={{height:600,padding:2,bgcolor:'#E4513D',mb:'16px',mt:'16px',mr:'16px',borderRadius:5}}>
+                <Typography disableTypography sx={{color:'#FDF1EF', fontFamily: 'Noto Sans TC',fontSize: '36px',fontWeight: '700',lineHeight: '52px'}}>
+                    {saler_address.address}－{buyer_address.address}
+                </Typography>
                 <Box className="product-list" sx={{ height: 400, width: '100%' }}>
                     {/* 要改用Grid再跟我說 */}
-                    <DataGrid
+                    <DataGrid sx={{mt:'10px',color:'#FDF1EF',fontFamily: 'Noto Sans TC',fontSize: '16px',fontWeight:'700px',lineHeight: '23px',}}
                         rows={target.package}
                         columns={r_columns}
                         pageSize={10}
                         rowsPerPageOptions={[10]}
                     />
                 </Box>
+                {/* 開啟哪一個拉桿有點問題 */}
                 {
                     target.package.map(
                         (product) => {
@@ -283,7 +317,14 @@ const HarborSend = ({ user }) => {
                 <Snackbar open={alertOpen} onClose={() => setAlertOpen(false)}>
                     <Alert severity="error">數量不正確，應為{alertNum.should}，現在是{alertNum.now}</Alert>
                 </Snackbar>
-                <Button onClick={handleSend} href='/harbor'>開始配送</Button>
+                <Grid container justifyContent="flex-end">
+                <Button sx={{"&:hover": { backgroundColor:"#350D08",color:"#FDF1EF"},backgroundColor: "#FFFFFF" ,color:"#E4513D",borderRadius:3,fontFamily: 'Noto Sans TC',fontSize: '24px',fontWeight: '400',lineHeight: '35px',mt:'30px'}}onClick={handleSend} href='/harbor'>
+                    開始配送
+                </Button>
+                </Grid>
+            </Box>
+            </Grid>
+            </Grid>
             </Box>
         </div>
     )

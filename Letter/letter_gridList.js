@@ -1,33 +1,38 @@
 import React from "react";
-import { Grid, Chip } from '@mui/material';
+import { Grid, Chip,Box,Link} from '@mui/material';
 import get_letter_list from "../data/letter_list";
 
 function LetterList() {
     const letterList = get_letter_list();
     return (
-        <Grid container>
+        <Grid container  >
             {
                 letterList.map(
                     (letter) => {
                         return (
-                            <a href={`/letter_list/${letter.id}`}>
-                                <Grid container className={letter.id}>
+                            <Box sx={{
+                                height:30,width:"110%",boxShadow: 1,borderRadius: 4, bgcolor: '#FFFFFF',mb:0.5,padding:1
+                                }}>
+                            <Link underline="none" color=" #350D08" href={`/letter_list/${letter.id}`}>
+                                <Grid container justifyContent="space-between"alignItems="center" className={letter.id}>
                                     <Grid item>
                                         {letter.sender}
                                         <Chip label={letter.sender_type} size="small" />
+                                        {letter.title}
                                     </Grid>
                                     <Grid item>
-                                        {letter.title}
-                                        <div classname="expired">{letter.expired}</div>
                                     </Grid>
+                                    <div classname="expired"><Box sx={{color:"#BE0000",fontWeight: 'bold'}}>{letter.expired}</Box></div>
                                     <Grid item>{letter.time}</Grid>
                                 </Grid>
-                            </a>
+                            </Link>
+                            </Box>
                         )
                     }
                 )
             }
         </Grid>
+        
     )
 }
 

@@ -225,14 +225,18 @@ function Product() {
                 (good) => {
                     return (
                         <div className="goods">
-                            <Grid item>
+                        <Grid container>
+                            <Grid item xs={4} sx={{borderBottom:1}}>
+                            <Typography disableTypography sx={{fontFamily: "Noto Sans TC",fontSize: "16px",fontWeight: 700,lineHeight: "23px",letterSpacing: "0em",textAlign: "left"}}>
                                 {good.status}
+                            </Typography>
                             </Grid>
-                            <Grid item>
+                            <Grid item xs={4} sx={{borderBottom:1}}>
                                 {good.name}
                             </Grid>
-                            <Grid item>
+                            <Grid item xs={4} sx={{borderBottom:1}}>
                                 {good.amount}
+                            </Grid>
                             </Grid>
                         </div>
                     )
@@ -245,15 +249,20 @@ function Product() {
                     (good) => {
                         return (
                             <div className="change">
-                                <Grid item>
+                            <Grid container>
+                                <Grid item xs={4}  sx={{borderBottom:1}}>
+                                <Typography disableTypography sx={{fontFamily: "Noto Sans TC",fontSize: "16px",fontWeight: 700,lineHeight: "23px",letterSpacing: "0em",textAlign: "left"}}>
                                     {good.status}
+                                </Typography>
                                 </Grid>
-                                <Grid item>
+                                <Grid item xs={4}  sx={{borderBottom:1}}>
                                     {good.name}
+                                
                                 </Grid>
-                                <Grid item>
+                                <Grid item xs={4}  sx={{borderBottom:1}}>
                                     {good.amount}
                                 </Grid>
+                             </Grid>
                             </div>
                         )
                     }
@@ -263,27 +272,64 @@ function Product() {
     }
 
     return (
-        <Box sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            '& > :not(style)': {
-                m: 1,
-                width: 1367,
-                height: 797,
-            },
-        }}>
+        <div div className="mf_product">
             {/* 商品目錄 */}
-            <Paper>
-                商品目錄（先跳過）
-            </Paper>
+        <Box sx={{height: 700,bgcolor:"#FDF1EF"}}>
+            <Grid container
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="flex-start"
+                
+    
+                >
+                <Grid Item xs={4}>
+                <Box sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    '& > :not(style)': {
+                        m: 1,
+                        width: 250,
+                        height: 400,
+                        bgcolor:"#FFFFFF"
+                    },
+                    }}>
+                <Paper elevation={4} 
+                    square={false}
+                    sx={{width: 250,
+                        height: 400,
+                        padding:2}}>
+                    <Typography disableTypography sx={{fontFamily: "Noto Sans TC",fontSize: "24px",fontWeight: 700,lineHeight: "35px",letterSpacing: "0em",textAlign: "left"}}>
+                        商品目錄（先跳過）
+                    </Typography>
+                </Paper>
+                </Box>
+                </Grid>
             {/* 製造指示 */}
-            <Paper>
-                <Typography>發布製造指示</Typography>
+            <Grid Item xs={4}>
+                <Box sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    '& > :not(style)': {
+                        m: 1,
+                        width: 250,
+                        height: 400,
+                        bgcolor:"#FFFFFF"
+                    },
+                    }}>
+            <Paper elevation={4} 
+                    square={false}
+                    sx={{width: 250,
+                        height: 400,
+                        padding:2}}>
+                <Typography disableTypography sx={{fontFamily: "Noto Sans TC",fontSize: "24px",fontWeight: 700,lineHeight: "35px",letterSpacing: "0em",textAlign: "left"}}>
+                    發布製造指示
+                </Typography>
                 <Grid container>
-                    <Grid item>
+                    <Grid item xs={12}>
                         <FormControl>
                             <InputLabel id="product">生產目標</InputLabel>
                             <Select
+                                sx={{ bgcolor: '#FDF1EF',width:150}}
                                 id="product-select"
                                 label="產品"
                                 onChange={handleIgd}>
@@ -299,11 +345,11 @@ function Product() {
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid item>生產目標：</Grid>
-                    <Grid item>
+                    <Grid item xs={4} sx={{borderBottom:1}}>生產目標：</Grid>
+                    <Grid item xs={4} >
                         <FormControl>
                             <InputLabel>生產等級</InputLabel>
-                            <Select id="rank-select" onChange={handleRank}>
+                            <Select  sx={{ bgcolor: '#FDF1EF',width:80,height:40 }}id="rank-select" onChange={handleRank}>
                                 {
                                     rankList.map(
                                         (rank) => {
@@ -318,10 +364,11 @@ function Product() {
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={2} >
                         <FormControl>
                             <InputLabel id='amount'>生產數量</InputLabel>
                             <Select
+                                sx={{ bgcolor: '#FDF1EF',width:80,height:40  }}
                                 id="product-amount"
                                 label="數量"
                                 onChange={handleAmount}>
@@ -331,19 +378,25 @@ function Product() {
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={2}></Grid>
+                    <Grid item xs={4} sx={{borderBottom:1}}>
                         預期誤差：
                     </Grid>
                     {
                         mistakeList.map(
                             mistake => {
                                 return (
-                                    <Grid item>{mistake.rank}-{mistake.amount}</Grid>
+                                    <Grid container>
+                                        <Grid item xs={4} ></Grid>
+                                        <Grid item xs={8} sx={{borderBottom:1}}>{mistake.rank}-{mistake.amount}</Grid>
+                                    </Grid>
+                                    
+                                    
                                 )
                             }
                         )
                     }
-                    <Grid item>
+                    <Grid item xs={4} sx={{borderBottom:1}}>
                         材料：
                     </Grid>
                     {
@@ -351,59 +404,87 @@ function Product() {
                             igd => {
                                 return (
                                     <Grid container>
-                                        <Grid item>{igd.name}-{igd.amount}單位</Grid>
+                                        <Grid item xs={4} ></Grid>
+                                        <Grid item xs={8} sx={{borderBottom:1}}>{igd.name}-{igd.amount}單位</Grid>
                                     </Grid>
                                 )
                             }
                         )
                     }
                     <Grid item />
-                    <Grid item>
+                   
+                    <Grid item  xs={4} sx={{borderBottom:1}}>
                         材料成本：
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={4} sx={{borderBottom:1}}>
                         {igdCost}千元
                     </Grid>
-                    <Grid item>
+                    <Grid item  xs={4}></Grid>
+                    <Grid item xs={4} sx={{borderBottom:1}}>
                         其他費用：
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={4} sx={{borderBottom:1}}>
                         {cost}千元
                     </Grid>
-                    <Grid item>
+                    <Grid item  xs={4}></Grid>
+                    <Grid item xs={4} sx={{borderBottom:1}}>
                         共計成本：
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={4} sx={{borderBottom:1}}>
                         {igdCost + cost}千元
                     </Grid>
-                    <Grid item>
+                    <Grid item  xs={4}></Grid>
+                    <Grid item xs={4} sx={{borderBottom:1}}>
                         預計耗時：
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={4} sx={{borderBottom:1}}>
                         {time}天
                     </Grid>
+                    <Grid item  xs={4}></Grid>
                 </Grid>
             </Paper>
+            </Box>
+            </Grid>
 
             {/* 訂單內容 */}
-            <Paper>
-                <Typography>訂單</Typography>
+            <Grid Item xs={4}>
+                <Box sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    '& > :not(style)': {
+                        m: 1,
+                        width: 250,
+                        height: 400,
+                        bgcolor:"#FFFFFF"
+                    },
+                    }}>
+            <Paper elevation={4} 
+                    square={false}
+                    sx={{width: 250,
+                        height: 400,
+                        padding:2}}>
+                <Typography disableTypography sx={{fontFamily: "Noto Sans TC",fontSize: "24px",fontWeight: 700,lineHeight: "35px",letterSpacing: "0em",textAlign: "left"}}>
+                    訂單
+                </Typography>
                 {
                     contractList.map(
                         (contract) => {
                             return (
                                 <div id={contract.contract_id}>
-                                    <Typography>{contract.buyer}</Typography>
                                     <Grid container>
+                                        <Grid item xs={12}>
+                                            <Typography disableTypography sx={{fontFamily: "Noto Sans TC",fontSize: "24px",fontWeight: 400,lineHeight: "35px",letterSpacing: "0em",textAlign: "left"}}>{contract.buyer}</Typography>
+                                        </Grid>
                                         {createContract(contract).map(
                                             (ele) => {
                                                 return ele;
                                             }
                                         )}
-                                        <Grid item>
+                                        <Grid item xs={4}></Grid>
+                                        <Grid item xs={4} sx={{borderBottom:1}}>
                                             送達期限：
                                         </Grid>
-                                        <Grid item>
+                                        <Grid item xs={4} sx={{borderBottom:1}}>
                                             {contract.deadline}
                                         </Grid>
                                     </Grid>
@@ -413,7 +494,11 @@ function Product() {
                     )
                 }
             </Paper>
-        </Box>
+            </Box>
+            </Grid>
+            </Grid>
+            </Box>
+            </div>
     );
 }
 

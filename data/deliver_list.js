@@ -19,10 +19,9 @@ const deliverList = [
             }
         ],
         sender: 'WAH汽車零件供應商',
-        send_date: '2022-03-17',
-        arrange_time: '20天',
-        actual_time: '30天',
-        arrive_date: '2022-04-07'
+        send_date: '2460-07-22',
+        arrange_time: 20,
+        actual_time: 30
     },
     {
         id: '0200',
@@ -44,10 +43,9 @@ const deliverList = [
             }
         ],
         sender: '大直材料廠',
-        send_date: '2022-03-27',
-        arrange_time: '20天',
-        actual_time: '17天',
-        arrive_date: '2022-04-17'
+        send_date: '2460-07-01',
+        arrange_time: 20,
+        actual_time: 17
     }
 ];
 

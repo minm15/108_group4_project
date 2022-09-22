@@ -8,6 +8,13 @@ import Product from "./manufactor/mf_product";
 import LetterReply from "./Letter/letter_reply";
 import HarborMain from "./harbor/harbor_main";
 import HarborSend from "./harbor/harbor_send";
+import Company_Service from "./Company/Service.js"
+import Company_FinanInfo from "./Company/FinanInfo.js";
+import Company_Warehouse from "./Company/Warehouse.js";
+import Company_Info from "./Company/Company_Info.js";
+import Company_Other from "./Company/Other.js";
+import Company_Catalog from "./Company/Catalog";
+import Company_Catalog_Add from "./Company/Catalog_Add";
 
 const user = {
     name: 'takodachi公司',
@@ -35,7 +42,7 @@ class MainContainer extends React.Component {
                                 </div>
                             } />
                             <Route path='/letter_list'>
-                                <Route index element={<LetterGrid />} />
+                                <Route index element={<LetterGrid user={user} />} />
                                 <Route
                                     path=":letterId"
                                     element={
@@ -60,12 +67,33 @@ class MainContainer extends React.Component {
                                     } />
                             </Route>
                             <Route path="/manufactory">
-                                <Route index element={<Manufactor />} />
-                                <Route path="product" element={<Product />} />
+                                <Route index element={<Manufactor user={user} />} />
+                                <Route path="product" element={<Product user={user} />} />
                             </Route>
                             <Route path="/harbor">
                                 <Route index element={<HarborMain user={user} />} />
                                 <Route path=":contractId" element={<HarborSend user={user} />} />
+                            </Route>
+                            <Route path='/Company_Service'>
+                                <Route index element={<Company_Service />} />
+                            </Route>
+                            <Route path='/Company_FinanInfo'>
+                                <Route index element={<Company_FinanInfo />} />
+                            </Route>
+                            <Route path='/Company_Warehouse'>
+                                <Route index element={<Company_Warehouse />} />
+                            </Route>
+                            <Route path='/Company_Info'>
+                                <Route index element={<Company_Info />} />
+                            </Route>
+                            <Route path='/Company_Other'>
+                                <Route index element={<Company_Other />} />
+                            </Route>
+                            <Route path='/Company_Catalog'>
+                                <Route index element={<Company_Catalog />} />
+                            </Route>
+                            <Route path='/Company_Catalog_Add'>
+                                <Route index element={<Company_Catalog_Add />} />
                             </Route>
                         </Routes>
                     </BrowserRouter>
