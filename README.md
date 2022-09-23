@@ -1,10 +1,10 @@
-- 要先install react-hook-form,uuid, recharts,swiper,@mui/lab(這個可能不需要)
 - 進度
 	- 目前功能應該都完善了
 	- 接下來會把資料部分處理的好看一點
 		- 不定期處理
 		- 如果要開始接我這個部分的後端可以兩三天前先@我叫我先處理
 		- 有任何格式要求要更動一樣請@我	
+- 需要install的package有react-hook-form,uuid, recharts,swiper,@mui/lab(這個可能不需要)
 - API文件中沒有的
 	- 設施Service
 		- 用levelList存五個設施的等級
