@@ -13,12 +13,12 @@ import { v4 as uuidv4} from 'uuid'
 import {
     ArrowUpward,DeleteForeverOutlined,CreateNewFolder
   } from "@mui/icons-material";
-// import  "./css/Catalog_Add2.css"
 let renderCount = 0;
 
 function Catalog_Add2() {
     const { register, control, handleSubmit, reset, setValue } = useForm({
         defaultValues: {
+          
           content: [{product_name: " ", product_price: "",product_level:"",product_tag:"",product_desc:"" }]
         }
       });

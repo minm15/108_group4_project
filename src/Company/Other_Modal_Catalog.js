@@ -44,8 +44,6 @@ export default function Modal_Product({ company_ID,name,catalogList}) { //姑且
 
             ))}   
             </Grid>      
-      這一頁的資料寫死在other_catalogList <br></br>
-      目前預設一個公司一次可以放多個目錄(要改再說)
 
    </Box>
   

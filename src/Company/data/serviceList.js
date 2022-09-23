@@ -1,11 +1,18 @@
 //API文件中沒有
 //依照 倉儲>生產>品質>商品>工廠的順序紀錄各設施目前的等級
+
+
+export const serviceList=[
+
+
+
+  
+]
 export const levelList=[1,5,2,4,3]  
 
 /*以下list1~list5為不同設施的等級文字資料
 順序同上*/
 //倉儲
-const nowLevel5="已達滿等"
 export const list1=    [
   { //0
     id: 1,
@@ -37,7 +44,7 @@ export const list1=    [
   }
   ,{ 
     id: 6,
-    effect: nowLevel5,
+    effect: "已達滿等",
     cost: '',
   }
   ];
@@ -73,7 +80,7 @@ export const list1=    [
     }
     ,{ 
       id: 6,
-      effect: nowLevel5,
+      effect: "已達滿等",
       cost: '',
     }
     ];
@@ -109,7 +116,7 @@ export const list1=    [
   }
   ,{ 
     id: 6,
-    effect: nowLevel5,
+    effect: "已達滿等",
     cost: '',
   }
   ];
@@ -145,7 +152,7 @@ export const list1=    [
     }
     ,{ 
       id: 6,
-      effect: nowLevel5,
+      effect: "已達滿等",
       cost: '',
     }
     ];
@@ -181,9 +188,11 @@ export const list1=    [
       }
       ,{ 
         id: 6,
-        effect: nowLevel5,
+        effect: "已達滿等",
         cost: '',
       }
       ];
+
+      
      
     export  default {levelList,list1,list2,list3,list4,list5};

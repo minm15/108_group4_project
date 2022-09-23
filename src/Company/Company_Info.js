@@ -110,8 +110,7 @@ const FinanState= ({  }) => {
   return (
     <>
  <h2>&emsp;本月財務狀況</h2>
-
-      <Table size="small">
+ <Table size="small">
   
           <TableBody>
               <TableRow >

@@ -1,4 +1,4 @@
-//目錄 
+// user這間公司的商品目錄資料
 const catalogList= [
   {
     "content": [

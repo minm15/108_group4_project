@@ -46,12 +46,12 @@ export default function Other_Modal({name, company_id,company_type,productList,f
           <TabList onChange={handleChange} aria-label="lab API tabs example">
             <Tab label="公司資訊" value="1" />
             <Tab label="產品目錄" value="2" />
-            <Tab label="區塊練資訊" value="3" />
+            {/* <Tab label="區塊練資訊" value="3" /> */}
           </TabList>
         </Box>
         <TabPanel value="1"><Modal_Info company_ID={company_id} name={name}  company_type={company_type}  productList={productList}  finanData={finanData} cooperateList={cooperateList} /></TabPanel>
         <TabPanel value="2"><Modal_Product company_ID={company_id} name={name} catalogList={catalogList}/></TabPanel>
-        <TabPanel value="3">這一頁還沒建</TabPanel>
+        {/* <TabPanel value="3">這一頁還沒建</TabPanel> */}
       </TabContext>
         </Box>
       </Modal>

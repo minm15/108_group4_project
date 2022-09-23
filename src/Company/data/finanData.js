@@ -1,3 +1,4 @@
+//user這間公司的財務資訊 用在公司資訊/財務資訊那一頁
 export const income=[
 {month:"21/09",
 amount:20000},
@@ -71,4 +72,5 @@ export const expense=[
         {month:"22/08",
         amount:1000},
         ];
+
 export default  {income,expense,revenue};
