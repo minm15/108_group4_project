@@ -1,7 +1,5 @@
-install react-hook-form、uuid 
+-要先install react-hook-form,uuid, recharts,swiper,@mui/lab(這個可能不需要)
 -進度
-	- 財務狀況折線圖大致上完成
-	- 目錄努力中
 API文件中沒有的
 - 設施Service
 	- 用levelList存五個設施的等級
@@ -19,6 +17,8 @@ API文件中沒有的
 	- 「資產」的來源?
 
 - 目錄Catalog
+	
+
 	
 
 	
