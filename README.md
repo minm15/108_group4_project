@@ -1,3 +1,4 @@
+install react-hook-form、uuid 
 -進度
 	- 財務狀況折線圖大致上完成
 	- 目錄努力中
