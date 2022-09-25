@@ -41,10 +41,10 @@ function LetterReply({ user }) {
             padding='5'
             >
 
-           {/*  <Grid item xs={2}>
+           <Grid item xs={2}>
                 <MenuList />
                 
-            </Grid> */}
+            </Grid>
            
             
             <Grid item xs={10}>

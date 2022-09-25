@@ -99,7 +99,7 @@ function IgdPurchase({ receiver, user }) {
 
     return (
         <div className="ingredient-purchase">
-            <Typography>
+            <Typography sx={{textAlign:'left'}}>
                 {receiver}負責人您好：<br />
             </Typography>
             {getContent('igd_purchase')}
@@ -191,14 +191,14 @@ function Quotation({ detail, user }) {
 
     return (
         <div classname="quotation">
-            <Typography>
+            <Typography sx={{textAlign:'left'}}>
                 {detail.sender}負責人您好：<br />
             </Typography>
             {getContent('quotation')}
             
                 <FormControl className="quotation-price">
-                    <FormLabel>請選擇報價單之價格調整</FormLabel>
-                    <RadioGroup onChange={handleChoice}>
+                    <FormLabel sx={{textAlign:'left'}}>請選擇報價單之價格調整</FormLabel>
+                    <RadioGroup sx={{textAlign:'left'}} onChange={handleChoice}>
                         <FormControlLabel value="normal" control={<Radio />} label="提供預設價格之報價單" />
                         <FormControlLabel value="adjust" control={<Radio />} label={
                             <div className="discount-textfield">
@@ -222,7 +222,7 @@ function Quotation_request({ receiver, user }) {
     }
     return (
         <div classname="quotation">
-            <Typography>
+            <Typography sx={{textAlign:'left'}}>
                 {receiver}負責人您好：<br />
             </Typography>
             {getContent('quotation_request')}
@@ -369,7 +369,7 @@ function ContractDraft({ detail, user }) {
 
     return (
         <div className="contract-draft">
-            <Typography>
+            <Typography sx={{textAlign:'left'}}>
                 {detail.receiver}負責人您好：<br />
             </Typography>
             {getContent('contract_draft')}
@@ -432,7 +432,7 @@ function ContractDraft({ detail, user }) {
                     </Grid>
 
                     <Grid item xs={1}>送達地址</Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={3}>
                         <FormControl>
                             <Select onChange={handleAddress}>
                                 <MenuItem value={detail.sender}>{detail.sender}</MenuItem>
@@ -440,7 +440,7 @@ function ContractDraft({ detail, user }) {
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid item xs={9}>位於{addressLoc}</Grid>
+                    <Grid item xs={8}>位於{addressLoc}</Grid>
 
                     <Grid item xs={1}>瑕疵處理</Grid>
                     <Grid item xs={11}>
@@ -452,6 +452,7 @@ function ContractDraft({ detail, user }) {
                         </FormControl>
                     </Grid>
                     {flawRender}
+                   
 
                     <Grid item xs={1}>支付期限</Grid>
                     <Grid item xs={11}>
@@ -464,7 +465,7 @@ function ContractDraft({ detail, user }) {
                     </Grid>
                 </Grid>
                 <Grid container justifyContent="flex-end">
-                    <Button  sx={{"&:hover": { backgroundColor:"#E4513D",color:"#FFFFFF"},backgroundColor: "#FFFFFF" ,color:"#350D08",border:2}} variant="contained" color='#350D08' fontFamily='Noto Sans TC' size="big" startIcon={<ForwardToInbox />} href='/letter_list' onClick={handleSend}>送出信件</Button>
+                    <Button  sx={{"&:hover": { backgroundColor:"#E4513D",color:"#FFFFFF"},backgroundColor: "#FFFFFF" ,color:"#350D08",border:2}} variant="contained"  fontFamily='Noto Sans TC' size="big" startIcon={<ForwardToInbox />} href='/letter_list' onClick={handleSend}>送出信件</Button>
                 </Grid>
 
         </div>
@@ -520,8 +521,8 @@ function ContractEdit({ detail, user }) {
             <div className="flaw-date">
                 
                 <Grid container>
-                 <Grid item xs={2}>處理期限</Grid>
-                <Grid item >
+                 <Grid item xs={12}>處理期限</Grid>
+                <Grid item >{/**一開始是undefined，所以不能加xs... */}
                     <FormControl>
                         <Select
                             onChange={(event) => { setFlawDate(Number(event.target.value)); }}
@@ -547,7 +548,18 @@ function ContractEdit({ detail, user }) {
         setFlaw(event.target.value);
         setFlawRender(event.target.value === "change" ?
             <div className="flaw-date">
-                 <Grid item xs={6}>處理期限</Grid>
+                <Grid Container
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="flex-start"
+                spacing='5'
+                padding='5'
+                >
+                 <Grid item xs={6}>
+                    
+                    處理期限
+                  
+                    </Grid>
                 <Grid item xs={6}>
                     <FormControl>
                         <Select
@@ -557,6 +569,7 @@ function ContractEdit({ detail, user }) {
                             <MenuItem value={30 + arrive}>{addDay(30 + arrive)}</MenuItem>
                         </Select>
                     </FormControl>
+                </Grid>
                 </Grid>
             </div> : null
         );
@@ -688,7 +701,7 @@ function ContractEdit({ detail, user }) {
     const rows = amountList;
     return (
         <div className="contract-edit">
-            <Typography>
+            <Typography sx={{textAlign:'left'}}>
                 {detail.sender}負責人您好：<br />
             </Typography>
             {getContent('contract_edit')}
@@ -780,10 +793,11 @@ function ContractEdit({ detail, user }) {
                             </Select>
                         </FormControl>
                     </Grid>
-                    {flawRender}
+                    <Grid item xs={12}>{flawRender}</Grid>
+                    
 
-                    <Grid item xs={1}>支付期限</Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={2}>支付期限</Grid>
+                    <Grid item xs={10}>
                         <FormControl>
                             <Select
                                 onChange={(event) => { setPay(Number(event.target.value)); }}

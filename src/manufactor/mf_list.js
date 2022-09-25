@@ -101,7 +101,7 @@ function Manufactor() {
             alignItems="center"
             direction="column"
             spacing={0}
-            style={{ minHeight: '65vh' }}
+            style={{ minHeight: 'auto' }}
             >
              
                 <Grid Item >
