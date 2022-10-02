@@ -42,7 +42,7 @@ class MainContainer extends React.Component {
                                 </div>
                             } />
                             <Route path='/letter_list'>
-                                <Route index element={<LetterGrid user={user}/>} />
+                                <Route index element={<LetterGrid user={user} />} />
                                 <Route
                                     path=":letterId"
                                     element={
@@ -67,38 +67,38 @@ class MainContainer extends React.Component {
                                     } />
                             </Route>
                             <Route path="/manufactory">
-                                <Route index element={<Manufactor user={user}/>} />
-                                <Route path="product" element={<Product user={user}/>} />
+                                <Route index element={<Manufactor user={user} />} />
+                                <Route path="product" element={<Product user={user} />} />
                             </Route>
                             <Route path="/harbor">
                                 <Route index element={<HarborMain user={user} />} />
                                 <Route path=":contractId" element={<HarborSend user={user} />} />
                             </Route>
                             <Route path='/Company_Service'>
-                            <Route index element={<Company_Service />} />
+                                <Route index element={<Company_Service />} />
                             </Route>
                             <Route path='/Company_FinanInfo'>
-                            <Route index element={<Company_FinanInfo />} />
+                                <Route index element={<Company_FinanInfo />} />
                             </Route>
                             <Route path='/Company_Warehouse'>
-                            <Route index element={<Company_Warehouse />} />
+                                <Route index element={<Company_Warehouse />} />
                             </Route>
                             <Route path='/Company_Info'>
-                            <Route index element={<Company_Info />} />
+                                <Route index element={<Company_Info />} />
                             </Route>
                             <Route path='/Company_Other'>
-                            <Route index element={<Company_Other />} />
+                                <Route index element={<Company_Other />} />
                             </Route>
                             <Route path='/Company_Catalog'>
-                            <Route index element={<Company_Catalog />} />
+                                <Route index element={<Company_Catalog />} />
                             </Route>
                             <Route path='/Company_Catalog_Add'>
-                            <Route index element={<Company_Catalog_Add />} />
+                                <Route index element={<Company_Catalog_Add />} />
                             </Route>
                         </Routes>
                     </BrowserRouter>
                 </div>
-            // </div>
+            </div>
         )
     }
 }

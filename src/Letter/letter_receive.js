@@ -2,7 +2,12 @@ import React, { useState } from "react";
 // import {Grid, Item} from '@mui/material'
 import { useParams } from "react-router-dom";
 import CreateContent from '../data/letter_detail';
-import get_letter_list from "../data/letter_list";
+// import get_letter_list from "../data/letter_list";
+
+function get_letter_list () {
+    let letter_list = require('../data/letter_list.json');
+    return letter_list;
+}
 
 function LetterReceive({ user }) {
     const [id, setId] = useState(useParams().letterId);

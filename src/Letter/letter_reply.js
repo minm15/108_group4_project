@@ -1,9 +1,14 @@
 import React from "react";
-import get_letter_list from "../data/letter_list";
+// import get_letter_list from "../data/letter_list";
 import { useParams } from "react-router-dom";
 import { Quotation, ContractDraft, ContractEdit } from '../data/letter_draft';
 import MenuList from "./menu";
 import { Box, Grid, TextField, Typography } from '@mui/material';
+
+function get_letter_list () {
+    let letter_list = require('../data/letter_list.json');
+    return letter_list;
+}
 
 // 依照回覆信件的類型，生成不同的信件內文
 const Content = ({ detail, user }) => {
@@ -31,14 +36,33 @@ function LetterReply({ user }) {
 
     return (
         <div className="letter_reply">
-            <MenuList />
+         <Box sx={{height: 1000,bgcolor:"#FDF1EF"}}>
+        <Grid
+            container
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="flex-start"
+            spacing='5'
+            padding='5'
+            >
+
+           <Grid item xs={2}>
+                <MenuList />
+                
+            </Grid>
+           
+            
+            <Grid item xs={10}>
+            <Box sx={{ height: 950, width: '90%' ,padding:3,bgcolor: '#FFFFFF' }}>
             <Box component="form" >
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
+                        <Typography sx={{textAlign:'left'}}>
                         收件人：
+                        </Typography>
                     </Grid>
                     <Grid item xs={32}>
-                        <TextField
+                        <TextField sx={{ bgcolor: '#FDF1EF',width:400,textAlign:'left' }}
                             id="sender"
                             defaultValue={detail.sender}
                             InputProps={{
@@ -46,10 +70,12 @@ function LetterReply({ user }) {
                             }} />
                     </Grid>
                     <Grid item xs={4}>
+                    <Typography sx={{textAlign:'left'}}>
                         標題：
+                    </Typography>
                     </Grid>
                     <Grid item xs={32}>
-                        <TextField
+                        <TextField sx={{ bgcolor: '#FDF1EF',width:400,textAlign:'left' }}
                             id="title"
                             defaultValue={detail.title}
                             InputProps={{
@@ -58,8 +84,14 @@ function LetterReply({ user }) {
                     </Grid>
                 </Grid>
             </Box>
-            {/* 依照要回復的信件，生成回復的信件內容，在這個檔案的前半段 */}
+            
             <Content detail={detail} user={user} />
+            </Box>
+            </Grid>
+            {/* 依照要回復的信件，生成回復的信件內容，在這個檔案的前半段 */}
+            
+        </Grid>
+        </Box>
         </div>
     )
 }

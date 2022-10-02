@@ -34,9 +34,10 @@ const Operation = ({ detail, user }) => {
 
     return (
         <div className="operation">
-            &emsp;上個月營運支出共計{detail.payment}元。並請您確認本月支出計畫，謝謝！<br />
+            <Typography sx={{textAlign:'left'}}>  &emsp;上個月營運支出共計{detail.payment}元。並請您確認本月支出計畫，謝謝！<br /></Typography>
+          
             {/* 選擇這個月支出計畫的Radio Button */}
-            <FormControl>
+            <FormControl sx={{textAlign:'left'}}>
                 <FormLabel>本月支出計畫：</FormLabel>
                 {/* 預設值是上一次的支出計畫 */}
                 <RadioGroup
@@ -241,12 +242,13 @@ const ContractDraft = ({ detail }) => {
              
 
                 <Grid item xs={2} sx={{borderBottom:1}}>送達地址</Grid>
-                <Grid item xs={2} sx={{borderBottom:1}}>{detail.address}</Grid>
-                <Grid item xs={8} sx={{borderBottom:1}}>{detail.addressLoc}</Grid>
+                <Grid item xs={4} sx={{borderBottom:1}}>{detail.address}</Grid>
+                <Grid item xs={6} sx={{borderBottom:1}}>{detail.addressLoc}</Grid>
               
 
                 <Grid item xs={2} sx={{borderBottom:1}}>瑕疵處理</Grid>
                 <Grid item xs={2} sx={{borderBottom:1}}>{detail.flaw}</Grid>
+
                 <Grid item xs={2} sx={{borderBottom:1}}>處理期限</Grid>
                 <Grid item xs={6} sx={{borderBottom:1}}>{detail.flawDate}</Grid>
 
@@ -404,14 +406,15 @@ const ContractEdit = ({ detail }) => {
              
 
                 <Grid item xs={2} sx={{borderBottom:1}}>送達地址</Grid>
-                <Grid item xs={2} sx={{borderBottom:1}}>{detail.address}</Grid>
-                <Grid item xs={8} sx={{borderBottom:1}}>{detail.addressLoc}</Grid>
+                <Grid item xs={3} sx={{borderBottom:1}}>{detail.address}</Grid>
+                <Grid item xs={7} sx={{borderBottom:1}}>{detail.addressLoc}</Grid>
               
 
                 <Grid item xs={2} sx={{borderBottom:1}}>瑕疵處理</Grid>
-                <Grid item xs={2} sx={{borderBottom:1}}>{detail.flaw}</Grid>
+                <Grid item xs={10} sx={{borderBottom:1}}>{detail.flaw}</Grid>
+
                 <Grid item xs={2} sx={{borderBottom:1}}>處理期限</Grid>
-                <Grid item xs={6} sx={{borderBottom:1}}>{detail.flawDate}</Grid>
+                <Grid item xs={2} sx={{borderBottom:1}}>{detail.flawDate}</Grid>
 
                 <Grid item xs={2} sx={{borderBottom:1}}>支付期限</Grid>
                 <Grid item xs={2} sx={{borderBottom:1}}>{detail.pay}</Grid>
@@ -495,7 +498,8 @@ const CreateContent = ({ detail, user }) => {
             <Box component="form"  sx={{ height: 850, width: '90%' ,padding:3,bgcolor: '#FFFFFF' }}>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
-                        寄件人：
+                        <Typography sx={{textAlign:'left'}}>寄件人：</Typography>
+                        
                     </Grid>
                     <Grid item xs={32}>
                         <TextField
@@ -507,7 +511,7 @@ const CreateContent = ({ detail, user }) => {
                             }} />
                     </Grid>
                     <Grid item xs={4}>
-                        標題：
+                    <Typography sx={{textAlign:'left'}}>標題：</Typography>
                     </Grid>
                     <Grid item xs={32}>
                         <TextField
@@ -520,8 +524,8 @@ const CreateContent = ({ detail, user }) => {
                     </Grid>
                 </Grid>
            
-            <Typography>{detail.receiver} 負責人您好：</Typography>
-            {createContent(detail.letter_type)}
+            <Typography sx={{textAlign:'left'}}>{detail.receiver} 負責人您好：
+            {createContent(detail.letter_type)}</Typography>
             </Box>
             </Grid>
             </Grid>

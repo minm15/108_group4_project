@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        .comment{
+            padding-right: 130px;
+        }
+    </style>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+    <div>
+        <div style="float: left;">
+            <div class="main">
+                <button onclick="get_current_date()" class="btn">start</button>
+                <button onclick="calculate_time()" class="btn">calculate date</button>
+            </div>  
+            <div id="current_time">
+                <label id="time"></label>
+            </div>
+            <div id="result">
+
+            </div>
+        </div>
+        <div style="float: right;"> 
+            <div class="comment">
+                <h1>說明</h1>
+                <br>1. 按鈕說明: start(獲取當前時間), calculate(做各種時間運算)
+                <br>2. 目前<b>現實開始時間</b>跟<b>遊戲內部開始時間</b>是亂設的
+                <br>3. 之後在遊戲中call跟時間相關的function時就會用<b>現實當下時間</b>扣除<b>現實開始時間</b>會得到相差的秒數，
+                <br>   目前設定10秒等於遊戲1天，轉換後的天數跟<b>遊戲內部開始時間</b>相加得到<b>遊戲內部當前時間</b>
+            </div>
+        </div>
+    </div>
+    </body>
+    <script src="index.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js"></script>
+</html>

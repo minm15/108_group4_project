@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import get_contract_list from "../data/contract_list";
+// import get_contract_list from "../data/contract_list";
 import {
     Box, Typography,
     Stepper, Step, StepContent, StepButton, Button,
@@ -8,6 +8,11 @@ import {
     Alert, Snackbar,Grid
 } from '@mui/material';
 import { DataGrid } from "@mui/x-data-grid";
+
+function get_contract_list() {
+    let contract_list = require('../data/contract_list.json');
+    return contract_list;
+}
 
 const HarborSend = ({ user }) => {
     // 從網址獲得訂單編號
@@ -284,6 +289,7 @@ const HarborSend = ({ user }) => {
                         rowsPerPageOptions={[10]}
                     />
                 </Box>
+                {/* 開啟哪一個拉桿有點問題 */}
                 {
                     target.package.map(
                         (product) => {
