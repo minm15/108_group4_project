@@ -9,24 +9,23 @@ const catalogList= [
                 "A",
                 "B"
             ],
-            "product_tag": "所有",
+            "product_tag": "所有車",
             "product_desc": ""
         },
         {
             "product_name": "輪胎",
-            "product_price": "五千",
+            "product_price": "七千",
             "product_level": [
-                "B",
-                "A",
+               
                 "C",
                 "D",
                 "E"
             ],
-            "product_tag": "",
-            "product_desc": ""
+            "product_tag": "休旅車",
+            "product_desc": "最高CP值的選擇!"
         }
     ],
-    "title": "兩個商品的目錄",
+    "title": "最新目錄22/10",
     "catalog_id": "d6ce5680-e9e4-40eb-b238-39cba8e1514d"
 },
 
@@ -47,13 +46,11 @@ const catalogList= [
           "product_price": "五千",
           "product_level": [
               "B",
-              "A",
               "C",
               "D",
-              "E"
           ],
-          "product_tag": "",
-          "product_desc": ""
+          "product_tag": "休旅車",
+          "product_desc": "超耐磨、壽命長、CP值超高的選擇"
       },
       {
           "product_name": "板金",
@@ -108,11 +105,9 @@ const catalogList= [
   },
   {
       "product_name": "輪胎",
-      "product_price": "五千",
+      "product_price": "七千",
       "product_level": [
-          "B",
-          "A",
-          "C",
+         
           "D",
           "E"
       ],
@@ -129,7 +124,7 @@ const catalogList= [
       "product_desc": ""
   }
   ],
-  "title": "九個商品的目錄",
+  "title": "最新目錄22/09",
   "catalog_id": "7144e93e-ee6e-45fb-a292-8234722ea45f"
 },
 {
@@ -174,7 +169,7 @@ const catalogList= [
           "product_desc": ""
       }
   ],
-  "title": "四個商品的目錄",
+  "title": "目錄草稿",
   "catalog_id": "483c9e2f-61e2-4ed9-bdcb-7be7db38427c"
 },
 {
@@ -235,7 +230,7 @@ const catalogList= [
           "product_desc": ""
       }
   ],
-  "title": "六個商品的目錄下中N",
+  "title": "目錄範例",
   "catalog_id": "fbca91c3-6bcc-49b1-9815-db510921aefc"
 }
 

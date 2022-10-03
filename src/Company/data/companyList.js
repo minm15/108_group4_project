@@ -51,17 +51,16 @@ const companyList = [
                     "product_name": "輪胎",
                     "product_price": "五千",
                     "product_level": [
-                        "B",
-                        "A",
+                        
                         "C",
                         "D",
                         "E"
                     ],
-                    "product_tag": "",
-                    "product_desc": ""
+                    "product_tag": "休旅車",
+                    "product_desc": "超耐磨、壽命長、CP值超高的選擇"
                 }
             ],
-            "title": "兩個商品的目錄",
+            "title": "最新目錄22/10",
             "catalog_id": "d6ce5680-e9e4-40eb-b238-39cba8e1514d"
         },
         
@@ -164,7 +163,7 @@ const companyList = [
               "product_desc": ""
           }
           ],
-          "title": "九個商品的目錄",
+          "title": "最新目錄22/09",
           "catalog_id": "7144e93e-ee6e-45fb-a292-8234722ea45f"
         },
         {
@@ -209,7 +208,7 @@ const companyList = [
                   "product_desc": ""
               }
           ],
-          "title": "四個商品的目錄",
+          "title": "最新目錄22/08",
           "catalog_id": "483c9e2f-61e2-4ed9-bdcb-7be7db38427c"
         },
         {
@@ -270,7 +269,7 @@ const companyList = [
                   "product_desc": ""
               }
           ],
-          "title": "六個商品的目錄下中N",
+          "title": "最新目錄22/07",
           "catalog_id": "fbca91c3-6bcc-49b1-9815-db510921aefc"
         }
         
@@ -390,7 +389,7 @@ const companyList = [
                       "B"
                   ],
                   "product_tag": "所有",
-                  "product_desc": "這是一種不錯的輪胎 速度快 這是一種不錯的輪胎 速度快 這是一種不錯的輪胎 速度快"
+                  "product_desc": ""
               },
               {
                   "product_name": "輪胎",
@@ -403,7 +402,7 @@ const companyList = [
                       "E"
                   ],
                   "product_tag": "",
-                  "product_desc": ""
+                  "product_desc": "超耐磨、壽命長、CP值超高的選擇"
               },
               {
                   "product_name": "板金",

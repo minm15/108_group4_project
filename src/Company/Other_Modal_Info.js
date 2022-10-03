@@ -24,7 +24,10 @@ import { Divider } from '@mui/material';
 
 export default function Modal_Info({ company_ID,name,company_type,productList,finanData,cooperateList,}) { 
 
-
+  var product_list_blank="";
+ for(let i=0;i<productList.length;i++){
+  product_list_blank=product_list_blank+productList[i]+" ";
+ }
 
     return (
       <Box sx={{ display: 'flex'}}>
@@ -39,10 +42,9 @@ export default function Modal_Info({ company_ID,name,company_type,productList,fi
      <Grid container spacing={2}>
        <Grid item xs={6} > 
        <h3>&emsp;公司資訊</h3>
-      <b>產品列表：{productList} (此行只是放來測試篩選功能用的)　</b> <br></br>
-       <br></br>
-       不知道這個欄位要放什麼
-       這裡是Other_Modal_Info.js的44行<br></br>    
+       &emsp; 生產產品類型：  {product_list_blank} <br></br>  
+       不知道這裡要放什麼
+       這裡是Other_Modal_Info.js的4x行<br></br>    
         <br></br>
 
   
