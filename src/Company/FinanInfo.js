@@ -13,7 +13,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import CompanyDrawer from './Drawer';
-import {income,expense,revenue} from './data/finanData'
+// import {income,expense,revenue} from './data/finanData'
+import myCompany from './data/myCompany';
 import {
 
   LineChart,
@@ -62,7 +63,7 @@ function Company_FinanInfo() {
 {/* aspect:長寬比 */}
 <ResponsiveContainer     height={160} > 
 
-<LineChart data={income} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+<LineChart data={myCompany[0].income} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
 
     <CartesianGrid/>
 <CartesianAxis ></CartesianAxis>
@@ -88,7 +89,7 @@ function Company_FinanInfo() {
 {/* aspect:長寬比 */}
 <ResponsiveContainer     height={160} > 
 
-<LineChart data={expense} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+<LineChart data={myCompany[0].expense} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
 
     <CartesianGrid/>
 <CartesianAxis ></CartesianAxis>
@@ -114,7 +115,7 @@ function Company_FinanInfo() {
 {/* aspect:長寬比 */}
 <ResponsiveContainer     height={160} > 
 
-<LineChart data={revenue} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+<LineChart data={myCompany[0].revenue} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
 
     <CartesianGrid/>
 <CartesianAxis ></CartesianAxis>

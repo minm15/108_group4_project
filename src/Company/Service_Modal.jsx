@@ -30,9 +30,9 @@ export default function Service_Modal({ nowLevel,service,levelNo }) {
   const [value, setValue] = React.useState('1');
 const level=parseInt(nowLevel);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  // const handleChange = (event, newValue) => {
+  //   setValue(newValue);
+  // };
   return (
     <div>
       <Button onClick={handleOpen} sx={{ 

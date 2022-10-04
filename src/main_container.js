@@ -13,8 +13,8 @@ import Company_FinanInfo from "./Company/FinanInfo.js";
 import Company_Warehouse from "./Company/Warehouse.js";
 import Company_Info from "./Company/Company_Info.js";
 import Company_Other from "./Company/Other.js";
-import Company_Catalog from "./Company/Catalog";
-import Company_Catalog_Add from "./Company/Catalog_Add";
+import Company_Catalog_Add2 from "./Company/Catalog_Add2";
+import Company_Catalog2 from "./Company/Catalog2";
 
 const user = {
     name: 'takodachi公司',
@@ -89,11 +89,12 @@ class MainContainer extends React.Component {
                             <Route path='/Company_Other'>
                                 <Route index element={<Company_Other />} />
                             </Route>
-                            <Route path='/Company_Catalog'>
-                                <Route index element={<Company_Catalog />} />
+
+                            <Route path='/Company_Catalog_Add2'>
+                                <Route index element={<Company_Catalog_Add2 />} />
                             </Route>
-                            <Route path='/Company_Catalog_Add'>
-                                <Route index element={<Company_Catalog_Add />} />
+                            <Route path='/Company_Catalog2'>
+                                <Route index element={<Company_Catalog2 />} />
                             </Route>
                         </Routes>
                     </BrowserRouter>

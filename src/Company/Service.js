@@ -12,7 +12,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Link } from "react-router-dom";
 import CompanyDrawer from './Drawer';
-import {levelList,list1,list2,list3,list4,list5} from './data/serviceList.js'; 
+import {list1,list2,list3,list4,list5} from './data/serviceLevelName'
+// import {levelList} from './data/serviceList.js'; 
+import myCompany from './data/myCompany';
 import Service_Modal from './Service_Modal';
 import {
  
@@ -24,7 +26,6 @@ function Company_Service() {
 
 
   // //倉-生-品-商-工(順序) 目前的等級 
-  // const levelList=[1,5,2,4,3]  
 
   const nowLevel = {
       background: "#FDF1EF", //目前等級的底色
@@ -36,6 +37,7 @@ function Company_Service() {
       background: "white",
     };
     
+   
 
     return (
     <Box sx={{ display: 'flex', my:'25px',}}>
@@ -50,7 +52,7 @@ function Company_Service() {
         <DashboardCustomize /> <big><b> 倉儲容量</b></big>
         </Grid>
         <Grid item xs={3}>
-        <Service_Modal nowLevel={levelList[0]} service={'倉儲容量'} levelNo={0}/>
+        <Service_Modal nowLevel={myCompany[0].levelList[0]} service={'倉儲容量'} levelNo={0}/>
         </Grid>
         </Grid >
 
@@ -84,7 +86,7 @@ function Company_Service() {
         <Rocket /> <big><b> 生產效率</b></big>
         </Grid>
         <Grid item xs={3}>
-        <Service_Modal nowLevel={levelList[1]} service={'生產效率'} levelNo={1} />
+        <Service_Modal nowLevel={myCompany[0].levelList[1]} service={'生產效率'} levelNo={1} />
         </Grid>
         </Grid >
 
@@ -118,7 +120,7 @@ function Company_Service() {
         <Rocket /> <big><b> 品質管控</b></big>
         </Grid>
         <Grid item xs={3}>
-        <Service_Modal nowLevel={levelList[2]} service={'品質管控'} levelNo={2}/>
+        <Service_Modal nowLevel={myCompany[0].levelList[2]} service={'品質管控'} levelNo={2}/>
         </Grid>
         </Grid >
         <TableContainer component={Paper} variant="outlined">
@@ -151,7 +153,7 @@ function Company_Service() {
         <Lightbulb /> <big><b> 商品研發</b></big>
         </Grid>
         <Grid item xs={3}>
-        <Service_Modal nowLevel={levelList[3]} service={'商品研發'} levelNo={3}/>
+        <Service_Modal nowLevel={myCompany[0].levelList[3]} service={'商品研發'} levelNo={3}/>
         </Grid>
         </Grid >
 
@@ -184,7 +186,7 @@ function Company_Service() {
         <Gite /> <big><b> 工廠規模</b></big>
         </Grid>
         <Grid item xs={3}>
-        <Service_Modal nowLevel={levelList[4]} service={'工廠規模'} levelNo={4}/>
+        <Service_Modal nowLevel={myCompany[0].levelList[4]} service={'工廠規模'} levelNo={4}/>
         </Grid>
         </Grid >
         <TableContainer component={Paper} variant="outlined">

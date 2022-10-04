@@ -105,18 +105,17 @@ function Company_Drawer() {
             </ListItemButton>
             <Collapse in={open2}>
                 <List component="div" disablePadding>
-                <ListItemButton onClick={handleClick2} component={Link} to="/Company_Catalog_Add">
+                <ListItemButton onClick={handleClick2} component={Link} to="/Company_Catalog_Add2">
                     &emsp;&emsp; &emsp;&ensp;  <ListItemText primary="新增目錄" />
                     </ListItemButton>
-                    <ListItemButton onClick={handleClick2} component={Link} to="/Company_Catalog">
+                    <ListItemButton onClick={handleClick2} component={Link} to="/Company_Catalog2">
                     &emsp;&emsp; &emsp;&ensp;  <ListItemText primary="查看目錄" />
                     </ListItemButton>
                   
                   
                 </List>
             </Collapse>
-
-    
+          
         </Box>
       </Drawer>
   

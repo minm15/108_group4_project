@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 // import get_producing_list from "../data/mf_producing_list";
 import { calculate_time } from '../time';
 
-function get_producing_list () {
+function get_producing_list() {
     let producing_list = require('../data/mf_producing.json');
     return producing_list;
 }
@@ -73,7 +73,6 @@ function Manufactor() {
                                 }
                             )
                         }
-
                         <Grid item xs={8} sx={{ borderBottom: 1 }}>其他費用：</Grid>
                         <Grid item xs={4} sx={{ borderBottom: 1 }}>{mf.expense}</Grid>
 
@@ -87,14 +86,7 @@ function Manufactor() {
                         mf.finish_date === date ?
                             <Grid container justifyContent="flex-end"><Button sx={{ margin: "10px", "&:hover": { backgroundColor: "#E4513D", color: "#FFFFFF" }, backgroundColor: "#FFFFFF", color: "#350D08", border: 2 }} onClick={handleCollect} id={mf.id}>收集成品</Button></Grid> : null
                     }
-
                 </Paper>
-
-
-
-
-
-
             )
         }
     )

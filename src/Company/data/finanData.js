@@ -1,12 +1,27 @@
+//user這間公司的財務資訊 用在公司資訊/財務資訊那一頁&公司首頁
+export const finanData=[ //公司這個月的財務資訊
+    {
+    name: 'income',
+    amount:5000
+    },
+    {
+      name: 'expense',
+      amount:2000
+    },
+    {
+      name: 'revenue',
+      amount:3000
+    },
+    ];
 export const income=[
-{month:"21/09",
-amount:20000},
-{month:"21/10",
-amount:30000},
-{month:"21/11",
-amount:35000},
-{month:"21/12",
-amount:30000},
+// {month:"21/09",
+// amount:20000},
+// {month:"21/10",
+// amount:30000},
+// {month:"21/11",
+// amount:35000},
+// {month:"21/12",
+// amount:30000},
 {month:"22/01",
 amount:15000},
 {month:"22/02",
@@ -71,4 +86,5 @@ export const expense=[
         {month:"22/08",
         amount:1000},
         ];
-export default  {income,expense,revenue};
+
+export default  {income,expense,revenue,finanData};

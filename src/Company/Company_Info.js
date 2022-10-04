@@ -18,11 +18,12 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import CompanyDrawer from './Drawer';
-import cooperateList from  './data/cooperateList'
-import {levelList,list1,list2,list3,list4,list5} from './data/serviceList.js'; 
-import {warehouseSpace,good,ingredient} from './data/warehouseData.js';
+// import cooperateList from  './data/cooperateList'
+import {list1,list2,list3,list4,list5} from './data/serviceLevelName'
+// import {levelList} from './data/serviceList.js'; 
+// import {warehouseSpace,good,ingredient} from './data/warehouseData.js';
 import myCompany from './data/myCompany.js'
-import {income,expense,revenue} from './data/finanData'
+// import {income,expense,revenue,finanData} from './data/finanData'
 
 import './css/Company_Info.css';
 
@@ -52,11 +53,11 @@ function Company_Info() {
         <Stack spacing={1.5} >
           <Item >
             {/* 財務報表 */}
-            <FinanState/>  
+            <FinanState finanData={myCompany[0].finanData}/>  
           </Item>
           <Item sx={{        maxHeight:'300px',  overflowY: "scroll",}}>
             {/* 上次合作 */}
-            <Cooperate/>  
+            <Cooperate cooperateList={myCompany[0].cooperateList}/>  
           </Item>
         </Stack>
         </Grid>
@@ -64,13 +65,13 @@ function Company_Info() {
           <Stack spacing={8}>
             <Item sx={{        maxHeight:'500px', }}>
               {/* 設施等級 */}
-              <Service/>
+              <Service levelList={myCompany[0].levelList}/>
             </Item>
           </Stack>
         </Grid>
         <Grid item xs={4}>
           {/* 倉庫的空間 */}
-          <Warehouse/>
+          <Warehouse warehouseSpace={myCompany[0].warehouseSpace}/>
         </Grid>
         </Grid>
     </Box>
@@ -81,7 +82,7 @@ function Company_Info() {
 export default Company_Info;
 
 
-const Cooperate = ({  }) => {
+const Cooperate = ({cooperateList  }) => {
   return (
    <>
  <h2>&emsp;上次合作</h2>
@@ -106,35 +107,42 @@ const Cooperate = ({  }) => {
   );
 };
 
-const FinanState= ({  }) => {
+const FinanState= ({ finanData }) => {
+  function transfer(name) {
+    var chinese="";
+    if(name=="income"){chinese="收入"}
+    if(name=="expense"){chinese="支出"}
+    if(name=="revenue"){chinese="利潤"}
+
+    return chinese;
+  }
   return (
     <>
- <h2>&emsp;本月財務狀況</h2>
+<h2>&emsp;本月財務狀況</h2>  
 
-      <Table size="small">
-  
-          <TableBody>
-              <TableRow >
-                <TableCell >收入</TableCell>
-                <TableCell >{income[income.length-1].amount}</TableCell>
-              </TableRow>
-              <TableRow >
-                <TableCell >支出</TableCell>
-                <TableCell >{expense[expense.length-1].amount}</TableCell>
-              </TableRow>
-              <TableRow >
-                <TableCell >收益</TableCell>
-                <TableCell >{revenue[revenue.length-1].amount}</TableCell>
-              </TableRow>
-          </TableBody>
-        </Table>
-   </>
+
+<Table size="small">
+
+    <TableBody>
+    {finanData.map((row, index) => (
+        <TableRow >
+          <TableCell >{transfer(row.name)}</TableCell>
+          <TableCell >
+          {row.amount}
+          </TableCell>
+       
+        </TableRow>
+      ))}
+    </TableBody>
+  <small> &emsp; 單位:100萬</small>
+  </Table>
+</>
 
 
   );
 };
 
-const Service= ({  }) => {
+const Service= ({ levelList }) => {
   return (
     <>
 <Grid container spacing={0}>
@@ -220,7 +228,7 @@ const Service= ({  }) => {
   );
 };
 
-const Warehouse= ({  }) => {
+const Warehouse= ({warehouseSpace  }) => {
   const renderCustomizedLabel = (props) => {
     const { content, value,...rest } = props;
   

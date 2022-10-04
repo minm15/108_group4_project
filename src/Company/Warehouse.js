@@ -20,8 +20,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Link } from "react-router-dom";
 import CompanyDrawer from './Drawer';
-
-import { warehouseSpace,good,ingredient } from './data/warehouseData.js';
+import myCompany from './data/myCompany';
+// import { warehouseSpace,good,ingredient } from './data/warehouseData.js';
 
 function Company_Warehouse() {
  
@@ -39,7 +39,7 @@ function Company_Warehouse() {
      <Box sx={{ flexGrow: 1 ,ml:'25px'}}>
       <Grid container spacing={3}>
         <Grid item xs={3}>
-        <BarChart width={300} height={500} data={warehouseSpace}   stackOffset="expand">
+        <BarChart width={300} height={500} data={myCompany[0].warehouseSpace}   stackOffset="expand">
     
         <Bar dataKey="ingredient" fill="#E4513D" stackId="a"  >
         <LabelList position="insideLeft" fontWeight="bold" offset={70} >材料：&emsp;&emsp;%</LabelList>
@@ -86,7 +86,7 @@ function Company_Warehouse() {
           id="tableTitle"
           component="div"
         >
-          商品( {warehouseSpace[0].good} %)
+          商品( {myCompany[0].warehouseSpace[0].good} %)
         </Typography>
 <Table>
           <TableHead>
@@ -97,7 +97,7 @@ function Company_Warehouse() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {good.map((row, index) => (
+            {myCompany[0].good.map((row, index) => (
               <TableRow >
                 <TableCell align="center">{row.name}</TableCell>
                 <TableCell align="center" >{row.rank}</TableCell>
@@ -117,7 +117,7 @@ function Company_Warehouse() {
           id="tableTitle"
           component="div"
         >
-          材料( {warehouseSpace[0].ingredient} %)
+          材料( {myCompany[0].warehouseSpace[0].ingredient} %)
         </Typography>
 <Table>
           <TableHead>
@@ -128,7 +128,7 @@ function Company_Warehouse() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {ingredient.map((row, index) => (
+            {myCompany[0].ingredient.map((row, index) => (
               <TableRow >
                 <TableCell align="center">{row.name}</TableCell>
                 <TableCell align="center" >{row.rank}</TableCell>
