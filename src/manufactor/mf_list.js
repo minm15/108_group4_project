@@ -55,8 +55,8 @@ function Manufactor() {
                         <Grid item xs={6} sx={{ borderBottom: 1 }}>{mf.target.type}</Grid>
                         <Grid item xs={4} sx={{ borderBottom: 1 }}>{mf.target.amount}</Grid>
 
-                        <Grid item xs={8} sx={{ borderBottom: 1 }}>預期誤差：</Grid>
-                        <Grid item xs={4} sx={{ borderBottom: 1 }}>{mf.mistake}</Grid>
+                        {/* <Grid item xs={8} sx={{ borderBottom: 1 }}>預期誤差：</Grid>
+                        <Grid item xs={4} sx={{ borderBottom: 1 }}>{mf.mistake}</Grid> */}
 
                         <Grid item xs={5} sx={{ borderBottom: 1 }}>材料：</Grid>
                         <Grid item xs={7} ></Grid>
@@ -73,6 +73,7 @@ function Manufactor() {
                                 }
                             )
                         }
+
                         <Grid item xs={8} sx={{ borderBottom: 1 }}>其他費用：</Grid>
                         <Grid item xs={4} sx={{ borderBottom: 1 }}>{mf.expense}</Grid>
 
@@ -86,7 +87,14 @@ function Manufactor() {
                         mf.finish_date === date ?
                             <Grid container justifyContent="flex-end"><Button sx={{ margin: "10px", "&:hover": { backgroundColor: "#E4513D", color: "#FFFFFF" }, backgroundColor: "#FFFFFF", color: "#350D08", border: 2 }} onClick={handleCollect} id={mf.id}>收集成品</Button></Grid> : null
                     }
+
                 </Paper>
+
+
+
+
+
+
             )
         }
     )

@@ -25,81 +25,81 @@ class MainContainer extends React.Component {
     render() {
         return (
             <div className="main_frame">
-                <div className="letter_frame">
-                    <BrowserRouter>
-                        <Routes>
-                            <Route path="/" element={
-                                <div>
-                                    <Link to={`/letter_list`}>
-                                        Click here to go to mail page.
-                                    </Link>
-                                    <Link to={`/manufactory`}>
-                                        Click here to go to manufactory page.
-                                    </Link>
-                                    <Link to={`/harbor`}>
-                                        Click here to go to harbor page.
-                                    </Link>
-                                </div>
-                            } />
-                            <Route path='/letter_list'>
-                                <Route index element={<LetterGrid user={user} />} />
-                                <Route
-                                    path=":letterId"
-                                    element={
-                                        <LetterReceive
-                                            user={user}
-                                        />
-                                    }
+                {/* <div className="letter_frame"> */}
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={
+                            <div>
+                                <Link to={`/letter_list`}>
+                                    Click here to go to mail page.
+                                </Link>
+                                <Link to={`/manufactory`}>
+                                    Click here to go to manufactory page.
+                                </Link>
+                                <Link to={`/Company_Info`}>
+                                    Click here to go to company page.
+                                </Link>
+                            </div>
+                        } />
+                        <Route path='/letter_list'>
+                            <Route index element={<LetterGrid user={user} />} />
+                            <Route
+                                path=":letterId"
+                                element={
+                                    <LetterReceive
+                                        user={user}
+                                    />
+                                }
+                            />
+                        </Route>
+                        <Route path="/letter_writing">
+                            <Route index element={
+                                <LetterWriting
+                                    user={user}
                                 />
-                            </Route>
-                            <Route path="/letter_writing">
-                                <Route index element={
-                                    <LetterWriting
+                            } />
+                            <Route
+                                path=":letterId"
+                                element={
+                                    <LetterReply
                                         user={user}
                                     />
                                 } />
-                                <Route
-                                    path=":letterId"
-                                    element={
-                                        <LetterReply
-                                            user={user}
-                                        />
-                                    } />
-                            </Route>
-                            <Route path="/manufactory">
-                                <Route index element={<Manufactor user={user} />} />
-                                <Route path="product" element={<Product user={user} />} />
-                            </Route>
-                            <Route path="/harbor">
-                                <Route index element={<HarborMain user={user} />} />
-                                <Route path=":contractId" element={<HarborSend user={user} />} />
-                            </Route>
-                            <Route path='/Company_Service'>
-                                <Route index element={<Company_Service />} />
-                            </Route>
-                            <Route path='/Company_FinanInfo'>
-                                <Route index element={<Company_FinanInfo />} />
-                            </Route>
-                            <Route path='/Company_Warehouse'>
-                                <Route index element={<Company_Warehouse />} />
-                            </Route>
-                            <Route path='/Company_Info'>
-                                <Route index element={<Company_Info />} />
-                            </Route>
-                            <Route path='/Company_Other'>
-                                <Route index element={<Company_Other />} />
-                            </Route>
+                        </Route>
+                        <Route path="/manufactory">
+                            <Route index element={<Manufactor user={user} />} />
+                            <Route path="product" element={<Product user={user} />} />
+                        </Route>
+                        <Route path="/harbor">
+                            <Route index element={<HarborMain user={user} />} />
+                            <Route path=":contractId" element={<HarborSend user={user} />} />
+                        </Route>
+                        <Route path='/Company_Service'>
+                            <Route index element={<Company_Service />} />
+                        </Route>
+                        <Route path='/Company_FinanInfo'>
+                            <Route index element={<Company_FinanInfo />} />
+                        </Route>
+                        <Route path='/Company_Warehouse'>
+                            <Route index element={<Company_Warehouse />} />
+                        </Route>
+                        <Route path='/Company_Info'>
+                            <Route index element={<Company_Info />} />
+                        </Route>
+                        <Route path='/Company_Other'>
+                            <Route index element={<Company_Other />} />
+                        </Route>
 
-                            <Route path='/Company_Catalog_Add2'>
-                                <Route index element={<Company_Catalog_Add2 />} />
-                            </Route>
-                            <Route path='/Company_Catalog2'>
-                                <Route index element={<Company_Catalog2 />} />
-                            </Route>
-                        </Routes>
-                    </BrowserRouter>
-                </div>
+                        <Route path='/Company_Catalog_Add2'>
+                            <Route index element={<Company_Catalog_Add2 />} />
+                        </Route>
+                        <Route path='/Company_Catalog2'>
+                            <Route index element={<Company_Catalog2 />} />
+                        </Route>
+                    </Routes>
+                </BrowserRouter>
             </div>
+            // </div>
         )
     }
 }
