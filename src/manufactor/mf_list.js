@@ -1,58 +1,118 @@
 import React from "react";
 import { Box, Paper, Grid, IconButton, Button, Typography } from "@mui/material";
-// import { shadows } from '@mui/system';
-import { Add } from '@mui/icons-material';
+import { Add, KeyboardArrowRight, KeyboardArrowLeft } from '@mui/icons-material';
 import { Link } from "react-router-dom";
-// import get_producing_list from "../data/mf_producing_list";
-import { calculate_time } from '../time';
+import { calculate_time, cal_input_date, diff_time } from '../time';
 
-function get_producing_list() {
-    let producing_list = require('../data/mf_producing.json');
+function get_producing_list(user) {
+    let producing_list = JSON.parse(localStorage.getItem('product_list')).find((ele) => ele.company === user);
     return producing_list;
 }
 
-function Manufactor() {
+function Manufactor({ user }) {
+    const color = user.type === "供應" ? "#FDF1EF" : "#E3F2FD";
     const [date, setDate] = React.useState(calculate_time().game_day);
+    // manufactor list
+    const [mf_list, setList] = React.useState(
+        get_producing_list(user.name).product_list
+    );
     const time_change = () => {
         setDate(calculate_time().game_day);
-    }
+        setList(get_producing_list(user.name).product_list);
+    };
     setInterval(time_change, 10000);
     const handleCollect = (event) => {
-        setList(
-            mf_list.filter(
-                (mf) => mf.id !== event.currentTarget.id
+        let result = mf_list.filter(
+            (mf) => mf.id !== Number(event.currentTarget.id)
+        );
+        // console.log('here');
+        // console.log(result);
+        setList(result);
+        localStorage.setItem('product_list', JSON.stringify(
+            JSON.parse(localStorage.getItem('product_list')).map(
+                (ele) => {
+                    if (ele.company=== user.name) {
+                        return {
+                            company: user.name,
+                            limit: ele.limit,
+                            product_list: result
+                        };
+                    } else {
+                        return ele;
+                    }
+                }
+            )
+        ));
+        console.log(
+            JSON.parse(localStorage.getItem('product_list')).map(
+                (ele) => {
+                    if (ele.company === user.name) {
+                        // console.log('here');
+                        return {
+                            company: user.name,
+                            limit: ele.limit,
+                            product_list: result
+                        };
+                    } else {
+                        return ele;
+                    }
+                }
             )
         );
-        // console.log(mf_list);
-        // console.log(event.currentTarget.id);
-    }
-
-    // manufactor list
-    const [mf_list, setList] = React.useState(get_producing_list());
-
+        // console.log(JSON.parse(localStorage.getItem('product_list')).map(
+        //     (ele) => {
+        //         if (ele.company === user.name) {
+        //             return {
+        //                 company: user.name,
+        //                 limit: ele.limit,
+        //                 product_list: result
+        //             };
+        //         } else {
+        //             return ele;
+        //         }
+        //     }
+        // ));
+    };
+    const [page, setPage] = React.useState(3);
     const product_paper = mf_list.map(
-        mf => {
+        (mf, index) => {
             return (
                 <Paper elevation={4}
                     square={false}
                     sx={{
                         width: 250,
                         height: 400,
-                        padding: 2
+                        padding: 2,
+                        display: index >= page - 3 & index < page ? null : 'none'
                     }}
                     key={mf.id}>
-
-                    <div className="mf_status">{mf.status}</div>
-                    <div className="mf_purpose">
-                        <Typography disableTypography sx={{ fontFamily: "Noto Sans TC", fontSize: "24px", fontWeight: 700, lineHeight: "35px", letterSpacing: "0em", textAlign: "left" }}>
-                            {mf.purpose}
-                        </Typography>
+                    <div className="mf_reason">
+                        <Grid container direction="row">
+                            <Grid xs={8}>
+                                <Typography sx={{ fontFamily: "Noto Sans TC", fontSize: "24px", fontWeight: 700, lineHeight: "35px", letterSpacing: "0em", textAlign: "left" }}>
+                                    {mf.reason}
+                                </Typography>
+                            </Grid>
+                            {
+                                diff_time(date, cal_input_date(mf.product_time, mf.time)) > 0 ?
+                                    null :
+                                    <Grid xs={4}>
+                                        <Typography sx={{ fontFamily: "Noto Sans TC", fontSize: "16px", fontWeight: 700, lineHeight: "35px", letterSpacing: "0em", textAlign: "left" }}>
+                                            製造中...
+                                        </Typography>
+                                    </Grid>
+                            }
+                        </Grid>
                     </div>
                     <Grid container direction="row">
                         <Grid item xs={8} sx={{ borderBottom: 1 }} >生產目標：</Grid>
                         <Grid item xs={4} ></Grid>
                         <Grid item xs={2} ></Grid>
-                        <Grid item xs={6} sx={{ borderBottom: 1 }}>{mf.target.type}</Grid>
+                        <Grid item xs={6} sx={{ borderBottom: 1 }}>
+                            {mf.target.name}-{mf.target.type === undefined
+                                ? mf.target.rank :
+                                mf.target.type}
+                        </Grid>
                         <Grid item xs={4} sx={{ borderBottom: 1 }}>{mf.target.amount}</Grid>
 
                         {/* <Grid item xs={8} sx={{ borderBottom: 1 }}>預期誤差：</Grid>
@@ -61,21 +121,20 @@ function Manufactor() {
                         <Grid item xs={5} sx={{ borderBottom: 1 }}>材料：</Grid>
                         <Grid item xs={7} ></Grid>
                         {
-                            mf.ingredient.map(
+                            mf.igd.map(
                                 igd => {
                                     return (
                                         <Grid container>
                                             <Grid item xs={2} ></Grid>
-                                            <Grid item xs={6} sx={{ borderBottom: 1 }}>{igd.name}-{igd.type}</Grid>
+                                            <Grid item xs={6} sx={{ borderBottom: 1 }}>{igd.name}{igd.type === undefined ? null : '-' + igd.type}</Grid>
                                             <Grid item xs={4} sx={{ borderBottom: 1 }}>{igd.amount}</Grid>
                                         </Grid>
                                     )
                                 }
                             )
                         }
-
                         <Grid item xs={8} sx={{ borderBottom: 1 }}>其他費用：</Grid>
-                        <Grid item xs={4} sx={{ borderBottom: 1 }}>{mf.expense}</Grid>
+                        <Grid item xs={4} sx={{ borderBottom: 1 }}>{mf.other_cost}</Grid>
 
                         <Grid item xs={8} sx={{ borderBottom: 1 }}>共計成本：</Grid>
                         <Grid item xs={4} sx={{ borderBottom: 1 }}>{mf.total_cost}</Grid>
@@ -84,24 +143,39 @@ function Manufactor() {
                         <Grid item xs={4} sx={{ borderBottom: 1 }}>{mf.time}</Grid>
                     </Grid>
                     {
-                        mf.finish_date === date ?
-                            <Grid container justifyContent="flex-end"><Button sx={{ margin: "10px", "&:hover": { backgroundColor: "#E4513D", color: "#FFFFFF" }, backgroundColor: "#FFFFFF", color: "#350D08", border: 2 }} onClick={handleCollect} id={mf.id}>收集成品</Button></Grid> : null
+                        diff_time(date, cal_input_date(mf.product_time, mf.time)) > 0 ?
+                            <Grid container justifyContent="flex-end">
+                                <Button
+                                    sx={{
+                                        margin: "10px",
+                                        "&:hover": { backgroundColor: "#E4513D", color: "#FFFFFF" },
+                                        backgroundColor: "#FFFFFF",
+                                        color: "#350D08",
+                                        border: 2
+                                    }}
+                                    onClick={handleCollect}
+                                    id={mf.id}>
+                                    收集成品
+                                </Button>
+                            </Grid> : null
                     }
-
                 </Paper>
-
-
-
-
-
-
             )
         }
     )
 
     // manufactor space
-    const mf_space = 5 - mf_list.length > 0 ? (
-        <Paper elevation={4} square={false} sx={{ width: 250, height: 400, padding: 2 }}>
+    // console.log(get_producing_list(user.name));
+    const mf_space = get_producing_list(user.name).limit - mf_list.length > 0 ? (
+        <Paper
+            elevation={4}
+            square={false}
+            sx={{
+                width: 250,
+                height: 400,
+                padding: 2,
+                display: page === mf_list.length + 1 ? null : 'none'
+            }}>
             <Grid container
                 justifyContent="center"
                 alignItems="center"
@@ -109,8 +183,7 @@ function Manufactor() {
                 spacing={0}
                 style={{ minHeight: 'auto' }}
             >
-
-                <Grid Item >
+                <Grid item>
                     <IconButton component={Link} to="/manufactory/product">
                         <Add />
                     </IconButton>
@@ -119,8 +192,14 @@ function Manufactor() {
             </Grid>
         </Paper>
     ) : (
-        <Paper elevation={4} square={false} sx={{ bgcolor: "#F6C9C3" }}>
-            <Typography disableTypography sx={{ fontFamily: "Noto Sans TC", fontSize: "36px", fontWeight: 400, lineHeight: "52px", letterSpacing: "0em", textAlign: "left" }}>
+        <Paper
+            elevation={4}
+            square={false}
+            sx={{
+                bgcolor: "#F6C9C3",
+                display: page === mf_list.length + 1 ? null : 'none'
+            }}>
+            <Typography sx={{ fontFamily: "Noto Sans TC", fontSize: "36px", fontWeight: 400, lineHeight: "52px", letterSpacing: "0em", textAlign: "left" }}>
                 請擴建廠房
             </Typography>
         </Paper>
@@ -129,13 +208,27 @@ function Manufactor() {
     //manufactor main menu
     return (
         <div className="mf_mainframe">
-            <Box sx={{ height: 700, bgcolor: "#FDF1EF" }}>
+            <Box
+                sx={{
+                    height: 700,
+                    width: 1367,
+                    bgcolor: color,
+                    left: 73,
+                    top: 126,
+                    position: "fixed"
+                }}>
+
                 <Grid container
                     direction="row"
                     justifyContent="flex-start"
                     alignItems="flex-start"
                 >
-                    <Grid Item xs={6}>
+                    <Grid item xs={1}>
+                        <KeyboardArrowLeft onClick={
+                            () => setPage(page === 3 ? 3 : page - 1)
+                        } />
+                    </Grid>
+                    <Grid item xs={page === mf_list.length + 1 ? 6 : 8}>
                         <Box sx={{
                             display: 'flex',
                             flexWrap: 'wrap',
@@ -149,7 +242,7 @@ function Manufactor() {
                             {product_paper}
                         </Box>
                     </Grid>
-                    <Grid Item xs={6}>
+                    <Grid item xs={page === mf_list.length + 1 ? 3 : 0}>
                         <Box sx={{
                             display: 'flex',
                             flexWrap: 'wrap',
@@ -162,6 +255,11 @@ function Manufactor() {
                         }}>
                             {mf_space}
                         </Box>
+                    </Grid>
+                    <Grid item xs={1}>
+                        <KeyboardArrowRight onClick={
+                            () => setPage(page === mf_list.length + 1 ? mf_list.length + 1 : page + 1)
+                        } />
                     </Grid>
                 </Grid>
             </Box>

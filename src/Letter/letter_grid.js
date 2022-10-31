@@ -1,63 +1,86 @@
 import React from 'react';
-import { Link, Outlet } from "react-router-dom";
-import { Box, Chip, Grid } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { Outlet, useLocation } from "react-router-dom";
+import { Grid, Chip, Box, Link, Typography } from '@mui/material';
 // import { get_letter_list } from '../back-end/mail';
 // import get_letter_list from '../data/letter_list';
 import MenuList from './menu';
-import LetterList from './letter_gridList';
 
 function get_letter_list() {
-    let letter_list = require('../data/letter_list.json');
+    let letter_list = JSON.parse(localStorage.getItem('letter_list'));
+    // console.log(letter_list);
     return letter_list;
 }
 
-const LetterGrid = () => {
-    const columns = [
-        {
-            field: 'sender',
-            headerName: '寄件人',
-            width: 270,
-            renderCell: (params) => {
-                return (
-                    <div>
-                        {params.row.sender}
-                        <Chip
-                            label={params.row.sender_type}
-                            size="small"
-                            sx={{ bgcolor: "#757575", color: "#F5F5F5" }}
-                        />
-                    </div>
-                )
-            }
-        },
-        {
-            field: 'title',
-            headerName: '主旨標題',
-            width: 700,
-            renderCell: (params) => {
-                return (
-                    <div>
-                        <Link disableTypography underline="none" to={`/letter_list/${params.row.id}`} key={params.row.id}>
-                            【{params.row.letter_type}】{params.row.title}
+function filter_letter_list(letterList, user, type) {
+    let result = letterList;
+    switch (type) {
+        case 'operation':
+            result = letterList.filter(
+                (letter) => letter.letter_type === "operation" & letter.expired === ''
+            );
+            // console.log(result);
+            break;
+        case 'quotation':
+            result = letterList.filter(
+                (letter) => letter.letter_type === 'quotation' & letter.expired === ''
+            );
+            break;
+        case 'negotiate':
+            result = letterList.filter(
+                (letter) => (letter.letter_type === 'contract_edit' |
+                    letter.letter_type === 'contract_draft') &
+                    letter.expired === ''
+            );
+            break;
+        case 'quotation_request':
+            result = letterList.filter(
+                (letter) => letter.letter_type === 'quotation_request' & letter.expired === ''
+            );
+            break;
+        case 'igd':
+            result = letterList.filter(
+                (letter) => letter.letter_type === 'igd' & letter.expired === ''
+            );
+            break;
+        // case 'contract':
+        //     result = JSON.parse(localStorage.getItem('contract_list')).filter(
+        //         (contract) => (contract.buyer === user.name |
+        //             contract.seller === user.name)
+        //     );
+        //     break;
+        case 'sent':
+            result = JSON.parse(localStorage.getItem('letter_list')).filter(
+                (letter) => letter.sender === user.name
+            );
+            break;
+        case 'all':
+            result = letterList;
+            break;
+        default:
+            result = undefined;
+            break;
+    }
+    return result;
+}
 
-                        </Link>
-                        <div>
-                            {params.row.expired}
-                        </div>
-                    </div>
-                )
-            }
-        },
-        {
-            field: 'time',
-            headerName: '日期',
-            width: 100
-        }
-    ];
+const LetterGrid = ({ user, type }) => {
+    const [letterList, setLetterList] = React.useState(
+        filter_letter_list(
+            get_letter_list().filter(
+                (letter) => letter.receiver === user.name
+            ), user, type)
+    );
 
-    // Fake data
-    const rows = get_letter_list();
+    React.useEffect(
+        () => {
+            // console.log('here');
+            setLetterList(
+                filter_letter_list(
+                    get_letter_list().filter(
+                        (letter) => letter.receiver === user.name
+                    ), user, type)
+            );
+        }, [useLocation().pathname]);
 
     return (
         <div className='main_frame'>
@@ -75,20 +98,42 @@ const LetterGrid = () => {
                             <MenuList />
                         </Grid>
                     </div>
-                    {/* <Box sx={{ height: 400, width: '100%' }}>
-                <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    pageSize={10}
-                    rowsPerPageOptions={[10]}
-                    componentsProps={{
-                        columnMenu: { background: 'red', counter: rows.length },
-                    }}
-                />
-            </Box> */}
                     <Grid item xs={8}>
                         <Box sx={{ width: '100%', padding: 3, bgcolor: '#FDF1EF' }}>
-                            <LetterList />
+                            <Grid container>
+                                {
+                                    letterList !== undefined ? 
+                                    letterList.length > 0 ? letterList.map(
+                                        (letter) => {
+                                            return (
+                                                <Box sx={{
+                                                    height: 30,
+                                                    width: "110%",
+                                                    boxShadow: 1,
+                                                    borderRadius: 4,
+                                                    bgcolor: '#FFFFFF',
+                                                    mb: 0.5,
+                                                    padding: 1
+                                                }}>
+                                                    <Link underline="none" color=" #350D08" href={`/letter_list/${letter.id}`}>
+                                                        <Grid container justifyContent="space-between" alignItems="center" className={letter.id}>
+                                                            <Grid item>
+                                                                {letter.sender}
+                                                                <Chip label={letter.sender_type} size="small" />
+                                                                {letter.title}
+                                                            </Grid>
+                                                            <Grid item>
+                                                            </Grid>
+                                                            <Box sx={{ color: "#BE0000", fontWeight: 'bold' }}>{letter.expired}</Box>
+                                                            <Grid item>{letter.time}</Grid>
+                                                        </Grid>
+                                                    </Link>
+                                                </Box>
+                                            )
+                                        }
+                                    ) : <Typography>尚無信件</Typography> : <Typography>尚無信件</Typography>
+                                }
+                            </Grid>
                         </Box>
                     </Grid>
                 </Grid>

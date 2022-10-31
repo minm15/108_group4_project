@@ -9,23 +9,25 @@ function LetterWriting({ user }) {
     // 信件標題（信件目的）
     const [title, setTitle] = React.useState('');
     // 所有公司的名單，到時候可以只拿供應跟材料商就好
-    const companies = [
-        {
-            name: "製造商1",
-            company_id: "mf01",
-            company_type: "製造商"
-        },
-        {
-            name: "供應商1",
-            company_id: "s01",
-            company_type: "供應商"
-        },
-        {
-            name: "材料商1",
-            company_id: "mt01",
-            company_type: "材料商"
-        }
-    ];
+    // const companies = [
+    //     {
+    //         name: "製造商1",
+    //         company_id: "mf01",
+    //         company_type: "製造商"
+    //     },
+    //     {
+    //         name: "供應商1",
+    //         company_id: "s01",
+    //         company_type: "供應商"
+    //     },
+    //     {
+    //         name: "材料商1",
+    //         company_id: "mt01",
+    //         company_type: "材料商"
+    //     }
+    // ];
+
+    const companies = JSON.parse(localStorage.getItem('company_list'));
 
     return (
         <div className="letter_writing">
@@ -39,14 +41,9 @@ function LetterWriting({ user }) {
                     spacing='5'
                     padding='5'
                 >
-
-
                     <Grid item xs={2}>
                         <MenuList />
-
                     </Grid>
-
-
                     {/* 信件主體 */}
                     <Grid item xs={10}>
                         <Box sx={{ height: 400, width: '90%', padding: 3, bgcolor: '#FFFFFF' }}>
@@ -60,13 +57,13 @@ function LetterWriting({ user }) {
                                         onChange={(event) => { setReceiver(event.target.value) }}>
                                         <option aria-label="None" value="" />
                                         {
-                                            (user.type === "manufacturer") ? (
+                                            (user.type === "製造") ? (
                                                 <optgroup label="供應商" value="供應商">
                                                     {
                                                         companies.map(
                                                             company => {
-                                                                return company.company_type === "供應商" ? (
-                                                                    <option value={company.name} key={company.company_id}>{company.name}</option>
+                                                                return company.type === "供應" ? (
+                                                                    <option value={company.name} key={company.name}>{company.name}</option>
                                                                 ) : null;
                                                             }
                                                         )
@@ -75,14 +72,14 @@ function LetterWriting({ user }) {
                                             ) : null
                                         }
                                         {
-                                            (user.type === "supplier") ? (
+                                            (user.type === "供應") ? (
                                                 <optgroup label="材料商" value="材料商">
 
                                                     {
                                                         companies.map(
                                                             company => {
-                                                                return company.company_type === "材料商" ? (
-                                                                    <option value={company.name} key={company.company_id}>{company.name}</option>
+                                                                return company.type === "材料" ? (
+                                                                    <option value={company.name} key={company.name}>{company.name}</option>
                                                                 ) : null;
                                                             }
                                                         )
@@ -103,11 +100,11 @@ function LetterWriting({ user }) {
                                         onChange={(event) => { setTitle(event.target.value) }}>
                                         <option aria-label="None" value="" />
                                         {
-                                            (user.type === "supplier") ?
+                                            (user.type === "供應") ?
                                                 <option value='材料採購'>【材料採購】</option> : null
                                         }
                                         {
-                                            (user.type === "manufacturer") ?
+                                            (user.type === "製造") ?
                                                 <option value='報價請求'>【報價請求】</option> : null
                                         }
                                     </Select>

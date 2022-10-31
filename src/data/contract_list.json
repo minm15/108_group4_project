@@ -2,18 +2,19 @@
     {
         "id": "0101",
         "buyer": "Takodachi汽車",
+        "seller": "Wah汽車零件",
         "package": [
             {
                 "id": "001",
                 "name": "輪胎",
                 "type": "A",
-                "amount": 40,
+                "amount": 100,
                 "price": 250
             },
             {
                 "id": "002",
-                "name": "車身",
-                "type": "C",
+                "name": "引擎",
+                "type": "E",
                 "amount": 10,
                 "price": 600
             }
@@ -26,45 +27,47 @@
         "pay": "2022-8-1",
         "status": "下訂",
         "origin": "2022-8-15",
-        "sufficient": true
+        "sent": true
     },
     {
         "id": "0102",
         "buyer": "Takodachi汽車",
+        "seller": "Wah汽車零件",
         "package": [
             {
                 "id": "001",
                 "name": "輪胎",
                 "type": "A",
-                "amount": 40,
+                "amount": 20,
                 "price": 250
             },
             {
                 "id": "002",
-                "name": "車身",
-                "type": "C",
-                "amount": 10,
+                "name": "引擎",
+                "type": "E",
+                "amount": 5,
                 "price": 600
             }
         ],
         "status": "換貨",
         "origin": "0101",
-        "sufficient": true
+        "sent": false
     },
     {
         "id": "0103",
-        "buyer": "Takodachi汽車",
+        "buyer": "Baamen汽車經銷商",
+        "seller": "Takodachi汽車",
         "package": [
             {
-                "id": "131",
-                "name": "休旅車（油）",
-                "type": "大眾",
+                "id": "1",
+                "name": "休旅車",
+                "rank": "A",
                 "amount": 40,
                 "price": 3170
             }
         ],
         "status": "下訂",
         "origin": "",
-        "sufficient": false
+        "sent": false
     }
 ]

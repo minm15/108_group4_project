@@ -1,0 +1,165 @@
+[
+    {
+        "company": "Wah汽車零件",
+        "limit": 5,
+        "product_list": [
+            {
+                "id": 1,
+                "reason": "訂單",
+                "target": {
+                    "name": "輪胎",
+                    "type": "A",
+                    "amount": 100
+                },
+                "igd": [
+                    {
+                        "name": "材料A",
+                        "amount": 100
+                    },
+                    {
+                        "name": "材料B",
+                        "amount": 100
+                    }
+                ],
+                "other_cost": 4000,
+                "total_cost": 44000,
+                "time": 2,
+                "product_time": "2232-12-06"
+            },
+            {
+                "id": 2,
+                "reason": "訂單",
+                "target": {
+                    "name": "輪胎",
+                    "type": "B",
+                    "amount": 200
+                },
+                "igd": [
+                    {
+                        "name": "材料A",
+                        "amount": 200
+                    },
+                    {
+                        "name": "材料C",
+                        "amount": 200
+                    }
+                ],
+                "other_cost": 8000,
+                "total_cost": 116000,
+                "time": 3,
+                "product_time": "2207-12-11"
+            },
+            {
+                "id": 3,
+                "reason": "商品目錄",
+                "target": {
+                    "name": "底盤",
+                    "type": "H",
+                    "amount": 100
+                },
+                "igd": [
+                    {
+                        "name": "材料A",
+                        "amount": 100
+                    },
+                    {
+                        "name": "材料B",
+                        "amount": 100
+                    },
+                    {
+                        "name": "材料C",
+                        "amount": 100
+                    },
+                    {
+                        "name": "材料E",
+                        "amount": 100
+                    },
+                    {
+                        "name": "材料F",
+                        "amount": 100
+                    }
+                ],
+                "other_cost": 1000,
+                "total_cost": 2700,
+                "time": 12,
+                "product_time": "2207-12-06"
+            }
+        ]
+    },
+    {
+        "company": "Takodachi汽車",
+        "limit": 2,
+        "product_list": [
+            {
+                "id": 1,
+                "reason": "研發",
+                "target": {
+                    "name": "休旅車",
+                    "amount": 50,
+                    "rank": "S"
+                },
+                "igd": [
+                    {
+                        "name": "輪胎",
+                        "type": "B",
+                        "amount": 200
+                    },
+                    {
+                        "name": "內裝材料",
+                        "type": "D",
+                        "amount": 50
+                    },
+                    {
+                        "name": "引擎",
+                        "type": "F",
+                        "amount": 50
+                    },
+                    {
+                        "name": "底盤",
+                        "type": "I",
+                        "amount": 50
+                    }
+                ],
+                "other_cost": 6340,
+                "total_cost": 282160,
+                "time": 3,
+                "product_time": "2207-12-06"
+            },
+            {
+                "id": 2,
+                "reason": "研發",
+                "target": {
+                    "name": "跑車",
+                    "amount": 50,
+                    "rank": "S"
+                },
+                "igd": [
+                    {
+                        "name": "輪胎",
+                        "type": "B",
+                        "amount": 200
+                    },
+                    {
+                        "name": "內裝材料",
+                        "type": "D",
+                        "amount": 50
+                    },
+                    {
+                        "name": "引擎",
+                        "type": "F",
+                        "amount": 50
+                    },
+                    {
+                        "name": "底盤",
+                        "type": "I",
+                        "amount": 50
+                    }
+                ],
+                "other_cost": 12240,
+                "total_cost": 288060,
+                "time": 3,
+                "product_time": "2207-12-06"
+            }
+        ]
+    }
+]

@@ -6,14 +6,15 @@ function get_current_date() {
     var current_time = moment.unix(date).format();
     //document.getElementById('current_time').innerHTML += "<label id='time'> " + current_time + "</label>";
     // document.getElementById('time').innerHTML += '<br>現在時間: ' + convert_date_format(current_time);
-    console.log(current_time + ' -> ' + convert_date_format(current_time));
+    // console.log(current_time + ' -> ' + convert_date_format(current_time));
+    return current_time;
 }
 
 // 10 sec = 1 day
 function calculate_time() {
     // start time
-    var old_date = 1662212826
-    var start_day = "2022-01-01";
+    var start_day = "2022-10-21";
+    var old_date = moment([2022, 9, 21]).unix()
 
     // current time
     let new_date = moment().format("X");
@@ -23,6 +24,7 @@ function calculate_time() {
     // 2022-09-03T20:57:06+08:00
     var true_start_time = moment.unix(old_date).format();
     var true_current_time = moment.unix(new_date).format();
+    // console.log(moment([2022,10,21]));
 
     // calculate game time
     var turn_to_day = Math.floor(difftime / 10) // turn second to day
@@ -53,7 +55,7 @@ function diff_time(timeA, timeB) {
     const b = moment(Date.parse(timeB));
     // console.log(typeof(a.diff(b,'days')));
     // console.log(a>b);
-    return a.diff(b, 'days');
+    return a.diff(b, 'days', true);
 }
 
 // convert ISO8601 date format

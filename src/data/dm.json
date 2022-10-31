@@ -1,0 +1,114 @@
+[
+    {
+        "company": "Comfydant材料商",
+        "dm": [
+            {
+                "name": "材料A",
+                "price": 200
+            },
+            {
+                "name": "材料B",
+                "price": 200
+            },
+            {
+                "name": "材料C",
+                "price": 300
+            },
+            {
+                "name": "材料D",
+                "price": 300
+            },
+            {
+                "name": "材料E",
+                "price": 400
+            },
+            {
+                "name": "材料F",
+                "price": 600
+            }
+        ]
+    },
+    {
+        "company": "Sheero材料商",
+        "dm": [
+            {
+                "name": "材料A",
+                "price": 180
+            },
+            {
+                "name": "材料B",
+                "price": 190
+            }
+        ]
+    },
+    {
+        "company": "Wah汽車零件",
+        "dm": [
+            {
+                "id": "001",
+                "name": "輪胎",
+                "type": "A",
+                "price": 440
+            },
+            {
+                "id": "002",
+                "name": "輪胎",
+                "type": "B",
+                "price": 540
+            },
+            {
+                "id": "003",
+                "name": "內裝材料",
+                "type": "C",
+                "price": 1100
+            },
+            {
+                "id": "004",
+                "name": "內裝材料",
+                "type": "D",
+                "price": 1200
+            },
+            {
+                "id": "005",
+                "name": "引擎",
+                "type": "E",
+                "price": 1600
+            },
+            {
+                "id": "006",
+                "name": "引擎",
+                "type": "F",
+                "price": 1700
+            },
+            {
+                "id": "007",
+                "name": "底盤",
+                "type": "G",
+                "price": 2400
+            },
+            {
+                "id": "008",
+                "name": "底盤",
+                "type": "H",
+                "price": 2700
+            },
+            {
+                "id": "009",
+                "name": "底盤",
+                "type": "I",
+                "price": 2700
+            }
+        ]
+    },
+    {
+        "company": "Takodachi汽車",
+        "dm": [
+            {
+                "id": "1",
+                "name": "休旅車",
+                "rank": "A",
+                "price": 320000
+            }
+        ]
+    }
+]

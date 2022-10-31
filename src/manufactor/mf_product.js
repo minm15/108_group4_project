@@ -3,503 +3,411 @@ import {
     Box, Paper, Grid,
     FormControl, InputLabel, Select, MenuItem, Typography
 } from "@mui/material";
+import { get_component_list, get_car_list, cal_grade } from '../data/game_rule';
 
-function Product() {
-    const [amount, setAmount] = React.useState(0);
-    const [rank, setRank] = React.useState("");
-    const [product, setProduct] = React.useState("");
+const Product = ({ user }) => {
+    const color = user.type === "供應" ? "#FDF1EF" : "#E3F2FD";
+    const dm = JSON.parse(localStorage.getItem('dm')).find(
+        (company) => company.company === user.name
+    );
+    const producing_list = JSON.parse(localStorage.getItem('product_list')).find(
+        (company) => company.company === user.name
+    ).product_list.map(
+        (item) => {
+            return item.target;
+        }
+    );
+    const productable = user.type === "供應" ? get_component_list() : get_car_list();
+    const contractList = JSON.parse(localStorage.getItem('contract_list')).filter(
+        (contract) => contract.seller === user.name & !contract.sent
+    );
+    console.log(contractList);
+    const storage = JSON.parse(localStorage.getItem('storage')).find((company) => company.company === user.name);
 
-    const [ingredient, setIgd] = React.useState([]);
-    const [rankList, setRankList] = React.useState([]);
-    const [mistakeList, setMistake] = React.useState([]);
+    // form content
+    const [targetName, setTargetName] = React.useState();
+    const [targetDetail, setTargetDetail] = React.useState();
+    const [targetAmount, setAmount] = React.useState();
+    const [rank, setRank] = React.useState();
+    const [igd, setIgd] = React.useState();
     const [igdCost, setIgdCost] = React.useState();
-    const [cost, setCost] = React.useState();
-    const [time, setTime] = React.useState();
 
-    // 參數
-    const [efficient, setEfficient] = React.useState(true);
-    const [thrift, setThrift] = React.useState(0.5);
-
-    // 獲得每個產品的生產資訊
-    const igdList = [
-        {
-            name: "鑄鐵引擎",
-            ingredient: [
-                {
-                    name: "水冷材料",
-                    amount: 1,
-                    marketPrice: 0.5
-                },
-                {
-                    name: "鑄鐵",
-                    amount: 1,
-                    marketPrice: 0.1
-                },
-                {
-                    name: "機油",
-                    amount: 1,
-                    marketPrice: 0.1
-                }
-            ],
-            cost: 1.5,
-            time: 0.1
-        },
-        {
-            name: "鋁製車門",
-            ingredient: [
-                {
-                    name: "鋁合金",
-                    amount: 1,
-                    marketPrice: 1
-                }
-            ],
-            cost: 1.5,
-            time: 0.1
-        }
-    ]
-
-    // 獲得訂單
-    const contractList = [
-        {
-            contract_id: '訂單編號',
-            buyer: '買家',
-            good_list: [
-                {
-                    name: '商品名稱',
-                    amount: '數量',
-                    status: '正在製造／存貨足夠／不足'
-                }
-            ],
-            change: [
-                {
-                    name: '商品名稱',
-                    amount: '數量',
-                    status: '正在製造／存貨足夠／不足'
-                }
-            ],
-            deadline: '送達時間'
-        },
-        {
-            contract_id: '訂單編號',
-            buyer: '買家',
-            good_list: [
-                {
-                    name: '商品名稱',
-                    amount: '數量',
-                    status: '正在製造／存貨足夠／不足'
-                }
-            ],
-            change: [],
-            deadline: '送達時間'
-        }
-    ]
-
-
-    // 計算其他成本
-    function calCost(rankNow, amountNow, target) {
-        if (rankNow === "A") {
-            setCost(Math.round(target.cost * 1.1 * amountNow));
-        } else {
-            setCost(Math.round(target.cost * amountNow));
-        }
+    const handleTargetName = (event) => {
+        setTargetName(event.value);
+        setTargetDetail(productable.find((item) => item.name === event.value));
     }
 
-    // 計算誤差
-    function calMistake(rankNow, amountNow) {
-        if (rankNow !== "" && amountNow > 0) {
-            switch (rankNow) {
-                case "A":
-                    setMistake(
-                        [
-                            {
-                                rank: "B",
-                                amount: 0.2 * amountNow
-                            },
-                            {
-                                rank: "C",
-                                amount: 0.30 * amountNow
+    const handleAmount = (event) => {
+        setAmount(event.value);
+        if (targetDetail !== undefined) {
+            if (user.type === '供應') {
+                let igdRequire = targetDetail.detail.find((eachType) => eachType.type === rank);
+                if (igdRequire !== undefined) {
+                    setIgd(igdRequire.igd.map(
+                        (eachIgd) => {
+                            return {
+                                name: '材料' + eachIgd,
+                                amount: event.value
                             }
-                        ]
-                    );
-                    break;
-                case "B":
-                    setMistake(
-                        [
-                            {
-                                rank: "A",
-                                amount: 0.2 * amountNow
-                            },
-                            {
-                                rank: "C",
-                                amount: 0.30 * amountNow
+                        }
+                    ));
+                }
+            } else {
+                setIgd(get_component_list().map((ele) => { return ele.name }).map(
+                    (item) => {
+                        let require = targetDetail.limit.find((product) => product.igd === item);
+                        if (require === undefined) {
+                            return {
+                                name: item,
+                                amount: item === '輪胎' ? 4 * event.value : event.value,
+                                type: ''
                             }
-                        ]
-                    );
-                    break;
-                case "C":
-                    setMistake(
-                        [
-                            {
-                                rank: "B",
-                                amount: 0.20 * amountNow
+                        } else {
+                            return {
+                                name: item,
+                                amount: item === '輪胎' ? 4 * event.value : event.value,
+                                type: require.type
                             }
-                        ]
-                    );
-                    break;
+                        }
+                    }
+                ));
             }
         }
     }
 
-    // 計算材料
-    function calIgd(target, amountNow, rankNow) {
-        var costNow = 0;
-        var timeNow = 0;
-        var amountAfter = amountNow;
-        if (rankNow === "C") {
-            amountAfter = amountNow * 0.9;
-        }
-        if (thrift) {
-            amountAfter = amountNow * 0.9;
-        }
-        setIgd(
-            target.ingredient.map(
-                (igd) => {
-                    costNow += igd.amount * amountAfter * igd.marketPrice;
-                    return (
-                        {
-                            name: igd.name,
-                            amount: Math.round(igd.amount * amountAfter)
-                        }
-                    )
-                }
-            )
-        );
-        timeNow = target.time * amountNow;
-        switch (rankNow) {
-            case "A":
-                timeNow = Math.round(timeNow * 1.1);
-                break;
-            case "C":
-                timeNow = Math.round(timeNow * 0.9);
-                costNow = Math.round(costNow * 0.9);
-                break;
-            default:
-                timeNow = Math.round(timeNow);
-                costNow = Math.round(costNow);
-        }
-        setIgdCost(costNow);
-        setTime(timeNow);
-    }
-
-    // 依照產品調整顯示內容
-    const handleIgd = (event) => {
-        setProduct(event.target.value);
-        const target = igdList.find(ele => ele.name === event.target.value);
-        calIgd(target, amount, rank);
-        calCost(rank, amount, target);
-        setRankList(["A", "B", "C"]);
-    }
-
-    // 依照等級調整顯示內容
-    const handleRank = (event) => {
-        setRank(event.target.value);
-        const target = igdList.find(ele => ele.name === product);
-        calCost(event.target.value, amount, target);
-        calIgd(target, amount, event.target.value);
-        calMistake(event.target.value, amount);
-    }
-
-    // 依照數量調整顯示內容
-    const handleAmount = (event) => {
-        setAmount(event.target.value);
-        const target = igdList.find(ele => ele.name === product)
-        calIgd(target, event.target.value, rank);
-        calCost(rank, event.target.value, target);
-        calMistake(rank, event.target.value);
-    }
-
-    // 生成訂單的表格
-    function createContract(contract) {
-        if (contract.change.length < 1) {
-            return (contract.good_list.map(
-                (good) => {
-                    return (
-                        <div className="goods">
-                        <Grid container>
-                            <Grid item xs={4} sx={{borderBottom:1}}>
-                            <Typography disableTypography sx={{fontFamily: "Noto Sans TC",fontSize: "16px",fontWeight: 700,lineHeight: "23px",letterSpacing: "0em",textAlign: "left"}}>
-                                {good.status}
-                            </Typography>
-                            </Grid>
-                            <Grid item xs={4} sx={{borderBottom:1}}>
-                                {good.name}
-                            </Grid>
-                            <Grid item xs={4} sx={{borderBottom:1}}>
-                                {good.amount}
-                            </Grid>
-                            </Grid>
-                        </div>
-                    )
-                }
-            )
-            );
-        } else {
-            return (
-                contract.change.map(
-                    (good) => {
-                        return (
-                            <div className="change">
-                            <Grid container>
-                                <Grid item xs={4}  sx={{borderBottom:1}}>
-                                <Typography disableTypography sx={{fontFamily: "Noto Sans TC",fontSize: "16px",fontWeight: 700,lineHeight: "23px",letterSpacing: "0em",textAlign: "left"}}>
-                                    {good.status}
-                                </Typography>
-                                </Grid>
-                                <Grid item xs={4}  sx={{borderBottom:1}}>
-                                    {good.name}
-                                
-                                </Grid>
-                                <Grid item xs={4}  sx={{borderBottom:1}}>
-                                    {good.amount}
-                                </Grid>
-                             </Grid>
-                            </div>
-                        )
+    const handleIgdRank = (event) => {
+        setIgd(igd.map(
+            (eachIgd) => {
+                if (eachIgd.name === event.currentTarget.id) {
+                    return {
+                        name: eachIgd.name,
+                        amount: eachIgd.amount,
+                        type: event.value
                     }
-                )
-            );
+                } else {
+                    return eachIgd;
+                }
+            }
+        ));
+    }
+
+    const checkStatus = (item) => {
+        let result = '';
+        if (producing_list.includes(item.name)) {
+            result = '製造中...'
         }
+        storage.storage.find((cate) => cate.category === '成品').item.map(
+            (eachItem) => {
+                if (eachItem.name === item.name) {
+                    if (eachItem.amount >= targetAmount) {
+                        result = '完成'
+                    }
+                }
+            }
+        );
+        return result;
     }
 
     return (
-        <div div className="mf_product">
-            {/* 商品目錄 */}
-        <Box sx={{height: 700,bgcolor:"#FDF1EF"}}>
+        <Box sx={{ height: 700, bgcolor: color }}>
             <Grid container
                 direction="row"
                 justifyContent="flex-start"
                 alignItems="flex-start"
-                
-    
-                >
+            >
                 <Grid Item xs={4}>
-                <Box sx={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    '& > :not(style)': {
-                        m: 1,
-                        width: 250,
-                        height: 400,
-                        bgcolor:"#FFFFFF"
-                    },
+                    <Box sx={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        '& > :not(style)': {
+                            m: 1,
+                            width: 250,
+                            height: 400,
+                            bgcolor: "#FFFFFF"
+                        },
                     }}>
-                <Paper elevation={4} 
-                    square={false}
-                    sx={{width: 250,
-                        height: 400,
-                        padding:2}}>
-                    <Typography disableTypography sx={{fontFamily: "Noto Sans TC",fontSize: "24px",fontWeight: 700,lineHeight: "35px",letterSpacing: "0em",textAlign: "left"}}>
-                        商品目錄（先跳過）
-                    </Typography>
-                </Paper>
-                </Box>
-                </Grid>
-            {/* 製造指示 */}
-            <Grid Item xs={4}>
-                <Box sx={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    '& > :not(style)': {
-                        m: 1,
-                        width: 250,
-                        height: 400,
-                        bgcolor:"#FFFFFF"
-                    },
-                    }}>
-            <Paper elevation={4} 
-                    square={false}
-                    sx={{width: 250,
-                        height: 400,
-                        padding:2}}>
-                <Typography disableTypography sx={{fontFamily: "Noto Sans TC",fontSize: "24px",fontWeight: 700,lineHeight: "35px",letterSpacing: "0em",textAlign: "left"}}>
-                    發布製造指示
-                </Typography>
-                <Grid container>
-                    <Grid item xs={12}>
-                        <FormControl>
-                            <InputLabel id="product">生產目標</InputLabel>
-                            <Select
-                                sx={{ bgcolor: '#FDF1EF',width:150}}
-                                id="product-select"
-                                label="產品"
-                                onChange={handleIgd}>
-                                {
-                                    igdList.map(
-                                        (product) => (
-                                            <MenuItem key={product.name} value={product.name}>
-                                                {product.name}
-                                            </MenuItem>
-                                        )
-                                    )
-                                }
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={4} sx={{borderBottom:1}}>生產目標：</Grid>
-                    <Grid item xs={4} >
-                        <FormControl>
-                            <InputLabel>生產等級</InputLabel>
-                            <Select  sx={{ bgcolor: '#FDF1EF',width:80,height:40 }}id="rank-select" onChange={handleRank}>
-                                {
-                                    rankList.map(
-                                        (rank) => {
-                                            return (
-                                                <MenuItem key={rank} value={rank}>
-                                                    {rank}級
-                                                </MenuItem>
-                                            )
-                                        }
-                                    )
-                                }
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={2} >
-                        <FormControl>
-                            <InputLabel id='amount'>生產數量</InputLabel>
-                            <Select
-                                sx={{ bgcolor: '#FDF1EF',width:80,height:40  }}
-                                id="product-amount"
-                                label="數量"
-                                onChange={handleAmount}>
-                                <MenuItem value={50}>50</MenuItem>
-                                <MenuItem value={100}>100</MenuItem>
-                                <MenuItem value={150}>150</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={2}></Grid>
-                    <Grid item xs={4} sx={{borderBottom:1}}>
-                        預期誤差：
-                    </Grid>
-                    {
-                        mistakeList.map(
-                            mistake => {
-                                return (
-                                    <Grid container>
-                                        <Grid item xs={4} ></Grid>
-                                        <Grid item xs={8} sx={{borderBottom:1}}>{mistake.rank}-{mistake.amount}</Grid>
-                                    </Grid>
-                                    
-                                    
-                                )
-                            }
-                        )
-                    }
-                    <Grid item xs={4} sx={{borderBottom:1}}>
-                        材料：
-                    </Grid>
-                    {
-                        ingredient.map(
-                            igd => {
-                                return (
-                                    <Grid container>
-                                        <Grid item xs={4} ></Grid>
-                                        <Grid item xs={8} sx={{borderBottom:1}}>{igd.name}-{igd.amount}單位</Grid>
-                                    </Grid>
-                                )
-                            }
-                        )
-                    }
-                    <Grid item />
-                   
-                    <Grid item  xs={4} sx={{borderBottom:1}}>
-                        材料成本：
-                    </Grid>
-                    <Grid item xs={4} sx={{borderBottom:1}}>
-                        {igdCost}千元
-                    </Grid>
-                    <Grid item  xs={4}></Grid>
-                    <Grid item xs={4} sx={{borderBottom:1}}>
-                        其他費用：
-                    </Grid>
-                    <Grid item xs={4} sx={{borderBottom:1}}>
-                        {cost}千元
-                    </Grid>
-                    <Grid item  xs={4}></Grid>
-                    <Grid item xs={4} sx={{borderBottom:1}}>
-                        共計成本：
-                    </Grid>
-                    <Grid item xs={4} sx={{borderBottom:1}}>
-                        {igdCost + cost}千元
-                    </Grid>
-                    <Grid item  xs={4}></Grid>
-                    <Grid item xs={4} sx={{borderBottom:1}}>
-                        預計耗時：
-                    </Grid>
-                    <Grid item xs={4} sx={{borderBottom:1}}>
-                        {time}天
-                    </Grid>
-                    <Grid item  xs={4}></Grid>
-                </Grid>
-            </Paper>
-            </Box>
-            </Grid>
+                        <Paper elevation={4}
+                            square={false}
+                            sx={{
+                                width: 250,
+                                height: 400,
+                                padding: 2
+                            }}>
+                            {/* <Typography sx={{ fontFamily: "Noto Sans TC", fontSize: "24px", fontWeight: 700, lineHeight: "35px", letterSpacing: "0em", textAlign: "left" }}>
+                                商品目錄（先跳過）
+                            </Typography> */}
 
-            {/* 訂單內容 */}
-            <Grid Item xs={4}>
-                <Box sx={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    '& > :not(style)': {
-                        m: 1,
-                        width: 250,
-                        height: 400,
-                        bgcolor:"#FFFFFF"
-                    },
+                        </Paper>
+                    </Box>
+                </Grid>
+                {/* 製造指示 */}
+                <Grid Item xs={4}>
+                    <Box sx={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        '& > :not(style)': {
+                            m: 1,
+                            width: 250,
+                            height: 400,
+                            bgcolor: "#FFFFFF"
+                        },
                     }}>
-            <Paper elevation={4} 
-                    square={false}
-                    sx={{width: 250,
-                        height: 400,
-                        padding:2}}>
-                <Typography disableTypography sx={{fontFamily: "Noto Sans TC",fontSize: "24px",fontWeight: 700,lineHeight: "35px",letterSpacing: "0em",textAlign: "left"}}>
-                    訂單
-                </Typography>
-                {
-                    contractList.map(
-                        (contract) => {
-                            return (
-                                <div id={contract.contract_id}>
-                                    <Grid container>
-                                        <Grid item xs={12}>
-                                            <Typography disableTypography sx={{fontFamily: "Noto Sans TC",fontSize: "24px",fontWeight: 400,lineHeight: "35px",letterSpacing: "0em",textAlign: "left"}}>{contract.buyer}</Typography>
-                                        </Grid>
-                                        {createContract(contract).map(
-                                            (ele) => {
-                                                return ele;
+                        <Paper elevation={4}
+                            square={false}
+                            sx={{
+                                width: 250,
+                                height: 400,
+                                padding: 2
+                            }}>
+                            <Typography sx={{ fontFamily: "Noto Sans TC", fontSize: "24px", fontWeight: 700, lineHeight: "35px", letterSpacing: "0em", textAlign: "left" }}>
+                                發布製造指示
+                            </Typography>
+                            <Grid container>
+                                <Grid item xs={12}>
+                                    <FormControl>
+                                        <InputLabel id="product">生產目標</InputLabel>
+                                        <Select
+                                            sx={{ bgcolor: '#FDF1EF', width: 150 }}
+                                            id="product-select"
+                                            label="產品"
+                                            onChange={handleTargetName}>
+                                            {
+                                                productable.map(
+                                                    (product) => (
+                                                        <MenuItem key={product.name} value={product.name}>
+                                                            {product.name}
+                                                        </MenuItem>
+                                                    )
+                                                )
                                             }
-                                        )}
-                                        <Grid item xs={4}></Grid>
-                                        <Grid item xs={4} sx={{borderBottom:1}}>
-                                            送達期限：
-                                        </Grid>
-                                        <Grid item xs={4} sx={{borderBottom:1}}>
-                                            {contract.deadline}
-                                        </Grid>
-                                    </Grid>
-                                </div>
-                            )
-                        }
-                    )
-                }
-            </Paper>
-            </Box>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={4} sx={{ borderBottom: 1 }}>生產目標：</Grid>
+                                <Grid item xs={4} >
+                                    {
+                                        user.type === '供應' ?
+                                            <FormControl>
+                                                <InputLabel>生產類型</InputLabel>
+                                                <Select sx={{ bgcolor: '#FDF1EF', width: 80, height: 40 }}
+                                                    id="rank-select"
+                                                    onChange={(event) => setRank(event.value)}>
+                                                    {
+                                                        targetDetail === undefined ? null : targetDetail.detail.map(
+                                                            (rank) => {
+                                                                return (
+                                                                    <MenuItem key={rank.type} value={rank.type}>
+                                                                        {rank.type}級
+                                                                    </MenuItem>
+                                                                )
+                                                            }
+                                                        )
+                                                    }
+                                                </Select>
+                                            </FormControl> :
+                                            <Typography>{rank}</Typography>
+                                    }
+                                </Grid>
+                                <Grid item xs={2} >
+                                    <FormControl>
+                                        <InputLabel id='amount'>生產數量</InputLabel>
+                                        <Select
+                                            sx={{ bgcolor: '#FDF1EF', width: 80, height: 40 }}
+                                            id="product-amount"
+                                            label="數量"
+                                            onChange={handleAmount}>
+                                            <MenuItem value={50}>50</MenuItem>
+                                            <MenuItem value={100}>100</MenuItem>
+                                            <MenuItem value={150}>150</MenuItem>
+                                            <MenuItem value={200}>200</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={2}></Grid>
+                                <Grid item xs={4} sx={{ borderBottom: 1 }}>
+                                    材料：
+                                </Grid>
+                                {
+                                    igd !== undefined ? igd.map(
+                                        (ele) => {
+                                            if (user.type === '供應') {
+                                                return (
+                                                    <Grid container>
+                                                        <Grid item xs={4} ></Grid>
+                                                        <Grid item xs={8} sx={{ borderBottom: 1 }}>{ele.name}-{ele.amount}單位</Grid>
+                                                    </Grid>
+                                                )
+                                            } else {
+                                                return (
+                                                    <Grid container>
+                                                        <Grid item xs={4} />
+                                                        <Grid item xs={2} sx={{ borderBottom: 1 }}>
+                                                            {ele.name}
+                                                        </Grid>
+                                                        <Grid item xs={2} sx={{ borderBottom: 1 }}>
+                                                            {ele.type === '' ?
+                                                                <FormControl>
+                                                                    <Select sx={{ bgcolor: '#FDF1EF', width: 80, height: 40 }}
+                                                                        id={ele.name}
+                                                                        label="等級"
+                                                                        onChange={handleIgdRank} >
+                                                                        {
+                                                                            get_component_list().find(ele.name).detail.map(
+                                                                                (eachType) => {
+                                                                                    return (
+                                                                                        <MenuItem value={eachType.type}>{eachType.type}</MenuItem>
+                                                                                    )
+                                                                                }
+                                                                            )
+                                                                        }
+                                                                    </Select>
+                                                                </FormControl>
+                                                                : ele.type
+                                                            }
+                                                        </Grid>
+                                                        <Grid item xs={2} sx={{ borderBottom: 1 }}>
+                                                            {ele.amount}
+                                                        </Grid>
+                                                    </Grid>
+                                                )
+                                            }
+                                        }
+                                    ) : null
+                                }
+                                <Grid item />
+
+                                <Grid item xs={4} sx={{ borderBottom: 1 }}>
+                                    材料成本：
+                                </Grid>
+                                <Grid item xs={4} sx={{ borderBottom: 1 }}>
+                                    {targetDetail !== undefined ? user.type === '供應' ?
+                                        targetDetail.detail.find((eachType) => eachType.type === rank).avg_cost :
+                                        get_component_list().map(
+                                            (item) => {
+                                                let targetType = igd.find((eachIgd) => eachIgd.name === item.name);
+                                                if (targetType === undefined) {
+                                                    return 0;
+                                                } else {
+                                                    return item.detail.find((eachType) => eachType.type === targetType).avg_cost;
+                                                }
+                                            }
+                                        ).reduce((prev, curr) => prev + curr, 0) : 0
+                                    }元
+                                </Grid>
+                                <Grid item xs={4}></Grid>
+                                <Grid item xs={4} sx={{ borderBottom: 1 }}>
+                                    其他費用：
+                                </Grid>
+                                <Grid item xs={4} sx={{ borderBottom: 1 }}>
+                                    {targetDetail !== undefined ? targetDetail.other_cost : 0}元
+                                </Grid>
+                                <Grid item xs={4}></Grid>
+                                <Grid item xs={4} sx={{ borderBottom: 1 }}>
+                                    共計成本：
+                                </Grid>
+                                <Grid item xs={4} sx={{ borderBottom: 1 }}>
+                                    {targetDetail !== undefined ? user.type === '供應' ?
+                                        targetDetail.detail.find((eachType) => eachType.type === rank).avg_cost + targetDetail.other_cost :
+                                        get_component_list().map(
+                                            (item) => {
+                                                let targetType = igd.find((eachIgd) => eachIgd.name === item.name);
+                                                if (targetType === undefined) {
+                                                    return 0;
+                                                } else {
+                                                    return item.detail.find((eachType) => eachType.type === targetType).avg_cost;
+                                                }
+                                            }
+                                        ).reduce((prev, curr) => prev + curr, 0) + targetDetail.other_cost : 0
+                                    }元
+                                </Grid>
+                                <Grid item xs={4}></Grid>
+                                <Grid item xs={4} sx={{ borderBottom: 1 }}>
+                                    預計耗時：
+                                </Grid>
+                                <Grid item xs={4} sx={{ borderBottom: 1 }}>
+                                    {targetDetail !== undefined ? Math.ceil(targetAmount / targetDetail.product_per_day) : 0}天
+                                </Grid>
+                                <Grid item xs={4}></Grid>
+                            </Grid>
+                        </Paper>
+                    </Box>
+                </Grid>
+
+                {/* 訂單內容 */}
+                <Grid Item xs={4}>
+                    <Box sx={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        '& > :not(style)': {
+                            m: 1,
+                            width: 250,
+                            height: 400,
+                            bgcolor: "#FFFFFF"
+                        },
+                    }}>
+                        <Paper elevation={4}
+                            square={false}
+                            sx={{
+                                width: 250,
+                                height: 400,
+                                padding: 2
+                            }}>
+                            <Typography disableTypography sx={{ fontFamily: "Noto Sans TC", fontSize: "24px", fontWeight: 700, lineHeight: "35px", letterSpacing: "0em", textAlign: "left" }}>
+                                訂單
+                            </Typography>
+                            {
+                                contractList.map(
+                                    (contract) => {
+                                        return (
+                                            <div id={contract.contract_id}>
+                                                <Grid container>
+                                                    <Grid item xs={12}>
+                                                        <Typography disableTypography sx={{ fontFamily: "Noto Sans TC", fontSize: "24px", fontWeight: 400, lineHeight: "35px", letterSpacing: "0em", textAlign: "left" }}>{contract.buyer}</Typography>
+                                                    </Grid>
+                                                    {
+                                                        contract.package.map(
+                                                            (item) => {
+                                                                return (
+                                                                    <div className={item.name}>
+                                                                        <Grid container>
+                                                                            <Grid item xs={4} sx={{ borderBottom: 1 }}>
+                                                                                <Typography disableTypography sx={{ fontFamily: "Noto Sans TC", fontSize: "16px", fontWeight: 700, lineHeight: "23px", letterSpacing: "0em", textAlign: "left" }}>
+                                                                                    {
+                                                                                        checkStatus(item)
+                                                                                    }
+                                                                                </Typography>
+                                                                            </Grid>
+                                                                            <Grid item xs={4} sx={{ borderBottom: 1 }}>
+                                                                                {item.name}
+                                                                            </Grid>
+                                                                            <Grid item xs={4} sx={{ borderBottom: 1 }}>
+                                                                                {item.amount}
+                                                                            </Grid>
+                                                                        </Grid>
+                                                                    </div>
+                                                                )
+                                                            }
+                                                        )
+                                                    }
+                                                    <Grid item xs={4}></Grid>
+                                                    <Grid item xs={4} sx={{ borderBottom: 1 }}>
+                                                        送達期限：
+                                                    </Grid>
+                                                    <Grid item xs={4} sx={{ borderBottom: 1 }}>
+                                                        {contract.arrive}
+                                                    </Grid>
+                                                </Grid>
+                                            </div>
+                                        )
+                                    }
+                                )
+                            }
+                        </Paper>
+                    </Box>
+                </Grid>
             </Grid>
-            </Grid>
-            </Box>
-            </div>
-    );
+        </Box>
+    )
 }
 
 export default Product;

@@ -3,25 +3,26 @@
 // product_per_day: 每日生產量
 // other_cost: 其他費用
 // score: 用以計算成品等級
-const product = [
+const component_product = [
     {
         name: '輪胎',
         product_per_day: 72,
         other_cost: 40,
         detail: [
             {
-                type: '零件A',
+                type: 'A',
                 score: 0,
-                igd: ['材料A', '材料B'],
+                igd: ['A', 'B'],
                 avg_cost: 440
             },
             {
-                type: '零件B',
+                type: 'B',
                 score: 1,
-                igd: ['材料A', '材料C'],
+                igd: ['A', 'C'],
                 avg_cost: 540
             }
-        ]
+        ],
+        size: 2
     },
     {
         name: '內裝材料',
@@ -29,18 +30,19 @@ const product = [
         other_cost: 400,
         detail: [
             {
-                type: '零件C',
+                type: 'C',
                 score: 0,
-                igd: ['材料A', '材料B', '材料D'],
+                igd: ['A', 'B', 'D'],
                 avg_cost: 1100
             },
             {
-                type: '零件D',
+                type: 'D',
                 score: 1,
-                igd: ['材料A', '材料C', '材料D'],
+                igd: ['A', 'C', 'D'],
                 avg_cost: 1200
             }
-        ]
+        ],
+        size: 2
     },
     {
         name: '引擎',
@@ -48,18 +50,19 @@ const product = [
         other_cost: 500,
         detail: [
             {
-                type: '零件E',
+                type: 'E',
                 score: 0,
-                igd: ['材料A', '材料B', '材料C', '材料E'],
+                igd: ['A', 'B', 'C', 'E'],
                 avg_cost: 1600
             },
             {
-                type: '零件F',
+                type: 'F',
                 score: 1,
-                igd: ['材料B', '材料C', '材料D', '材料E'],
+                igd: ['B', 'C', 'D', 'E'],
                 avg_cost: 1700
             }
-        ]
+        ],
+        size: 3
     },
     {
         name: '底盤',
@@ -67,25 +70,29 @@ const product = [
         other_cost: 1000,
         detail: [
             {
-                type: '零件G',
+                type: 'G',
                 score: 0,
-                igd: ['材料A', '材料B', '材料C', '材料D', '材料F'],
+                igd: ['A', 'B', 'C', 'D', 'F'],
                 avg_cost: 2400
             },
             {
-                type: '零件H',
+                type: 'H',
                 score: 1,
-                igd: ['材料A', '材料B', '材料C', '材料E', '材料F'],
+                igd: ['A', 'B', 'C', 'E', 'F'],
                 avg_cost: 2700
             },
             {
-                type: '零件I',
+                type: 'I',
                 score: 2,
-                igd: ['材料A', '材料B', '材料D', '材料E', '材料F'],
+                igd: ['A', 'B', 'D', 'E', 'F'],
                 avg_cost: 2700
             }
-        ]
-    },
+        ],
+        size: 4
+    }
+]
+
+const car_product = [
     {
         name: '休旅車',
         product_per_day: 24,
@@ -93,17 +100,18 @@ const product = [
         limit: [
             {
                 igd: '輪胎',
-                type: '零件B'
+                type: 'B'
             },
             {
                 igd: '引擎',
-                type: '零件F'
+                type: 'F'
             },
             {
                 igd: '底盤',
-                type: '零件H'
+                type: 'H'
             }
-        ]
+        ],
+        size: 30
     },
     {
         name: '轎車',
@@ -112,19 +120,21 @@ const product = [
         limit: [
             {
                 igd: '輪胎',
-                type: '零件B'
+                type: 'B'
             },
             {
                 igd: '引擎',
-                type: '零件F'
+                type: 'F'
             }
-        ]
+        ],
+        size: 20
     },
     {
         name: '小型車',
         product_per_day: 48,
         other_cost: 2140,
-        limit: []
+        limit: [],
+        size: 20
     },
     {
         name: '跑車',
@@ -133,31 +143,38 @@ const product = [
         limit: [
             {
                 igd: '輪胎',
-                type: '零件B'
+                type: 'B'
             },
             {
                 igd: '內裝材料',
-                type: '零件D'
+                type: 'D'
             },
             {
                 igd: '引擎',
-                type: '零件F'
+                type: 'F'
             },
             {
                 igd: '底盤',
-                type: '零件I'
+                type: 'I'
             }
-        ]
+        ],
+        size: 40
     }
 ]
 
-function get_product_list() {
-    return product;
+const product = component_product.push.apply(component_product, car_product);
+
+function get_car_list() {
+    return car_product;
+}
+
+function get_component_list() {
+    return component_product;
 }
 
 function cal_time(name, amount) {
-    time = product.find(item => item.name === name);
-    return Math.round(amount / time)
+    let time = product.find(item => item.name === name);
+    return Math.ceil(amount / time)
 }
 
 function cal_grade(igd) {
@@ -339,14 +356,14 @@ const shipping_list = [
 ]
 
 function count_container(item) {
-    total_amount = item.map(
+    let total_amount = item.map(
         (perItem) => {
             return perItem.amount;
         }
     ).reduce(
-        (previousValue, currentValue) => previousValue + currentValue,
-        initialValue
+        (previousValue, currentValue) => previousValue + currentValue, 0
     );
+    return Math.ceil(total_amount / 200)
 }
 
 function shipping_fee(start_containent, start_num, dest_continent, dest_num, container) {
@@ -354,8 +371,25 @@ function shipping_fee(start_containent, start_num, dest_continent, dest_num, con
         start_containent === dest_continent ? 3000 :
             shipping_list.find(
                 place => place.start === start_containent
-            ).find(
+            ).target.find(
                 dest => dest.name === dest_continent).num * 500
     ) + (start_num + dest_num) * 100 + container * 1000;
     return fee;
 }
+
+function shipping_time(start_containent, start_num, dest_continent, dest_num) {
+    return (
+        start_containent === dest_continent ? 0 :
+            shipping_list.find(
+                (place) => place.start === start_containent
+            ).target.find(
+                (dest) => dest.name === dest_continent
+            ).num
+    ) * 5 + Math.round((start_num + dest_num) * 0.0416)
+}
+
+function cal_storage(target) {
+    
+}
+
+export { get_component_list, get_car_list, cal_grade, shipping_fee, shipping_time, count_container, cal_time };

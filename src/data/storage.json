@@ -1,0 +1,129 @@
+[
+    {
+        "company": "Wah汽車零件",
+        "limit": 2200,
+        "total": 1000,
+        "storage": [
+            {
+                "category": "材料",
+                "total": 300,
+                "item": [
+                    {
+                        "name": "材料A",
+                        "amount": 100
+                    },
+                    {
+                        "name": "材料B",
+                        "amount": 200
+                    }
+                ]
+            },
+            {
+                "category": "成品",
+                "total": 700,
+                "item": [
+                    {
+                        "name": "輪胎",
+                        "type": "A",
+                        "amount": 100
+                    },
+                    {
+                        "name": "輪胎",
+                        "type": "B",
+                        "amount": 200
+                    },
+                    {
+                        "name": "內裝材料",
+                        "type": "C",
+                        "amount": 50
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "company": "Takodachi汽車",
+        "limit": 1700,
+        "total": 1160,
+        "storage": [
+            {
+                "category": "材料",
+                "total": 860,
+                "item": [
+                    {
+                        "name": "輪胎",
+                        "type": "B",
+                        "amount": 200
+                    },
+                    {
+                        "name": "內裝材料",
+                        "type": "D",
+                        "amount": 70
+                    },
+                    {
+                        "name": "引擎",
+                        "type": "F",
+                        "amount": 60
+                    },
+                    {
+                        "name": "底盤",
+                        "type": "G",
+                        "amount": 80
+                    }
+                ]
+            },
+            {
+                "category": "成品",
+                "total": 300,
+                "item": [
+                    {
+                        "name": "休旅車",
+                        "rank": "A",
+                        "amount": 50,
+                        "igd": [
+                            {
+                                "name": "輪胎",
+                                "type": "B"
+                            },
+                            {
+                                "name": "內裝材料",
+                                "type": "C"
+                            },
+                            {
+                                "name": "引擎",
+                                "type": "F"
+                            },
+                            {
+                                "name": "底盤",
+                                "type": "I"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "休旅車",
+                        "rank": "S",
+                        "amount": 50,
+                        "igd": [
+                            {
+                                "name": "輪胎",
+                                "type": "B"
+                            },
+                            {
+                                "name": "內裝材料",
+                                "type": "D"
+                            },
+                            {
+                                "name": "引擎",
+                                "type": "F"
+                            },
+                            {
+                                "name": "底盤",
+                                "type": "I"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

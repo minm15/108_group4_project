@@ -5,7 +5,7 @@ import CreateContent from '../data/letter_detail';
 // import get_letter_list from "../data/letter_list";
 
 function get_letter_list () {
-    let letter_list = require('../data/letter_list.json');
+    let letter_list = JSON.parse(localStorage.getItem('letter_list'));
     return letter_list;
 }
 

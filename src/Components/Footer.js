@@ -19,7 +19,7 @@ function Footer() {
             <div className={'footer'}>
                 <div className='leftbox'>
                     <GameTimer />
-                    {
+                    {/* {
                         leftshow === false ?
                             <ChatBubbleOutline onClick={
                                 () => {
@@ -35,7 +35,7 @@ function Footer() {
                                 } sx={{ float: 'right' }} />
                                 <img alt='' src='https://picsum.photos/id/870/200/350'></img>
                             </div>
-                    }
+                    } */}
                 </div>
                 <div className='rightbox'>
                     {

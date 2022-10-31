@@ -5,8 +5,8 @@ import { Quotation, ContractDraft, ContractEdit } from '../data/letter_draft';
 import MenuList from "./menu";
 import { Box, Grid, TextField, Typography } from '@mui/material';
 
-function get_letter_list () {
-    let letter_list = require('../data/letter_list.json');
+function get_letter_list() {
+    let letter_list = JSON.parse(localStorage.getItem('letter_list'));
     return letter_list;
 }
 
@@ -18,12 +18,14 @@ const Content = ({ detail, user }) => {
             return <Quotation detail={detail} user={user} />;
         // 回覆報價單 -> 訂單草稿
         case 'quotation':
-            return <ContractDraft detail={detail} user={user}/>;
+            return <ContractDraft detail={detail} user={user} />;
         // 回覆訂單草稿 -> 訂單調整
         case 'contract_draft':
-            return <ContractEdit detail={detail} user={user}/>;
+            return <ContractEdit detail={detail} user={user} />;
     }
 }
+
+
 
 function LetterReply({ user }) {
     const [reply, setReply] = React.useState(useParams().letterId);
@@ -32,66 +34,72 @@ function LetterReply({ user }) {
             letter => letter.id === reply
         )
     );
-    const [title, setTitle] = React.useState('');
+    const get_title = () => {
+        switch (detail.letter_type) {
+            case 'quotation_request':
+                return "【報價單】" + user.name + "公司之報價單";
+            case 'quotation':
+                return "【訂單草稿】" + user.name + "公司之下訂";
+            case 'contract_draft':
+                return "【訂單調整】請您確認調整後的訂單";
+        }
+    }
+    const [title, setTitle] = React.useState(get_title());
 
     return (
         <div className="letter_reply">
-         <Box sx={{height: 1000,bgcolor:"#FDF1EF"}}>
-        <Grid
-            container
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="flex-start"
-            spacing='5'
-            padding='5'
-            >
+            <Box sx={{ height: 1000, bgcolor: "#FDF1EF" }}>
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="flex-start"
+                    spacing='5'
+                    padding='5'
+                >
+                    <Grid item xs={2}>
+                        <MenuList />
+                    </Grid>
+                    <Grid item xs={10}>
+                        <Box sx={{ height: 950, width: '90%', padding: 3, bgcolor: '#FFFFFF' }}>
+                            <Box component="form" >
+                                <Grid container spacing={2}>
+                                    <Grid item xs={4}>
+                                        <Typography sx={{ textAlign: 'left' }}>
+                                            收件人：
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={32}>
+                                        <TextField sx={{ bgcolor: '#FDF1EF', width: 400, textAlign: 'left' }}
+                                            id="sender"
+                                            defaultValue={detail.sender}
+                                            InputProps={{
+                                                readOnly: true,
+                                            }} />
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Typography sx={{ textAlign: 'left' }}>
+                                            標題：
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={32}>
+                                        <TextField sx={{ bgcolor: '#FDF1EF', width: 400, textAlign: 'left' }}
+                                            id="title"
+                                            defaultValue={title}
+                                            InputProps={{
+                                                readOnly: true,
+                                            }} />
+                                    </Grid>
+                                </Grid>
+                            </Box>
 
-           <Grid item xs={2}>
-                <MenuList />
-                
-            </Grid>
-           
-            
-            <Grid item xs={10}>
-            <Box sx={{ height: 950, width: '90%' ,padding:3,bgcolor: '#FFFFFF' }}>
-            <Box component="form" >
-                <Grid container spacing={2}>
-                    <Grid item xs={4}>
-                        <Typography sx={{textAlign:'left'}}>
-                        收件人：
-                        </Typography>
+                            <Content detail={detail} user={user} />
+                        </Box>
                     </Grid>
-                    <Grid item xs={32}>
-                        <TextField sx={{ bgcolor: '#FDF1EF',width:400,textAlign:'left' }}
-                            id="sender"
-                            defaultValue={detail.sender}
-                            InputProps={{
-                                readOnly: true,
-                            }} />
-                    </Grid>
-                    <Grid item xs={4}>
-                    <Typography sx={{textAlign:'left'}}>
-                        標題：
-                    </Typography>
-                    </Grid>
-                    <Grid item xs={32}>
-                        <TextField sx={{ bgcolor: '#FDF1EF',width:400,textAlign:'left' }}
-                            id="title"
-                            defaultValue={detail.title}
-                            InputProps={{
-                                readOnly: true,
-                            }} />
-                    </Grid>
+                    {/* 依照要回復的信件，生成回復的信件內容，在這個檔案的前半段 */}
+
                 </Grid>
             </Box>
-            
-            <Content detail={detail} user={user} />
-            </Box>
-            </Grid>
-            {/* 依照要回復的信件，生成回復的信件內容，在這個檔案的前半段 */}
-            
-        </Grid>
-        </Box>
         </div>
     )
 }

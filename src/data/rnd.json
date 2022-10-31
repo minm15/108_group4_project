@@ -1,0 +1,53 @@
+[
+    {
+        "company": "Takodachi汽車",
+        "rnd": [
+            {
+                "id": "1",
+                "name": "休旅車",
+                "rank": "A",
+                "igd": [
+                    {
+                        "name": "輪胎",
+                        "type": "B"
+                    },
+                    {
+                        "name": "內裝材料",
+                        "type": "D"
+                    },
+                    {
+                        "name": "引擎",
+                        "type": "F"
+                    },
+                    {
+                        "name": "底盤",
+                        "type": "H"
+                    }
+                ]
+            },
+            {
+                "id": "2",
+                "name": "休旅車",
+                "rank": "S",
+                "igd": [
+                    {
+                        "name": "輪胎",
+                        "type": "B"
+                    },
+                    {
+                        "name": "內裝材料",
+                        "type": "D"
+                    },
+                    {
+                        "name": "引擎",
+                        "type": "F"
+                    },
+                    {
+                        "name": "底盤",
+                        "type": "I"
+                    }
+                ]
+            }
+        ]
+    }
+]
