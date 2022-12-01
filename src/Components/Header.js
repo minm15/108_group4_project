@@ -22,18 +22,24 @@ function Header() {
   const [rightshow2, setrightshow2] = useState(false);
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
 
+  const time_change = () => {
+    setUser(JSON.parse(localStorage.getItem('user')));
+  }
+  setInterval(time_change, 10000);
+
   const changeCompany = () => {
     let company_list = JSON.parse(localStorage.getItem('company_list'));
-    let userNow = user.type === '供應' ? 
-    company_list.find(
-      (company) => company.type === '製造'
-    ) : company_list.find(
-      (company) => company.type === '供應'
-    );
+    let userNow = user.type === '供應' ?
+      company_list.find(
+        (company) => company.type === '製造'
+      ) : company_list.find(
+        (company) => company.type === '供應'
+      );
     localStorage.setItem('user', JSON.stringify(userNow));
     setUser(userNow);
     window.location.href = '../';
   }
+  const color = user.type === "供應" ? "#E4513D" : "#1976D2";
 
   return (
     <div className={'header'}>
@@ -50,7 +56,7 @@ function Header() {
               <Chip
                 // label={myCompany[0].company_type}
                 label={user.type}
-                sx={{ bgcolor: "#E4513D", color: "white" }}
+                sx={{ bgcolor: color, color: "white" }}
                 onClick={changeCompany}
               />
             </span>
@@ -113,11 +119,12 @@ function Header() {
           modules={[Autoplay]}
           slidesPerView={1}
           autoplay={{ delay: 5000 }}
+          sx={{ bgcolor: color }}
         >
           <SwiperSlide><Campaign style={{ fontSize: 13 }} />大排長榮!因貨櫃船卡住蘇伊士運河，導致貨品運送時間成本增加，若改其他航道，將花費更多運送成本</SwiperSlide>
-          <SwiperSlide><Campaign style={{ fontSize: 13 }} />跑馬燈2 目前是設置5000毫秒(5秒)換一次</SwiperSlide>
+          {/* <SwiperSlide><Campaign style={{ fontSize: 13 }} />跑馬燈2 目前是設置5000毫秒(5秒)換一次</SwiperSlide>
           <SwiperSlide><Campaign style={{ fontSize: 13 }} />跑馬燈3</SwiperSlide>
-          <SwiperSlide><Campaign style={{ fontSize: 13 }} />跑馬燈4</SwiperSlide>
+          <SwiperSlide><Campaign style={{ fontSize: 13 }} />跑馬燈4</SwiperSlide> */}
         </Swiper>
       </div>
     </div>

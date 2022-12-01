@@ -71,6 +71,8 @@ const LetterGrid = ({ user, type }) => {
             ), user, type)
     );
 
+    const lightColor = user.type === '供應' ? "#FDF1EF" : "#E3F2FD";
+
     React.useEffect(
         () => {
             // console.log('here');
@@ -84,7 +86,7 @@ const LetterGrid = ({ user, type }) => {
 
     return (
         <div className='main_frame'>
-            <Box sx={{ height: 700, bgcolor: "#FDF1EF" }}>
+            <Box sx={{ height: 700, bgcolor: lightColor }}>
                 <Grid
                     container
                     direction="row"
@@ -95,11 +97,11 @@ const LetterGrid = ({ user, type }) => {
                 >
                     <div className="menu">
                         <Grid item xs={12}>
-                            <MenuList />
+                            <MenuList/>
                         </Grid>
                     </div>
                     <Grid item xs={8}>
-                        <Box sx={{ width: '100%', padding: 3, bgcolor: '#FDF1EF' }}>
+                        <Box sx={{ width: '100%', padding: 3, bgcolor: lightColor }}>
                             <Grid container>
                                 {
                                     letterList !== undefined ? 

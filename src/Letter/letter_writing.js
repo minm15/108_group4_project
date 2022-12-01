@@ -28,11 +28,13 @@ function LetterWriting({ user }) {
     // ];
 
     const companies = JSON.parse(localStorage.getItem('company_list'));
+    const lightColor = user.type === '供應' ? "#FDF1EF" : "#E3F2FD";
+    const brightColor = user.type === '供應' ? "#E4513D" : "#1976D2";
 
     return (
         <div className="letter_writing">
             {/* 導向各個信箱介面的選單 */}
-            <Box sx={{ height: 700, bgcolor: "#FDF1EF" }}>
+            <Box sx={{ height: 700, bgcolor: lightColor }}>
                 <Grid
                     container
                     direction="row"
@@ -51,7 +53,7 @@ function LetterWriting({ user }) {
                                 收件人：
                                 <FormControl>
                                     <InputLabel >Select a receiver</InputLabel>
-                                    <Select sx={{ bgcolor: '#FDF1EF', width: 400 }} native defaultValue=""
+                                    <Select sx={{ bgcolor: lightColor, width: 400 }} native defaultValue=""
                                         id="receiver-select"
                                         label="receiver"
                                         onChange={(event) => { setReceiver(event.target.value) }}>
@@ -94,7 +96,7 @@ function LetterWriting({ user }) {
                                 主旨：
                                 <FormControl>
                                     <InputLabel>Select your purpose</InputLabel>
-                                    <Select sx={{ bgcolor: '#FDF1EF', width: 400 }} native defaultValue=""
+                                    <Select sx={{ bgcolor: lightColor, width: 400 }} native defaultValue=""
                                         id="subject-select"
                                         label="subject"
                                         onChange={(event) => { setTitle(event.target.value) }}>

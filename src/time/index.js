@@ -13,8 +13,8 @@ function get_current_date() {
 // 10 sec = 1 day
 function calculate_time() {
     // start time
-    var start_day = "2022-10-21";
-    var old_date = moment([2022, 9, 21]).unix()
+    var start_day = "2022-11-5";
+    var old_date = moment([2022, 10, 5]).unix()
 
     // current time
     let new_date = moment().format("X");

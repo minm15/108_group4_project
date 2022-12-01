@@ -162,7 +162,7 @@ const car_product = [
     }
 ]
 
-const product = component_product.push.apply(component_product, car_product);
+const product = component_product.map((ele) => {return ele}).push(car_product);
 
 function get_car_list() {
     return car_product;

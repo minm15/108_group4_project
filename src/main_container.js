@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import LetterReceive from "./Letter/letter_receive";
 import LetterWriting from "./Letter/letter_writing";
 import Manufactor from "./manufactor/mf_list";
-import Product from "./manufactor/mf_product";
+import ProductS from "./manufactor/mf_product_s";
 import LetterReply from "./Letter/letter_reply";
 import HarborMain from "./harbor/harbor_main";
 import HarborSend from "./harbor/harbor_send";
@@ -68,7 +68,7 @@ class MainContainer extends React.Component {
                             </Route>
                             <Route path="/manufactory">
                                 <Route index element={<Manufactor user={user} />} />
-                                <Route path="product" element={<Product user={user} />} />
+                                <Route path="product" element={<ProductS user={user} />} />
                             </Route>
                             <Route path="/harbor">
                                 <Route index element={<HarborMain user={user} />} />

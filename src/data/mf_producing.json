@@ -6,6 +6,7 @@
             "type": "A",
             "amount": 72
         },
+        "perSize": 2,
         "mistake": "無",
         "ingredient": [
             {
@@ -35,6 +36,7 @@
             "amount": 90,
             "rank": "S"
         },
+        "perSize": 30,
         "ingredient": [
             {
                 "name": "輪胎",

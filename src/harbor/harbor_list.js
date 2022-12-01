@@ -22,12 +22,18 @@ function get_deliver_list() {
 
 // 港口中正在往自己方向寄、由自己寄出的清單
 const HarborList = ({ user }) => {
-    const [deliver_list, setDeliver] = React.useState(get_deliver_list());
+    const [deliver_list, setDeliver] = React.useState(
+        get_deliver_list().filter(
+            (deliver) => deliver.receiver === user.name | deliver.sender === user.name
+        )
+    );
     const [date, setDate] = React.useState(calculate_time().game_day);
     // refresh the page each 10 seconds
     const time_change = () => {
         setDate(calculate_time().game_day);
-        setDeliver(get_deliver_list());
+        setDeliver(get_deliver_list().filter(
+            (deliver) => deliver.receiver === user.name | deliver.sender === user.name
+        ));
     }
     setInterval(time_change, 10000);
 
@@ -57,7 +63,7 @@ const HarborList = ({ user }) => {
         );
         setDeliver(result);
         // 除此之外，還要回後端改資料
-        // localStorage.setItem('deliver_list', JSON.stringify(result));
+        localStorage.setItem('deliver_list', JSON.stringify(result));
         let storage = JSON.parse(localStorage.getItem('storage'))
         storage = storage.map(
             (company) => {
@@ -120,14 +126,14 @@ const HarborList = ({ user }) => {
     }
 
     return (
-        <div className='harbor_list'>
+        <Box sx={{width: 1280}} margin='auto'>
             {
                 deliver_list.map(
                     (deliver) => {
                         const progress = diff_time(date, cal_input_date(deliver.send_date, deliver.actual_time));
                         // console.log(progress);
                         return (
-                            <Accordion key={deliver.id}>
+                            <Accordion key={deliver.id} >
                                 {/* 收合狀態看見的內容／展開之後的上半部內容 */}
                                 <AccordionSummary>
                                     {/* 現在進度條跟最後的日期是沒有放進去Grid的，因為進度條放Grid會無法顯示。 */}
@@ -162,9 +168,15 @@ const HarborList = ({ user }) => {
                                                             已寄達
                                                         </Typography> :
                                                     <Box sx={{ width: '50%' }}>
-                                                        <LinearProgress variant="determinate" value={(progress / deliver.arrange_time) * (-1)} />{Math.round((progress / deliver.arrange_time) * (-1))}%
+                                                        <LinearProgress variant="determinate" value={(progress / deliver.arrange_time) * (-1)} />
+                                                        {Math.round((progress / deliver.arrange_time) * (-1))}%
                                                     </Box>
                                             }
+                                        </Grid>
+                                        <Grid item xs={1}>
+                                            <Typography disableTypography sx={{ color: '#BE0000', fontFamily: 'Noto Sans TC', fontSize: '16px', fontWeight: '400', lineHeight: '23px' }}>
+                                                {deliver.actual_time>deliver.arrange_time ? "延遲" : ""}
+                                            </Typography>
                                         </Grid>
                                         <Grid item xs={1}>
                                             <Typography disableTypography sx={{ color: '#350D08', fontFamily: 'Noto Sans TC', fontSize: '16px', fontWeight: '400', lineHeight: '23px' }}>
@@ -223,7 +235,7 @@ const HarborList = ({ user }) => {
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <CircularProgress progress={loadingTime} color="inherit" />
             </Backdrop>
-        </div>
+        </Box>
     )
 }
 

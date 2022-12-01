@@ -6,7 +6,8 @@
             "continent": "亞洲",
             "num": 6
         },
-        "cash": 250000
+        "cash": 250000,
+        "levelList": [5,1,2,4,3]
     },
     {
         "name": "Takodachi汽車",
@@ -15,7 +16,8 @@
             "continent": "歐洲",
             "num": 8
         },
-        "cash": 690000
+        "cash": 690000,
+        "levelList": [5,1,2,4,3]
     },
     {
         "name": "Sheero材料商",

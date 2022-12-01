@@ -45,10 +45,11 @@ function LetterReply({ user }) {
         }
     }
     const [title, setTitle] = React.useState(get_title());
+    const lightColor = user.type === '供應' ? "#FDF1EF" : "#E3F2FD";
 
     return (
         <div className="letter_reply">
-            <Box sx={{ height: 1000, bgcolor: "#FDF1EF" }}>
+            <Box sx={{ height: 1000, bgcolor: lightColor }}>
                 <Grid
                     container
                     direction="row"
@@ -70,7 +71,7 @@ function LetterReply({ user }) {
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={32}>
-                                        <TextField sx={{ bgcolor: '#FDF1EF', width: 400, textAlign: 'left' }}
+                                        <TextField sx={{ bgcolor: lightColor, width: 400, textAlign: 'left' }}
                                             id="sender"
                                             defaultValue={detail.sender}
                                             InputProps={{
@@ -83,7 +84,7 @@ function LetterReply({ user }) {
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={32}>
-                                        <TextField sx={{ bgcolor: '#FDF1EF', width: 400, textAlign: 'left' }}
+                                        <TextField sx={{ bgcolor: lightColor, width: 400, textAlign: 'left' }}
                                             id="title"
                                             defaultValue={title}
                                             InputProps={{

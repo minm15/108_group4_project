@@ -23,9 +23,6 @@ function get_company_list() {
 const HarborSend = ({ user }) => {
     // 從網址獲得訂單編號
     const [id, setId] = React.useState(useParams().contractId);
-    // 訂單結果
-    const [arrange_time, setArrange] = React.useState();
-    const [fee, setFee] = React.useState();
     // 依照訂單編號獲得訂單內容
     const target = get_contract_list().find(
         contract => contract.id === id
@@ -62,13 +59,17 @@ const HarborSend = ({ user }) => {
         buyer_address.address.continent,
         buyer_address.address.num,
         count_container(send.package)
-    )
+    );
+    const [fee, setFee] = React.useState(shippingFee);
+    // 訂單結果
+    const [arrange_time, setArrange] = React.useState(shippingTime);
     const handleArrange = (event) => {
-        setArrange(event.value);
+        setArrange(event.target.value);
         setFee(
-            event.value === shippingTime ?
+            Number(event.target.value) === shippingTime ?
                 shippingFee : shippingFee + 3000
-        )
+        );
+        // console.log(event.target.value);
     }
     // 品質比例
     const [ratioList, setRatioList] = React.useState(
@@ -264,6 +265,21 @@ const HarborSend = ({ user }) => {
             console.log(contracts);
             console.log('ratio: ');
             console.log(ratioList);
+            let company_list = JSON.parse(localStorage.getItem('company_list'));
+            company_list = company_list.map(
+                (company) => {
+                    if (company.name === user.name) {
+                        company.cash = company.cash - fee;
+                        return company
+                    } else {
+                        return company;
+                    }
+                }
+            );
+            localStorage.setItem('company_list', JSON.stringify(company_list));
+            let user_info = JSON.parse(localStorage.getItem('user'));
+            user_info.cash = user_info.cash - fee;
+            localStorage.setItem('user', JSON.stringify(user_info));
             window.location.href = '../harbor';
         } else {
             console.log('ratio: ');
@@ -485,6 +501,18 @@ const HarborSend = ({ user }) => {
                                             <MenuItem value={shippingTime - 5}>{shippingTime - 5}</MenuItem>
                                         </Select>
                                     </FormControl>
+                                </Grid>
+                            </Grid>
+                            <Grid container spacing={6}>
+                                <Grid item xs={4}>
+                                    <Typography sx={{ color: '#FDF1EF', fontFamily: 'Noto Sans TC', fontSize: '16px', fontWeight: '700', lineHeight: '23px' }}>
+                                        運送費用
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <Typography sx={{ color: '#FDF1EF', fontFamily: 'Noto Sans TC', fontSize: '16px', fontWeight: '700', lineHeight: '23px' }}>
+                                        {fee}
+                                    </Typography>
                                 </Grid>
                             </Grid>
 

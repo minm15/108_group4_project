@@ -43,9 +43,9 @@ export default function Modal_Info({ company_ID,name,company_type,productList,fi
        <Grid item xs={6} > 
        <h3>&emsp;公司資訊</h3>
        &emsp; 生產產品類型：  {product_list_blank} <br></br>  
-       不知道這裡要放什麼
+       {/* 不知道這裡要放什麼
        這裡是Other_Modal_Info.js的4x行<br></br>    
-        <br></br>
+        <br></br> */}
 
   
        <FinanState finanData={finanData}/>

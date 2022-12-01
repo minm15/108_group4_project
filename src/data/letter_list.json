@@ -22,11 +22,13 @@
             {
                 "id": "01",
                 "name": "輪胎",
+                "type": "A",
                 "price": 300
             },
             {
                 "id": "02",
                 "name": "引擎",
+                "type": "C",
                 "price": 600
             }
         ]
@@ -44,12 +46,14 @@
             {
                 "id": "01",
                 "name": "輪胎",
+                "type": "A",
                 "price": 300,
                 "amount": 40
             },
             {
                 "id": "02",
                 "name": "引擎",
+                "type": "C",
                 "price": 600,
                 "amount": 10
             }
@@ -74,9 +78,37 @@
             {
                 "id": "01",
                 "name": "輪胎",
+                "type": "A",
                 "price": 300,
                 "amount": 40,
                 "discount": 0.8,
+                "cantProvide": false
+            }
+        ],
+        "arrive": 30,
+        "address": "Takodachi公司",
+        "addressLoc": "美國",
+        "flaw": "換貨",
+        "flawDate": 60,
+        "pay": 60
+    },
+    {
+        "id": "1105",
+        "sender": "Baa汽車經銷商",
+        "sender_type": "其他",
+        "receiver": "Takodachi汽車",
+        "letter_type": "contract_edit",
+        "title": "【訂單調整】請您確認訂單",
+        "expired": "",
+        "time": "2022-6-14",
+        "amountList": [
+            {
+                "id": "01",
+                "name": "休旅車",
+                "type": "A",
+                "price": 320000,
+                "amount": 40,
+                "discount": 0,
                 "cantProvide": false
             }
         ],

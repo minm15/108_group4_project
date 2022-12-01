@@ -131,7 +131,7 @@ function IgdPurchase({ receiver, user }) {
             let deliver_list = JSON.parse(localStorage.getItem('deliver_list'));
             console.log(receiverLoc.continent);
             let deliver_time = shipping_time(receiverLoc.continent, receiverLoc.num, senderLoc.continent, senderLoc.num);
-            
+
             deliver_list.push(
                 {
                     id: "01" + deliver_list.length,
@@ -152,7 +152,8 @@ function IgdPurchase({ receiver, user }) {
             setSendable(false);
         }
     }
-
+    const lightColor = user.type === '供應' ? "#FDF1EF" : "#E3F2FD";
+    const brightColor = user.type === '供應' ? "#E4513D" : "#1976D2";
     return (
         <div className="ingredient-purchase">
             <Typography sx={{ textAlign: 'left' }}>
@@ -197,7 +198,7 @@ function IgdPurchase({ receiver, user }) {
             <Grid container justifyContent="flex-end">
                 <Button
                     sx={{
-                        "&:hover": { backgroundColor: "#E4513D", color: "#FFFFFF" },
+                        "&:hover": { backgroundColor: brightColor, color: "#FFFFFF" },
                         backgroundColor: "#FFFFFF",
                         color: "#350D08",
                         border: 2
@@ -229,6 +230,7 @@ function Quotation({ detail, user }) {
     }
 
     const handleSend = (event) => {
+        // console.log(detail.expired === '');
         // const quotate = [
         //     {
         //         name: "螺絲",
@@ -275,7 +277,7 @@ function Quotation({ detail, user }) {
         }
         letter_list.push(
             {
-                id: "11"+letter_list.length,
+                id: "11" + letter_list.length,
                 sender: user.name,
                 sender_type: user.type,
                 receiver: detail.sender,
@@ -286,10 +288,21 @@ function Quotation({ detail, user }) {
                 quotate: quotate
             }
         );
+        letter_list.map(
+            (letter) => {
+                if (detail.id === letter.id) {
+                    letter.expired = '逾期';
+                    return letter;
+                } else {
+                    return letter;
+                }
+            }
+        );
         localStorage.setItem('letter_list', JSON.stringify(letter_list));
         window.location.href = '../letter_list';
     }
-
+    const lightColor = user.type === '供應' ? "#FDF1EF" : "#E3F2FD";
+    const brightColor = user.type === '供應' ? "#E4513D" : "#1976D2";
     return (
         <div classname="quotation">
             <Typography sx={{ textAlign: 'left' }}>
@@ -313,7 +326,7 @@ function Quotation({ detail, user }) {
             <Typography className="letter-ending">{user.name}&emsp;敬上</Typography>
             <Button
                 sx={{
-                    "&:hover": { backgroundColor: "#E4513D", color: "#FFFFFF" },
+                    "&:hover": { backgroundColor: brightColor, color: "#FFFFFF" },
                     backgroundColor: "#FFFFFF",
                     color: "#350D08",
                     border: 2
@@ -347,6 +360,8 @@ function Quotation_request({ receiver, user }) {
         );
         localStorage.setItem('letter_list', JSON.stringify(letter_list));
     }
+    const lightColor = user.type === '供應' ? "#FDF1EF" : "#E3F2FD";
+    const brightColor = user.type === '供應' ? "#E4513D" : "#1976D2";
     return (
         <div classname="quotation">
             <Typography sx={{ textAlign: 'left' }}>
@@ -360,7 +375,7 @@ function Quotation_request({ receiver, user }) {
                 </Grid>
                 <Button
                     sx={{
-                        "&:hover": { backgroundColor: "#E4513D", color: "#FFFFFF" },
+                        "&:hover": { backgroundColor: brightColor, color: "#FFFFFF" },
                         backgroundColor: "#FFFFFF",
                         color: "#350D08",
                         border: 2
@@ -550,7 +565,8 @@ function ContractDraft({ detail, user }) {
     ];
 
     const rows = amountList;
-
+    const lightColor = user.type === '供應' ? "#FDF1EF" : "#E3F2FD";
+    const brightColor = user.type === '供應' ? "#E4513D" : "#1976D2";
     return (
         <div className="contract-draft">
             <Typography sx={{ textAlign: 'left' }}>
@@ -620,7 +636,7 @@ function ContractDraft({ detail, user }) {
             <Grid container justifyContent="flex-end">
                 <Button
                     sx={{
-                        "&:hover": { backgroundColor: "#E4513D", color: "#FFFFFF" },
+                        "&:hover": { backgroundColor: brightColor, color: "#FFFFFF" },
                         backgroundColor: "#FFFFFF",
                         color: "#350D08",
                         border: 2
@@ -836,6 +852,16 @@ function ContractEdit({ detail, user }) {
                     pay: pay
                 }
             );
+            letter_list.map(
+                (letter) => {
+                    if (detail.id === letter.id) {
+                        letter.expired = '逾期';
+                        return letter;
+                    } else {
+                        return letter;
+                    }
+                }
+            );
             localStorage.setItem('letter_list', JSON.stringify(letter_list));
             window.location.href = '../letter_list';
         } else {
@@ -886,6 +912,8 @@ function ContractEdit({ detail, user }) {
     ]
     // datagrid用的內容
     const rows = amountList;
+    const lightColor = user.type === '供應' ? "#FDF1EF" : "#E3F2FD";
+    const brightColor = user.type === '供應' ? "#E4513D" : "#1976D2";
     return (
         <div className="contract-edit">
             <Typography sx={{ textAlign: 'left' }}>
@@ -971,7 +999,7 @@ function ContractEdit({ detail, user }) {
 
             </Grid>
             <Grid container justifyContent="flex-end">
-                <Button sx={{ "&:hover": { backgroundColor: "#E4513D", color: "#FFFFFF" }, backgroundColor: "#FFFFFF", color: "#350D08", border: 2 }} startIcon={<ForwardToInbox />} onClick={handleSend} href='/letter_list'>送出信件</Button>
+                <Button sx={{ "&:hover": { backgroundColor: brightColor, color: "#FFFFFF" }, backgroundColor: "#FFFFFF", color: "#350D08", border: 2 }} startIcon={<ForwardToInbox />} onClick={handleSend} href='/letter_list'>送出信件</Button>
             </Grid>
 
         </div>

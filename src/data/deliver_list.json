@@ -19,20 +19,51 @@
             },
             {
                 "id": "003",
-                "name": "車殼",
+                "name": "內裝材料",
                 "type": "C",
                 "amount": 10,
                 "price": 600
             }
         ],
-        "sender": "WAH汽車零件供應商",
-        "send_date": "2158-06-02",
+        "sender": "Wah汽車零件",
+        "send_date": "2042-02-04",
+        "arrange_time": 20,
+        "actual_time": 30
+    },
+    {
+        "id": "0102",
+        "receiver": "Takodachi汽車",
+        "package" : [
+            {
+                "id": "004",
+                "name": "內裝材料",
+                "type": "D",
+                "amount": 40,
+                "price": 250
+            },
+            {
+                "id": "005",
+                "name": "引擎",
+                "type": "E",
+                "amount": 40,
+                "price": 250
+            },
+            {
+                "id": "006",
+                "name": "底盤",
+                "type": "G",
+                "amount": 10,
+                "price": 600
+            }
+        ],
+        "sender": "Wah汽車零件",
+        "send_date": "2042-02-04",
         "arrange_time": 20,
         "actual_time": 30
     },
     {
         "id": "0200",
-        "receiver": "WAH汽車零件供應商",
+        "receiver": "Wah汽車零件",
         "package" : [
             {
                 "id": "001",
@@ -50,8 +81,8 @@
             }
         ],
         "sender": "大直材料廠",
-        "send_date": "3000-7-7",
+        "send_date": "2000-7-7",
         "arrange_time": 20000,
-        "actual_time": 30000
+        "actual_time": 3
     }
 ]

@@ -23,6 +23,18 @@ import CustomFooter from "../small_component/customFooter";
 const Operation = ({ detail, user }) => {
     // choice: 營運支出信會需要回傳這個月的支出計畫
     const [choice, setChoice] = React.useState();
+    let letter_list = JSON.parse(localStorage.getItem('letter_list'));
+    letter_list.map(
+        (letter) => {
+            if (detail.id === letter.id) {
+                letter.expired = '逾期';
+                return letter;
+            } else {
+                return letter;
+            }
+        }
+    );
+    localStorage.setItem('letter_list', JSON.stringify(letter_list));
 
     // 營運支出信的確認鈕，向後端傳遞使用者選擇的結果
     // more: 增加支出；normal: 正常支出；less: 減少支出
@@ -30,8 +42,12 @@ const Operation = ({ detail, user }) => {
         console.log({
             choice: choice,
             user: user
-        })
+        });
+
     }
+
+    const lightColor = user.type === '供應' ? "#FDF1EF" : "#E3F2FD";
+    const brightColor = user.type === '供應' ? "#E4513D" : "#1976D2";
 
     return (
         <div className="operation">
@@ -52,7 +68,14 @@ const Operation = ({ detail, user }) => {
             </FormControl>
             {/* 按鈕會導回所有信件的頁面，並且向後端傳遞本月支出計畫 */}
             <Grid container justifyContent="flex-end">
-                <Button sx={{ "&:hover": { backgroundColor: "#E4513D", color: "#FFFFFF" }, backgroundColor: "#FFFFFF", color: "#350D08", border: 2 }} startIcon={<ForwardToInbox />} onClick={handleOperation} href="/letter_list">確認支出</Button>
+                <Button
+                    sx={{
+                        "&:hover": { backgroundColor: brightColor, color: "#FFFFFF" },
+                        backgroundColor: "#FFFFFF", color: "#350D08", border: 2
+                    }}
+                    startIcon={<ForwardToInbox />}
+                    onClick={handleOperation}
+                    href="/letter_list">確認支出</Button>
             </Grid>
 
         </div>
@@ -61,6 +84,8 @@ const Operation = ({ detail, user }) => {
 
 // QuotationRequest: 報價單請求
 const QuotationRequest = ({ detail, user }) => {
+    const lightColor = user.type === '供應' ? "#FDF1EF" : "#E3F2FD";
+    const brightColor = user.type === '供應' ? "#E4513D" : "#1976D2";
 
     return (
         <div className="quotation_request">
@@ -71,13 +96,14 @@ const QuotationRequest = ({ detail, user }) => {
             {detail.receiver === user.name ?
                 <Button
                     sx={{
-                        "&:hover": { backgroundColor: "#E4513D", color: "#FFFFFF" },
+                        "&:hover": { backgroundColor: brightColor, color: "#FFFFFF" },
                         backgroundColor: "#FFFFFF",
                         color: "#350D08",
                         border: 2
                     }}
                     startIcon={<ForwardToInbox />}
-                    href={`/letter_writing/${detail.id}`}>
+                    disabled={detail.expired !== ''}
+                    onClick={() => { window.location.href = `../letter_writing/${detail.id}`; }}>
                     提供報價單
                 </Button>
                 : null}
@@ -112,7 +138,8 @@ const Quotation = ({ detail, user }) => {
     // datagrid的內容物
     // 報價單儲存的變數名稱為quotate，會記錄在信件裡面，或是由後端生成（可能有價格調整問題）
     const rows = detail.quotate;
-
+    const lightColor = user.type === '供應' ? "#FDF1EF" : "#E3F2FD";
+    const brightColor = user.type === '供應' ? "#E4513D" : "#1976D2";
     return (
         <div className="quotation">
             {getContent('quotation')}
@@ -129,13 +156,15 @@ const Quotation = ({ detail, user }) => {
             <Grid container justifyContent="flex-end">
                 {detail.receiver === user.name ? <Button
                     sx={{
-                        "&:hover": { backgroundColor: "#E4513D", color: "#FFFFFF" },
+                        "&:hover": { backgroundColor: brightColor, color: "#FFFFFF" },
                         backgroundColor: "#FFFFFF",
                         color: "#350D08",
                         border: 2
                     }}
                     startIcon={<LocalGroceryStore />}
-                    href={`/letter_writing/${detail.id}`}>前往下訂</Button>
+                    disabled={detail.expired !== ''}
+                    onClick={() => { window.location.href = `../letter_writing/${detail.id}`; }}>
+                    前往下訂</Button>
                     : null}
             </Grid>
         </div>
@@ -190,9 +219,9 @@ const ContractDraft = ({ detail, user }) => {
                 address: detail.address,
                 addressLoc: detail.addressLoc,
                 flaw: detail.flaw,
-                flawDate: detail.flawDate === '' ? 
-                detail.flawDate : 
-                cal_input_date(calculate_time().game_day, detail.flawDate),
+                flawDate: detail.flawDate === '' ?
+                    detail.flawDate :
+                    cal_input_date(calculate_time().game_day, detail.flawDate),
                 pay: cal_input_date(calculate_time().game_day, detail.pay),
                 status: "下訂",
                 origin: '',
@@ -201,11 +230,25 @@ const ContractDraft = ({ detail, user }) => {
         );
         localStorage.setItem('contract_list', JSON.stringify(contract_list));
         setOpenDialog(true);
-        console.log('同意訂單');
+        // console.log('同意訂單');
+        let letter_list = JSON.parse(localStorage.getItem('letter_list'));
+        letter_list.map(
+            (letter) => {
+                if (detail.id === letter.id) {
+                    letter.expired = '逾期';
+                    return letter;
+                } else {
+                    return letter;
+                }
+            }
+        );
+        localStorage.setItem('letter_list', JSON.stringify(letter_list));
     };
 
     // datagrid的內容物
     const rows = detail.amountList;
+    const lightColor = user.type === '供應' ? "#FDF1EF" : "#E3F2FD";
+    const brightColor = user.type === '供應' ? "#E4513D" : "#1976D2";
 
     return (
         <div className="contract-draft">
@@ -268,15 +311,33 @@ const ContractDraft = ({ detail, user }) => {
             <Grid container justifyContent="flex-end" columnSpacing={5}>
                 <Grid Item xs={2}>
                     {user.name === detail.receiver ?
-                        <Button sx={{ "&:hover": { backgroundColor: "green", color: "#FFFFFF" }, backgroundColor: "#FFFFFF", color: "green", border: 2 }} startIcon={<Check />} onClick={handleAgreeContract}>
-                        同意訂單
-                    </Button> : null}
+                        <Button
+                            sx={{
+                                "&:hover": { backgroundColor: "green", color: "#FFFFFF" },
+                                backgroundColor: "#FFFFFF",
+                                color: "green",
+                                border: 2
+                            }}
+                            startIcon={<Check />}
+                            disabled={detail.expired !== ''}
+                            onClick={handleAgreeContract}>
+                            同意訂單
+                        </Button> : null}
                 </Grid>
                 <Grid Item xs={2}>
-                {user.name === detail.receiver ?
-                    <Button sx={{ "&:hover": { backgroundColor: "#E4513D", color: "#FFFFFF" }, backgroundColor: "#FFFFFF", color: "#350D08", border: 2 }} startIcon={<ForwardToInbox />} href={`/letter_writing/${detail.id}`}>
-                        修改訂單
-                    </Button> : null}
+                    {user.name === detail.receiver ?
+                        <Button
+                            sx={{
+                                "&:hover": { backgroundColor: brightColor, color: "#FFFFFF" },
+                                backgroundColor: "#FFFFFF",
+                                color: "#350D08",
+                                border: 2
+                            }}
+                            startIcon={<ForwardToInbox />}
+                            disabled={detail.expired !== ''}
+                            onClick={() => window.location.href = `../letter_writing/${detail.id}`}>
+                            修改訂單
+                        </Button> : null}
                 </Grid>
             </Grid>
             <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
@@ -317,6 +378,18 @@ const ContractEdit = ({ detail, user }) => {
             }
         );
         setOpenDialog(true);
+        let letter_list = JSON.parse(localStorage.getItem('letter_list'));
+        letter_list.map(
+            (letter) => {
+                if (detail.id === letter.id) {
+                    letter.expired = '逾期';
+                    return letter;
+                } else {
+                    return letter;
+                }
+            }
+        );
+        localStorage.setItem('letter_list', JSON.stringify(letter_list));
         // console.log('拒絕訂單');
     };
     // 同意訂單：向後端傳遞使用者同意這份訂單 -> 亦即這份訂單正在「進行中」
@@ -338,9 +411,9 @@ const ContractEdit = ({ detail, user }) => {
                 address: detail.address,
                 addressLoc: detail.addressLoc,
                 flaw: detail.flaw,
-                flawDate: detail.flawDate === '' ? 
-                detail.flawDate : 
-                cal_input_date(calculate_time(), detail.flawDate),
+                flawDate: detail.flawDate === '' ?
+                    detail.flawDate :
+                    cal_input_date(calculate_time(), detail.flawDate),
                 pay: cal_input_date(calculate_time(), detail.pay),
                 status: "下訂",
                 origin: '',
@@ -349,7 +422,19 @@ const ContractEdit = ({ detail, user }) => {
         );
         localStorage.setItem('contract_list', JSON.stringify(contract_list));
         setOpenDialog(true);
-        console.log('同意訂單');
+        // console.log('同意訂單');
+        let letter_list = JSON.parse(localStorage.getItem('letter_list'));
+        letter_list.map(
+            (letter) => {
+                if (detail.id === letter.id) {
+                    letter.expired = '逾期';
+                    return letter;
+                } else {
+                    return letter;
+                }
+            }
+        );
+        localStorage.setItem('letter_list', JSON.stringify(letter_list));
     };
 
     // datagrid用的標題
@@ -453,9 +538,6 @@ const ContractEdit = ({ detail, user }) => {
                 <Grid item xs={2} sx={{ borderBottom: 1 }}>支付期限</Grid>
                 <Grid item xs={2} sx={{ borderBottom: 1 }}>{detail.pay}天</Grid>
 
-
-
-
             </Grid>
             {/* 信件結尾詞 */}
             <Grid container justifyContent="flex-end"><Typography>{detail.sender}敬上</Typography></Grid>
@@ -463,14 +545,32 @@ const ContractEdit = ({ detail, user }) => {
             <Grid container justifyContent="flex-end" columnSpacing={5}>
                 <Grid Item xs={2}>
                     {detail.receiver === user.name ?
-                        <Button sx={{ "&:hover": { backgroundColor: "green", color: "#FFFFFF" }, backgroundColor: "#FFFFFF", color: "green", border: 2 }} startIcon={<Check />} onClick={handleAgreeContract}>
+                        <Button
+                            sx={{
+                                "&:hover": { backgroundColor: "green", color: "#FFFFFF" },
+                                backgroundColor: "#FFFFFF",
+                                color: "green",
+                                border: 2
+                            }}
+                            startIcon={<Check />}
+                            onClick={handleAgreeContract}
+                            disabled={detail.expired !== ''}>
                             同意訂單
                         </Button> : null}
                 </Grid>
                 {/* 拒絕並回到所有訂單頁面 */}
                 <Grid Item xs={2}>
                     {detail.receiver === user.name ?
-                        <Button sx={{ "&:hover": { backgroundColor: "red", color: "#FFFFFF" }, backgroundColor: "#FFFFFF", color: "red", border: 2 }} startIcon={<Close />} onClick={handleRefuseContract}>
+                        <Button
+                            sx={{
+                                "&:hover": { backgroundColor: "red", color: "#FFFFFF" },
+                                backgroundColor: "#FFFFFF",
+                                color: "red",
+                                border: 2
+                            }}
+                            startIcon={<Close />}
+                            onClick={handleRefuseContract}
+                            disabled={detail.expired !== ''}>
                             拒絕訂單
                         </Button> : null}
                 </Grid>
@@ -525,10 +625,12 @@ const CreateContent = ({ detail, user }) => {
         }
     }
 
+    const lightColor = user.type === '供應' ? "#FDF1EF" : "#E3F2FD";
+    const brightColor = user.type === '供應' ? "#E4513D" : "#1976D2";
+
     return (
         <div className="letter_detail">
-
-            <Box sx={{ height: 950, bgcolor: "#FDF1EF" }}>
+            <Box sx={{ height: 950, bgcolor: lightColor }}>
                 <Grid
                     container
                     direction="row"

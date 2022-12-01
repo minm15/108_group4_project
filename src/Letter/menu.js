@@ -39,17 +39,21 @@ function MenuList() {
   const handleClick = () => {
     setOpen(!open);
   };
+  const user = JSON.parse(localStorage.getItem('user'));
 
+  const lightColor = user.type === '供應' ? "#FDF1EF" : "#E3F2FD";
+  const brightColor = user.type === '供應' ? "#E4513D" : "#1976D2";
+  
 
   return (
     //<ThemeProvider theme={list}>
 
     <List component="nav" sx={{
-      bgcolor: '#FDF1EF', "&$selected": {
+      bgcolor: lightColor, "&$selected": {
         backgroundColor: "red"
       }
     }}>
-      <ListItemButton sx={{ "&:hover": { backgroundColor: "#E4513D", borderRadius: 5 } }} component={Link} to="/letter_writing" >
+      <ListItemButton sx={{ "&:hover": { backgroundColor: brightColor, borderRadius: 5 } }} component={Link} to="/letter_writing" >
         <ListItemIcon sx={{ "&:hover": { color: "#ffffff" } }}>
           <Create />
         </ListItemIcon>
@@ -61,8 +65,8 @@ function MenuList() {
 
       <ListItemButton
         sx={{
-          "&:hover": { backgroundColor: "#E4513D" },
-          "&$selected": { backgroundColor: "#E4513D" }
+          "&:hover": { backgroundColor: brightColor },
+          "&$selected": { backgroundColor: brightColor }
         }}
         onClick={handleClick}
         component={Link} to="/letter_list"
@@ -81,8 +85,8 @@ function MenuList() {
         <List component="div" disablePadding>
           <ListItemButton
             sx={{
-              "&:hover": { backgroundColor: "#E4513D" },
-              "&$selected": { backgroundColor: "#E4513D" }
+              "&:hover": { backgroundColor: brightColor },
+              "&$selected": { backgroundColor: brightColor }
             }}
             component={Link} to={
               JSON.parse(localStorage.getItem('user')).type === '供應' ?
@@ -100,8 +104,8 @@ function MenuList() {
           </ListItemButton>
           <ListItemButton
             sx={{
-              "&:hover": { backgroundColor: "#E4513D" },
-              "&$selected": { backgroundColor: "#E4513D" }
+              "&:hover": { backgroundColor: brightColor},
+              "&$selected": { backgroundColor: brightColor }
             }}
             component={Link} to="/letter_list/negotiate"
           >
@@ -112,8 +116,8 @@ function MenuList() {
           </ListItemButton>
           <ListItemButton
             sx={{
-              "&:hover": { backgroundColor: "#E4513D" },
-              "&$selected": { backgroundColor: "#E4513D" }
+              "&:hover": { backgroundColor: brightColor },
+              "&$selected": { backgroundColor: brightColor }
             }}
             component={Link} to="/letter_list/operation"
           >
@@ -124,8 +128,8 @@ function MenuList() {
           </ListItemButton>
           <ListItemButton
             sx={{
-              "&:hover": { backgroundColor: "#E4513D" },
-              "&$selected": { backgroundColor: "#E4513D" }
+              "&:hover": { backgroundColor: brightColor },
+              "&$selected": { backgroundColor: brightColor }
             }}
             component={Link} to={
               JSON.parse(localStorage.getItem('user')).type === '供應' ?
@@ -165,8 +169,8 @@ function MenuList() {
         </ListItemButton> */}
         <ListItemButton
           sx={{
-            "&:hover": { backgroundColor: "#E4513D" },
-            "&$selected": { backgroundColor: "#E4513D" }
+            "&:hover": { backgroundColor: brightColor },
+            "&$selected": { backgroundColor: brightColor}
           }}
           component={Link} to="/letter_list/sent"
         >

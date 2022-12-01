@@ -21,9 +21,8 @@ const Product = ({ user }) => {
     const contractList = JSON.parse(localStorage.getItem('contract_list')).filter(
         (contract) => contract.seller === user.name & !contract.sent
     );
-    console.log(contractList);
+    // console.log(contractList);
     const storage = JSON.parse(localStorage.getItem('storage')).find((company) => company.company === user.name);
-
     // form content
     const [targetName, setTargetName] = React.useState();
     const [targetDetail, setTargetDetail] = React.useState();
@@ -31,6 +30,12 @@ const Product = ({ user }) => {
     const [rank, setRank] = React.useState();
     const [igd, setIgd] = React.useState();
     const [igdCost, setIgdCost] = React.useState();
+
+
+    React.useEffect(()=>{
+        
+    })
+
 
     const handleTargetName = (event) => {
         setTargetName(event.value);
