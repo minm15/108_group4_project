@@ -193,7 +193,7 @@ const FilterPanel = ({
       ))} 
     </div>
     <Grid container spacing={0}>
-    <Grid item xs={5}> 
+    <Grid item xs={6}> 
 
     <div className='input-group'>
     &emsp;   提供商品：&emsp;      
@@ -204,7 +204,7 @@ const FilterPanel = ({
       />
     </div>
     </Grid>
-    <Grid item xs={7}> 
+    <Grid item xs={6}> 
 
     </Grid>
      </Grid>
@@ -247,7 +247,7 @@ const List = ({ list }) => (
 const ListItem = ({
   item: {name, company_id,company_type,productList,finanData,cooperateList,catalogList},
 }) => (
-     <Card variant="outlined" sx={{width:250,height:200}}>
+     <Card variant="outlined" sx={{width:250,height:180}}>
         <CardHeader
         action={
           <>
@@ -264,7 +264,7 @@ const ListItem = ({
          </>
             } 
             title={name} />
-                <div align="center">id: {company_id}</div>
+                {/* <div align="center">id: {company_id}</div> */}
                 <div align="center" >{company_type}</div>
 
                 <CompanyModal name={name} company_id={company_id }company_type={company_type} productList={productList}  finanData={finanData} cooperateList={cooperateList} catalogList={catalogList}/>

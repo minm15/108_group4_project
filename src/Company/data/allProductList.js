@@ -4,14 +4,8 @@ const allProductList = [
       // id: "0",
       value: '所有',
     },
-    {
-      // id: "1",
-      value: "車殼",
-    },
-    {
-      // id: "2",
-      value: "板金",
-    },
+ 
+  
     {
       // id: "3",
       value: '引擎',
@@ -26,7 +20,7 @@ const allProductList = [
     },
     {
       // id: "5",
-      value: '獨家',
+      value: '車門',
     },
   
   

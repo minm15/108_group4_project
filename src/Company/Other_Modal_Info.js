@@ -34,7 +34,7 @@ export default function Modal_Info({ company_ID,name,company_type,productList,fi
      
      <Box sx={{ flexGrow: 1 }}>
      <Typography sx={{ fontSize: 24 ,fontWeight:"bold"}}  >
-     {company_ID}-{name} 
+     {name} 
      <Chip label={company_type} sx={{ bgcolor: "#1976D2", color: "white",fontSize:10,height:'18px' }} />
 
         </Typography>

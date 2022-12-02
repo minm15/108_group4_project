@@ -79,11 +79,11 @@ function Header() {
               <Button href={homeLink + "/letter_list"} onClick={() => { }} style={{ color: "white", fontSize: "22px", fontFamily: 'Noto Sans TC' }}
               ><MarkEmailUnread />獲取訂單</Button>
               <KeyboardDoubleArrowRight />
-              <Button href={homeLink + "/letter_list"} onClick={() => { }} style={{ color: "white", fontSize: "22px", fontFamily: 'Noto Sans TC' }} ><ForwardToInbox />下定材料</Button>
+              <Button href={homeLink + "/letter_list"} onClick={() => { }} style={{ color: "white", fontSize: "22px", fontFamily: 'Noto Sans TC' }} ><ForwardToInbox />下訂材料</Button>
               <KeyboardDoubleArrowRight />
               <Button href={homeLink + "/manufactory"} onClick={() => { }} style={{ color: "white", fontSize: "22px", fontFamily: 'Noto Sans TC' }}><Build />&emsp;製造&emsp;</Button>
               <KeyboardDoubleArrowRight />
-              <Button style={{ color: "white", fontSize: "22px", fontFamily: 'Noto Sans TC' }}><Anchor />交付貨品</Button>
+              <Button href={homeLink + "/harbor"} onClick={() => { }} style={{ color: "white", fontSize: "22px", fontFamily: 'Noto Sans TC' }}><Anchor />交付貨品</Button>
               <KeyboardDoubleArrowRight />
               <Button style={{ color: "white", fontSize: "22px", fontFamily: 'Noto Sans TC' }}><Balance />履行契約</Button>
               <Button onClick={() => { setrightshow2(false) }} style={{ color: "white" }} ><KeyboardArrowLeft style={{ fontSize: "36px", }} /></Button>

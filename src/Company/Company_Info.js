@@ -33,6 +33,7 @@ import {
 } from "@mui/icons-material";
 function Company_Info() {
 
+  const [levelList2, setLevelList2] = React.useState(JSON.parse(localStorage.getItem('user')).levelList);
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -66,7 +67,7 @@ function Company_Info() {
             <Stack spacing={8}>
               <Item sx={{ maxHeight: '500px', }}>
                 {/* 設施等級 */}
-                <Service levelList={myCompany[0].levelList} />
+                <Service levelList={levelList2} />
               </Item>
             </Stack>
           </Grid>
