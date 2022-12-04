@@ -1,9 +1,10 @@
 import React from "react";
 import {
     Box, Paper, Grid,
-    FormControl, InputLabel, Select, MenuItem, Typography, Button
+    FormControl, InputLabel, Select, MenuItem, Typography, Button, 
+    Alert, Snackbar
 } from "@mui/material";
-import { get_component_list } from '../data/game_rule';
+import { cal_size, get_component_list } from '../data/game_rule';
 import { calculate_time, cal_input_data } from "../time/index";
 
 const ProductS = ({ user }) => {
@@ -36,6 +37,8 @@ const ProductS = ({ user }) => {
     const [igdCost, setIgdCost] = React.useState(0);
     const [otherCost, setOtherCost] = React.useState(0);
     const [time, setTime] = React.useState(0);
+
+    const [alert, setAlert] = React.useState(false);
 
     React.useEffect(() => {
         if (targetName !== '') {
@@ -122,53 +125,71 @@ const ProductS = ({ user }) => {
     }
 
     const handleProduct = (event) => {
-        let timeNow = calculate_time().game_day;
-        let product_list = JSON.parse(localStorage.getItem('product_list'));
-        console.log(product_list);
-        let addProduct = {
-            id: product_list.find(
-                (ele) => ele.company === user.name
-            ).product_list.length,
-            reason: '',
-            target: {
-                name: targetName,
-                type: type,
-                amount: targetAmount
-            },
-            igd: igd,
-            other_cost: otherCost,
-            total_cost: igdCost + otherCost,
-            time: time,
-            product_time: timeNow
-        };
-        localStorage.setItem('product_list', JSON.stringify(product_list.map(
-            (ele) => {
-                if (ele.company === user.name) {
-                    let temp = ele;
-                    temp.product_list.push(addProduct);
-                    return temp;
-                } else {
-                    return ele;
+        // 檢查是否超出倉儲
+        let storageNow = cal_size(storage.storage.find((cate) => cate.category === '成品').item)
+            + storage.storage.find((cate) => cate.category === '材料').item.map(
+                (item) => {return item.amount}
+            ).reduce((acc, curr) => acc + curr, 0);
+        let igdSize = igd.map((item) => item.amount).reduce((acc, curr) => acc + curr, 0);
+        let productSize = cal_size([{
+            name: targetName,
+            amount: targetAmount
+        }]);
+        let levelList = [0, 1000, 1700, 2200, 2600, 3000];
+        let storageVolume = levelList[JSON.parse(localStorage.getItem('user')).levelList[0]];
+        // console.log(storageVolume - storageNow + igdSize - productSize);
+        if (storageVolume - storageNow + igdSize - productSize < 0) {
+            setAlert(true);
+            console.log('倉儲不足')
+        } else {
+            let timeNow = calculate_time().game_day;
+            let product_list = JSON.parse(localStorage.getItem('product_list'));
+            console.log(product_list);
+            let addProduct = {
+                id: product_list.find(
+                    (ele) => ele.company === user.name
+                ).product_list.length,
+                reason: '',
+                target: {
+                    name: targetName,
+                    type: type,
+                    amount: targetAmount
+                },
+                igd: igd,
+                other_cost: otherCost,
+                total_cost: igdCost + otherCost,
+                time: time,
+                product_time: timeNow
+            };
+            localStorage.setItem('product_list', JSON.stringify(product_list.map(
+                (ele) => {
+                    if (ele.company === user.name) {
+                        let temp = ele;
+                        temp.product_list.push(addProduct);
+                        return temp;
+                    } else {
+                        return ele;
+                    }
                 }
-            }
-        )));
-        let company_list = JSON.parse(localStorage.getItem('company_list'));
-        company_list = company_list.map(
-            (company) => {
-                if (company.name === user.name) {
-                    company.cash = company.cash - igdCost - otherCost;
-                    return company
-                } else {
-                    return company;
+            )));
+            let company_list = JSON.parse(localStorage.getItem('company_list'));
+            company_list = company_list.map(
+                (company) => {
+                    if (company.name === user.name) {
+                        company.cash = company.cash - igdCost - otherCost;
+                        return company
+                    } else {
+                        return company;
+                    }
                 }
-            }
-        );
-        localStorage.setItem('company_list', JSON.stringify(company_list));
-        let user_info = JSON.parse(localStorage.getItem('user'));
-        user_info.cash = user_info.cash - igdCost - otherCost;
-        localStorage.setItem('user', JSON.stringify(user_info));
-        window.location.href = `../manufactory`
-        // console.log(JSON.parse(localStorage.getItem('product_list')));
+            );
+            localStorage.setItem('company_list', JSON.stringify(company_list));
+            let user_info = JSON.parse(localStorage.getItem('user'));
+            user_info.cash = user_info.cash - igdCost - otherCost;
+            localStorage.setItem('user', JSON.stringify(user_info));
+            window.location.href = `../manufactory`
+            // console.log(JSON.parse(localStorage.getItem('product_list')));
+        }
     }
 
     return (
@@ -450,6 +471,9 @@ const ProductS = ({ user }) => {
                     </Box>
                 </Grid>
             </Grid>
+            <Snackbar open={alert} onClose={() => setAlert(false)}>
+                <Alert severity="error">倉儲空間不足！</Alert>
+            </Snackbar>
         </Box>
     )
 }

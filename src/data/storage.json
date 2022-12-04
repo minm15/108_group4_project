@@ -27,7 +27,7 @@
                     {
                         "name": "輪胎",
                         "type": "A",
-                        "amount": 100,
+                        "amount": 130,
                         "perSize": 2
                     },
                     {
@@ -39,8 +39,13 @@
                     {
                         "name": "內裝材料",
                         "type": "C",
-                        "amount": 50,
+                        "amount": 275,
                         "perSize": 2
+                    },
+                    {
+                        "name": "引擎",
+                        "type": "I",
+                        "amount": 500
                     }
                 ]
             }
@@ -58,25 +63,25 @@
                     {
                         "name": "輪胎",
                         "type": "B",
-                        "amount": 200,
+                        "amount": 100,
                         "perSize": 2
                     },
                     {
                         "name": "內裝材料",
                         "type": "D",
-                        "amount": 70,
+                        "amount": 50,
                         "perSize": 2
                     },
                     {
                         "name": "引擎",
                         "type": "F",
-                        "amount": 60,
+                        "amount": 50,
                         "perSize": 3
                     },
                     {
                         "name": "底盤",
                         "type": "G",
-                        "amount": 80,
+                        "amount": 50,
                         "perSize": 4
                     }
                 ]
@@ -88,7 +93,7 @@
                     {
                         "name": "休旅車",
                         "rank": "A",
-                        "amount": 50,
+                        "amount": 20,
                         "igd": [
                             {
                                 "name": "輪胎",

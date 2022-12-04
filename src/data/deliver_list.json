@@ -84,5 +84,29 @@
         "send_date": "2000-7-7",
         "arrange_time": 20000,
         "actual_time": 3
+    },
+    {
+        "id": "0201",
+        "receiver": "Wah汽車零件",
+        "package" : [
+            {
+                "id": "001",
+                "name": "材料A",
+                "type": "",
+                "amount": 40,
+                "price": 110
+            },
+            {
+                "id": "002",
+                "name": "材料B",
+                "type": "",
+                "amount": 10,
+                "price": 100
+            }
+        ],
+        "sender": "大直材料廠",
+        "send_date": "3000-7-7",
+        "arrange_time": 20000,
+        "actual_time": 30000
     }
 ]

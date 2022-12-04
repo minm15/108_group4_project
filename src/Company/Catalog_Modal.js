@@ -74,7 +74,7 @@ export default function Catalog_Modal({title, content,catalog_id }) {
             </Paper>
 </Grid>
 <Grid item={1}>
-<Button startIcon={<DriveFolderUpload/>} onClick={handleLunch} >發布到??</Button>
+{/* <Button startIcon={<DriveFolderUpload/>} onClick={handleLunch} >發布到??</Button> */}
 
 </Grid>
 

@@ -162,7 +162,12 @@ const car_product = [
     }
 ]
 
-const product = component_product.map((ele) => {return ele}).push(car_product);
+const product = component_product.map((ele) => {return ele});
+car_product.map(
+    (item) => {
+        product.push(item);
+    }
+)
 
 function get_car_list() {
     return car_product;
@@ -355,6 +360,17 @@ const shipping_list = [
     }
 ]
 
+function cal_size(itemList) {
+    // console.log(product);
+    let result = 0;
+    for (let i=0; i < itemList.length; i++){
+        result += product.find(
+            (item) => item.name === itemList[i].name
+        ).size*itemList[i].amount
+    }
+    return result;
+}
+
 function count_container(item) {
     let total_amount = item.map(
         (perItem) => {
@@ -388,8 +404,4 @@ function shipping_time(start_containent, start_num, dest_continent, dest_num) {
     ) * 5 + Math.round((start_num + dest_num) * 0.0416)
 }
 
-function cal_storage(target) {
-    
-}
-
-export { get_component_list, get_car_list, cal_grade, shipping_fee, shipping_time, count_container, cal_time };
+export { cal_size, get_component_list, get_car_list, cal_grade, shipping_fee, shipping_time, count_container, cal_time };
