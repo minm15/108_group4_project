@@ -9,16 +9,19 @@
                 "target": {
                     "name": "輪胎",
                     "type": "A",
-                    "amount": 100
+                    "amount": 100,
+                    "perSize": 2
                 },
                 "igd": [
                     {
                         "name": "材料A",
-                        "amount": 100
+                        "amount": 100,
+                        "perSize": 1
                     },
                     {
                         "name": "材料B",
-                        "amount": 100
+                        "amount": 100,
+                        "perSize": 1
                     }
                 ],
                 "other_cost": 4000,
@@ -32,16 +35,19 @@
                 "target": {
                     "name": "輪胎",
                     "type": "B",
-                    "amount": 200
+                    "amount": 200,
+                    "perSize": 2
                 },
                 "igd": [
                     {
                         "name": "材料A",
-                        "amount": 200
+                        "amount": 200,
+                        "perSize": 1
                     },
                     {
                         "name": "材料C",
-                        "amount": 200
+                        "amount": 200,
+                        "perSize": 1
                     }
                 ],
                 "other_cost": 8000,
@@ -55,28 +61,34 @@
                 "target": {
                     "name": "底盤",
                     "type": "H",
-                    "amount": 100
+                    "amount": 100,
+                    "perSize": 4
                 },
                 "igd": [
                     {
                         "name": "材料A",
-                        "amount": 100
+                        "amount": 100,
+                        "perSize": 1
                     },
                     {
                         "name": "材料B",
-                        "amount": 100
+                        "amount": 100,
+                        "perSize": 1
                     },
                     {
                         "name": "材料C",
-                        "amount": 100
+                        "amount": 100,
+                        "perSize": 1
                     },
                     {
                         "name": "材料E",
-                        "amount": 100
+                        "amount": 100,
+                        "perSize": 1
                     },
                     {
                         "name": "材料F",
-                        "amount": 100
+                        "amount": 100,
+                        "perSize": 1
                     }
                 ],
                 "other_cost": 1000,
@@ -96,28 +108,33 @@
                 "target": {
                     "name": "休旅車",
                     "amount": 50,
-                    "rank": "S"
+                    "rank": "S",
+                    "perSize": 30
                 },
                 "igd": [
                     {
                         "name": "輪胎",
                         "type": "B",
-                        "amount": 200
+                        "amount": 200,
+                        "perSize": 2
                     },
                     {
                         "name": "內裝材料",
                         "type": "D",
-                        "amount": 50
+                        "amount": 50,
+                        "perSize": 2
                     },
                     {
                         "name": "引擎",
                         "type": "F",
-                        "amount": 50
+                        "amount": 50,
+                        "perSize": 3
                     },
                     {
                         "name": "底盤",
                         "type": "I",
-                        "amount": 50
+                        "amount": 50,
+                        "perSize": 4
                     }
                 ],
                 "other_cost": 6340,
@@ -131,28 +148,33 @@
                 "target": {
                     "name": "跑車",
                     "amount": 50,
-                    "rank": "S"
+                    "rank": "S",
+                    "perSize": 40
                 },
                 "igd": [
                     {
                         "name": "輪胎",
                         "type": "B",
-                        "amount": 200
+                        "amount": 200,
+                        "perSize": 2
                     },
                     {
                         "name": "內裝材料",
                         "type": "D",
-                        "amount": 50
+                        "amount": 50,
+                        "perSize": 2
                     },
                     {
                         "name": "引擎",
                         "type": "F",
-                        "amount": 50
+                        "amount": 50,
+                        "perSize": 3
                     },
                     {
                         "name": "底盤",
                         "type": "I",
-                        "amount": 50
+                        "amount": 50,
+                        "perSize": 4
                     }
                 ],
                 "other_cost": 12240,

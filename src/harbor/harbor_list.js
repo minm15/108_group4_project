@@ -7,11 +7,13 @@ import {
     Button,
     Box,
     Backdrop,
-    CircularProgress
+    CircularProgress,
+    Snackbar, Alert
 } from '@mui/material';
 // import get_deliver_list from '../data/deliver_list';
 import { calculate_time, cal_input_date, diff_time } from '../time';
 import { ChangeCircle } from '@mui/icons-material';
+import { cal_size } from '../data/game_rule';
 
 // const date = '2022-04-07';
 
@@ -36,6 +38,7 @@ const HarborList = ({ user }) => {
         ));
     }
     setInterval(time_change, 10000);
+    const [alert, setAlert] = React.useState(false);
 
     // note: 還沒弄完驗貨loading
     const [loadingShow, setLoading] = React.useState(false);
@@ -55,78 +58,99 @@ const HarborList = ({ user }) => {
 
     // 不驗貨取貨
     const handleCollect = (event) => {
+        let storage = JSON.parse(localStorage.getItem('storage')).find(
+            (company) => company.company === user.name
+        );
         let change = get_deliver_list().find(
             (deliver) => deliver.id === event.currentTarget.id
         ).package;
-        let result = get_deliver_list().filter(
-            (deliver) => deliver.id !== event.currentTarget.id
-        );
-        setDeliver(result);
-        // 除此之外，還要回後端改資料
-        localStorage.setItem('deliver_list', JSON.stringify(result));
-        let storage = JSON.parse(localStorage.getItem('storage'))
-        storage = storage.map(
-            (company) => {
-                if (company.company === user.name) {
-                    let companyStorage = company;
-                    companyStorage.storage = companyStorage.storage.map(
-                        (cate) => {
-                            if (cate.category === '材料') {
-                                let cateStorage = cate;
-                                change.map(
-                                    (item) => {
-                                        let changed = false;
-                                        console.log(cateStorage.item);
-                                        cateStorage.item = cateStorage.item.map(
-                                            (product) => {
-                                                console.log(product.name, '-', product.type);
-                                                console.log(item.name, '-', item.type);
-                                                if (product.name === item.name & product.type === item.type) {
-                                                    let productChange = product;
-                                                    console.log('update', product.name, 'to', product.amount + item.amount);
-                                                    changed = true;
-                                                    productChange.amount = product.amount + item.amount;
-                                                    console.log(productChange);
-                                                    return productChange;
-                                                } else {
-                                                    return product;
+        // 檢查是否超出倉儲
+        let storageNow = cal_size(storage.storage.find((cate) => cate.category === '成品').item)
+            + storage.storage.find((cate) => cate.category === '材料').item.map(
+                (item) => { return item.amount }
+            ).reduce((acc, curr) => acc + curr, 0);
+        let productSize = change[0].name.indexOf('材料') !== null ?
+            change.map(
+                (item) => item.amount
+            ).reduce((acc, curr) => acc + curr, 0) :
+            cal_size(change);
+        let levelList = [0, 1000, 1700, 2200, 2600, 3000];
+        let storageVolume = levelList[JSON.parse(localStorage.getItem('user')).levelList[0]];
+        // console.log(storageVolume - storageNow + igdSize - productSize);
+        if (storageVolume - storageNow - productSize < 0) {
+            setAlert(true);
+            console.log('倉儲空間不足')
+        } else {
+            let result = get_deliver_list().filter(
+                (deliver) => deliver.id !== event.currentTarget.id
+            );
+            setDeliver(result);
+            // 除此之外，還要回後端改資料
+            localStorage.setItem('deliver_list', JSON.stringify(result));
+            let storage = JSON.parse(localStorage.getItem('storage'))
+            storage = storage.map(
+                (company) => {
+                    if (company.company === user.name) {
+                        let companyStorage = company;
+                        companyStorage.storage = companyStorage.storage.map(
+                            (cate) => {
+                                if (cate.category === '材料') {
+                                    let cateStorage = cate;
+                                    change.map(
+                                        (item) => {
+                                            let changed = false;
+                                            console.log(cateStorage.item);
+                                            cateStorage.item = cateStorage.item.map(
+                                                (product) => {
+                                                    console.log(product.name, '-', product.type);
+                                                    console.log(item.name, '-', item.type);
+                                                    if (product.name === item.name & product.type === item.type) {
+                                                        let productChange = product;
+                                                        console.log('update', product.name, 'to', product.amount + item.amount);
+                                                        changed = true;
+                                                        productChange.amount = product.amount + item.amount;
+                                                        console.log(productChange);
+                                                        return productChange;
+                                                    } else {
+                                                        return product;
+                                                    }
                                                 }
+                                            );
+                                            console.log('cateStorage now:', cateStorage);
+                                            if (!changed) {
+                                                console.log('add', item.name, 'into list');
+                                                cateStorage.item.push(item.type === undefined ?
+                                                    {
+                                                        name: item.name,
+                                                        amount: item.amount
+                                                    } :
+                                                    {
+                                                        name: item.name,
+                                                        amount: item.amount,
+                                                        type: item.type
+                                                    }
+                                                )
                                             }
-                                        );
-                                        console.log('cateStorage now:', cateStorage);
-                                        if (!changed) {
-                                            console.log('add', item.name, 'into list');
-                                            cateStorage.item.push(item.type === undefined ?
-                                                {
-                                                    name: item.name,
-                                                    amount: item.amount
-                                                } :
-                                                {
-                                                    name: item.name,
-                                                    amount: item.amount,
-                                                    type: item.type
-                                                }
-                                            )
                                         }
-                                    }
-                                );
-                                return cateStorage;
-                            } else {
-                                return cate;
+                                    );
+                                    return cateStorage;
+                                } else {
+                                    return cate;
+                                }
                             }
-                        }
-                    )
-                    return companyStorage;
-                } else {
-                    return company;
+                        )
+                        return companyStorage;
+                    } else {
+                        return company;
+                    }
                 }
-            }
-        );
-        console.log(storage);
+            );
+            console.log(storage);
+        }
     }
 
     return (
-        <Box sx={{width: 1280}} margin='auto'>
+        <Box sx={{ width: 1280 }} margin='auto'>
             {
                 deliver_list.map(
                     (deliver) => {
@@ -175,7 +199,7 @@ const HarborList = ({ user }) => {
                                         </Grid>
                                         <Grid item xs={1}>
                                             <Typography disableTypography sx={{ color: '#BE0000', fontFamily: 'Noto Sans TC', fontSize: '16px', fontWeight: '400', lineHeight: '23px' }}>
-                                                {deliver.actual_time>deliver.arrange_time ? "延遲" : ""}
+                                                {deliver.actual_time > deliver.arrange_time ? "延遲" : ""}
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={1}>
@@ -230,6 +254,9 @@ const HarborList = ({ user }) => {
                     }
                 )
             }
+            <Snackbar open={alert} onClose={() => setAlert(false)}>
+                <Alert severity="error">倉儲空間不足！</Alert>
+            </Snackbar>
             <Backdrop
                 open={loadingShow}
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}>

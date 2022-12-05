@@ -61,7 +61,8 @@ function Company_Drawer() {
         <Box sx={{ my:'-50px',  }} >
         <List component="nav" >
        
-            <ListItemButton onClick={handleClick}>
+            <ListItemButton onClick={handleClick}  
+        component={Link} to="/Company_Info">
                 <ListItemIcon>
                     <WorkRounded />
                 </ListItemIcon>

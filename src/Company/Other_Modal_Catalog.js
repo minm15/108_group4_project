@@ -37,7 +37,7 @@ export default function Modal_Product({ company_ID,name,catalogList}) { //姑且
       <Grid item xs={4}>
 
      <Card variant="outlined" sx={{height:60}}>
-     &ensp;{row.title}
+     {row.title}
      <Other_Modal_Catalog_Detail title={row.title} content={row.content} catalog_id={row.catalog_id}/>
      </Card>
      </Grid>

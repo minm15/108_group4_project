@@ -24,6 +24,7 @@ import { list1, list2, list3, list4, list5 } from './data/serviceLevelName'
 // import {warehouseSpace,good,ingredient} from './data/warehouseData.js';
 import myCompany from './data/myCompany.js'
 // import {income,expense,revenue,finanData} from './data/finanData'
+import { cal_size } from '../data/game_rule';
 
 import './css/Company_Info.css';
 
@@ -34,7 +35,33 @@ import {
 function Company_Info() {
 
   const [levelList2, setLevelList2] = React.useState(JSON.parse(localStorage.getItem('user')).levelList);
+  const storageLevel = JSON.parse(localStorage.getItem('user')).levelList[0];
+  const user = JSON.parse(localStorage.getItem('user'));
+  const levelList = [0, 1000, 1700, 2200, 2600, 3000]
+  const [storageVolume, setVolume] = React.useState(levelList[storageLevel]);
 
+  const storageInfo = JSON.parse(localStorage.getItem('storage')).find(
+    (company) => company.company === user.name
+  );
+
+  const [warehouseSpace, setSpace] = React.useState(
+    {
+      ingredient: Math.round(
+        storageInfo.storage.find((storage) => storage.category === '材料').item.map(
+          (item) => item.amount
+        ).reduce((acc, curr) => acc + curr, 0) * 100
+        / storageVolume),
+      good: Math.round(
+        cal_size(storageInfo.storage.find((storage) => storage.category === '成品').item) * 100
+        / storageVolume),
+      empty: Math.round((storageVolume
+        - storageInfo.storage.find((storage) => storage.category === '材料').item.map(
+          (item) => item.amount
+        ).reduce((acc, curr) => acc + curr, 0)
+        - cal_size(storageInfo.storage.find((storage) => storage.category === '成品').item)) * 100
+        / storageVolume)
+    }
+  );
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
@@ -73,7 +100,7 @@ function Company_Info() {
           </Grid>
           <Grid item xs={4}>
             {/* 倉庫的空間 */}
-            <Warehouse warehouseSpace={myCompany[0].warehouseSpace} />
+            <Warehouse warehouseSpace={[warehouseSpace]} />
           </Grid>
         </Grid>
       </Box>

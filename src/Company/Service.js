@@ -17,7 +17,7 @@ import { list1, list2, list3, list4, list5 } from './data/serviceLevelName'
 // import myCompany from './data/myCompany';
 import Service_Modal from './Service_Modal';
 import {
- DashboardCustomize, Rocket, Lightbulb, Gite
+  DashboardCustomize, Rocket, Lightbulb, Gite
 } from "@mui/icons-material";
 
 function Company_Service() {
