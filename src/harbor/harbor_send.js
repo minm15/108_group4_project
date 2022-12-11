@@ -8,6 +8,7 @@ import {
     Dialog, Slider,
     Alert, Snackbar, Grid, FormControl, Select, MenuItem
 } from '@mui/material';
+import { calculate_time } from "../time";
 import { DataGrid } from "@mui/x-data-grid";
 
 function get_contract_list() {
@@ -247,7 +248,7 @@ const HarborSend = ({ user }) => {
                     }
                 }
             );
-            console.log(storage);
+            // console.log(storage);
             localStorage.setItem('storage', JSON.stringify(storage));
             let contracts = get_contract_list().map(
                 (contract) => {
@@ -261,10 +262,10 @@ const HarborSend = ({ user }) => {
                 }
             );
             localStorage.setItem('contract_list', JSON.stringify(contracts));
-            console.log('contract: ');
-            console.log(contracts);
-            console.log('ratio: ');
-            console.log(ratioList);
+            // console.log('contract: ');
+            // console.log(contracts);
+            // console.log('ratio: ');
+            // console.log(ratioList);
             let company_list = JSON.parse(localStorage.getItem('company_list'));
             company_list = company_list.map(
                 (company) => {
@@ -280,6 +281,17 @@ const HarborSend = ({ user }) => {
             let user_info = JSON.parse(localStorage.getItem('user'));
             user_info.cash = user_info.cash - fee;
             localStorage.setItem('user', JSON.stringify(user_info));
+            let deliver_list = JSON.parse(localStorage.getItem('deliver_list'));
+            deliver_list.push({
+                id: deliver_list.length,
+                receiver: target.buyer,
+                package: target.package,
+                sender: user.name,
+                send_date: calculate_time().game_day,
+                arrange_time: arrange_time,
+                actual_time: arrange_time
+            });
+            localStorage.setItem('deliver_list', JSON.stringify(deliver_list));
             window.location.href = '../harbor';
         } else {
             console.log('ratio: ');
